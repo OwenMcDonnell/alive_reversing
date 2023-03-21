@@ -14,6 +14,7 @@
 #include "Collisions.hpp"
 #include "Game.hpp"
 #include "Grid.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -87,11 +88,11 @@ BaseGameObject* Grenade::dtor_41ECD0()
 
     if (!gInfiniteGrenades_5076EC && !field_10E_bDead)
     {
-        if (field_F8_pLiftPoint)
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+        if (pLiftPoint)
         {
-            field_F8_pLiftPoint->VRemove(this);
-            field_F8_pLiftPoint->field_C_refCount--;
-            field_F8_pLiftPoint = nullptr;
+            pLiftPoint->VRemove(this);
+            field_F8_id = -1;
         }
 
         if (gpThrowableArray_50E26C)
@@ -208,13 +209,13 @@ void Grenade::VUpdate_41F240()
 
                 const auto oldLine = field_114_pCollisionLine;
                 field_114_pCollisionLine = field_114_pCollisionLine->MoveOnLine_40CA20(&field_A8_xpos, &field_AC_ypos, field_B4_velx);
-                if (field_F8_pLiftPoint)
+                auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+                if (pLiftPoint)
                 {
                     if (field_114_pCollisionLine != oldLine)
                     {
-                        field_F8_pLiftPoint->VRemove(this);
-                        field_F8_pLiftPoint->field_C_refCount--;
-                        field_F8_pLiftPoint = nullptr;
+                        pLiftPoint->VRemove(this);
+                        field_F8_id = -1;
                     }
                 }
 
@@ -227,13 +228,13 @@ void Grenade::VUpdate_41F240()
             {
                 const auto oldLine = field_114_pCollisionLine;
                 field_114_pCollisionLine = field_114_pCollisionLine->MoveOnLine_40CA20(&field_A8_xpos, &field_AC_ypos, field_B4_velx);
-                if (field_F8_pLiftPoint)
+                auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+                if (pLiftPoint)
                 {
                     if (field_114_pCollisionLine != oldLine)
                     {
-                        field_F8_pLiftPoint->VRemove(this);
-                        field_F8_pLiftPoint->field_C_refCount--;
-                        field_F8_pLiftPoint = nullptr;
+                        pLiftPoint->VRemove(this);
+                        field_F8_id = -1;
                     }
                 }
 
@@ -289,13 +290,13 @@ void Grenade::VUpdate_41F240()
 
             const auto oldLine = field_114_pCollisionLine;
             field_114_pCollisionLine = field_114_pCollisionLine->MoveOnLine_40CA20(&field_A8_xpos, &field_AC_ypos, field_B4_velx);
-            if (field_F8_pLiftPoint)
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
                 if (field_114_pCollisionLine != oldLine)
                 {
-                    field_F8_pLiftPoint->VRemove(this);
-                    field_F8_pLiftPoint->field_C_refCount--;
-                    field_F8_pLiftPoint = nullptr;
+                    pLiftPoint->VRemove(this);
+                    field_F8_id = -1;
                 }
             }
 
@@ -328,11 +329,11 @@ void Grenade::VUpdate_41F240()
 
 void Grenade::VOnTrapDoorOpen_41F920()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove(this);
+        field_F8_id = -1;
 
         if (field_110_state == States::eWaitToBeCollected_1 || field_110_state == States::eDoesNothing_2)
         {
@@ -379,7 +380,7 @@ s16 Grenade::InTheAir_41EF10()
         {
             if (field_B8_vely < FP_FromInteger(1))
             {
-                if (!field_F8_pLiftPoint)
+                if (!sObjectIds_5C1B70.Find_449CF0(field_F8_id))
                 {
                     AddToPlatform_41F7C0();
                 }

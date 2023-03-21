@@ -22,6 +22,7 @@
 #include "Midi.hpp"
 #include "SwitchStates.hpp"
 #include "Grid.hpp"
+#include "ObjectIds.hpp"
 
 void Scrab_ForceLink()
 { }
@@ -143,7 +144,7 @@ Scrab* Scrab::ctor_45B5F0(Path_Scrab* pTlv, s32 tlvInfo)
 
     field_110_brain_sub_state = 0;
     field_FE_next_motion = 0;
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     field_FC_current_motion = 1;
     field_112 = 0;
 
@@ -632,11 +633,11 @@ void Scrab::VOnTrapDoorOpen()
 
 void Scrab::VOnTrapDoorOpen_45E5E0()
 {
-    if (field_F8_pLiftPoint)
+    auto pPlatform = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pPlatform)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pPlatform->VRemove(this);
+        field_F8_id = -1;
 
         field_FC_current_motion = eScrabMotions::Motion_15_ToFall_45F180;
 
@@ -868,7 +869,7 @@ void Scrab::MoveOnLine_45E450()
 
         if (field_F4_pLine)
         {
-            if (field_F8_pLiftPoint)
+            if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
             {
                 if (field_F4_pLine->field_8_type != eLineTypes::eUnknown_32 && field_F4_pLine->field_8_type != eLineTypes::eUnknown_36)
                 {
@@ -1044,19 +1045,20 @@ void Scrab::Motion_0_Empty_45E3D0()
 {
     if (sNumCamSwappers_507668 <= 0)
     {
+        auto pPlatform = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
         if (sControlledCharacter_50767C == this)
         {
             field_FC_current_motion = field_E4_previous_motion;
-            if (field_F8_pLiftPoint)
+            if (pPlatform)
             {
-                // TODO: Is type of field_F8_pLiftPoint too low?
-                static_cast<LiftPoint*>(field_F8_pLiftPoint)->field_12C_bMoving |= 1u;
+                // TODO: Is type of field_F8_id too low?
+                pPlatform->field_12C_bMoving |= 1u;
             }
         }
         else
         {
             field_FC_current_motion = field_E4_previous_motion;
-            if (field_F8_pLiftPoint)
+            if (pPlatform)
             {
                 field_A8_xpos = FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2);
                 field_AC_ypos = FP_FromInteger(field_F4_pLine->field_0_rect.y);
@@ -2736,11 +2738,11 @@ s16 Scrab::Brain_ChasingEnemy_45CC90()
                 return 2;
             }
 
-            if (field_F8_pLiftPoint)
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                if (field_F8_pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
+                if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
                 {
-                    auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                     if (!pLiftPoint->OnAnyFloor())
                     {
                         return 4;
@@ -2955,8 +2957,8 @@ s16 Scrab::Brain_ChasingEnemy_45CC90()
                 return 10;
             }
 
-            auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
-            if (pLiftPoint && field_F8_pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint && pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
             {
                 field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
                 return 4;
@@ -2970,21 +2972,23 @@ s16 Scrab::Brain_ChasingEnemy_45CC90()
         }
 
         case 4:
+        {
             if (VIsObjNearby(kGridSize, field_120_pTarget) && VOnSameYLevel(field_120_pTarget))
             {
                 field_FE_next_motion = eScrabMotions::Motion_28_LegKick_45FF60;
                 return 10;
             }
 
-            if (field_F8_pLiftPoint)
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (!pLiftPoint->OnAnyFloor())
                 {
                     return field_110_brain_sub_state;
                 }
             }
             return 11;
+        }
 
         case 5:
         case 6:
@@ -3274,9 +3278,9 @@ s16 Scrab::Brain_ChasingEnemy_45CC90()
 
             field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
 
-            if (field_F8_pLiftPoint && field_F8_pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint && pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (!pLiftPoint->OnAnyFloor())
                 {
                     return 4;
@@ -3340,7 +3344,7 @@ s16 Scrab::Brain_Patrol_460020()
                 return field_110_brain_sub_state;
             }
 
-            auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
             if (pLiftPoint)
             {
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
@@ -3418,9 +3422,10 @@ s16 Scrab::Brain_Patrol_460020()
         }
 
         case 1:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
                 {
                     field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
@@ -3429,21 +3434,23 @@ s16 Scrab::Brain_Patrol_460020()
             }
 
             if (gMap_507BA8.TLV_Get_At_446260(
-                    FP_GetExponent(field_A8_xpos - ScaleToGridSize_41FA30(field_BC_sprite_scale)),
-                    FP_GetExponent(field_AC_ypos),
-                    FP_GetExponent(field_A8_xpos - ScaleToGridSize_41FA30(field_BC_sprite_scale)),
-                    FP_GetExponent(field_AC_ypos),
-                    TlvTypes::ScrabLeftBound_74))
+                FP_GetExponent(field_A8_xpos - ScaleToGridSize_41FA30(field_BC_sprite_scale)),
+                FP_GetExponent(field_AC_ypos),
+                FP_GetExponent(field_A8_xpos - ScaleToGridSize_41FA30(field_BC_sprite_scale)),
+                FP_GetExponent(field_AC_ypos),
+                TlvTypes::ScrabLeftBound_74))
             {
                 field_FE_next_motion = eScrabMotions::Motion_4_Turn_45EF30;
                 return 2;
             }
             return field_110_brain_sub_state;
+        }
 
         case 2:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
                 {
                     field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
@@ -3458,11 +3465,13 @@ s16 Scrab::Brain_Patrol_460020()
                 return 3;
             }
             return field_110_brain_sub_state;
+        }
 
         case 3:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
                 {
                     field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
@@ -3484,11 +3493,13 @@ s16 Scrab::Brain_Patrol_460020()
 
             field_FE_next_motion = GetMotionForPatrolType(field_116_patrol_type);
             return 4;
+        }
 
         case 4:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
                 {
                     field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
@@ -3497,21 +3508,23 @@ s16 Scrab::Brain_Patrol_460020()
             }
 
             if (gMap_507BA8.TLV_Get_At_446260(
-                    FP_GetExponent(ScaleToGridSize_41FA30(field_BC_sprite_scale) + field_A8_xpos),
-                    FP_GetExponent(field_AC_ypos),
-                    FP_GetExponent(ScaleToGridSize_41FA30(field_BC_sprite_scale) + field_A8_xpos),
-                    FP_GetExponent(field_AC_ypos),
-                    TlvTypes::ScrabRightBound_75))
+                FP_GetExponent(ScaleToGridSize_41FA30(field_BC_sprite_scale) + field_A8_xpos),
+                FP_GetExponent(field_AC_ypos),
+                FP_GetExponent(ScaleToGridSize_41FA30(field_BC_sprite_scale) + field_A8_xpos),
+                FP_GetExponent(field_AC_ypos),
+                TlvTypes::ScrabRightBound_75))
             {
                 field_FE_next_motion = eScrabMotions::Motion_4_Turn_45EF30;
                 return 5;
             }
             return field_110_brain_sub_state;
+        }
 
         case 5:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
                 {
                     field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
@@ -3526,11 +3539,13 @@ s16 Scrab::Brain_Patrol_460020()
                 return 6;
             }
             return field_110_brain_sub_state;
+        }
 
         case 6:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
                 {
                     field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
@@ -3552,8 +3567,10 @@ s16 Scrab::Brain_Patrol_460020()
 
             field_FE_next_motion = GetMotionForPatrolType(field_116_patrol_type);
             return 1;
+        }
 
         case 7:
+        {
             if (field_118_timer > static_cast<s32>(gnFrameCount_507670))
             {
                 return field_110_brain_sub_state;
@@ -3561,9 +3578,9 @@ s16 Scrab::Brain_Patrol_460020()
 
             field_FE_next_motion = GetMotionForPatrolType(field_116_patrol_type);
 
-            if (field_F8_pLiftPoint)
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
                 {
                     field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
@@ -3576,17 +3593,20 @@ s16 Scrab::Brain_Patrol_460020()
                 return 1;
             }
             return 4;
+        }
 
         case 8:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLift = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLift)
             {
-                auto pLift = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (!pLift->OnAnyFloor())
                 {
                     return field_110_brain_sub_state;
                 }
             }
             return 0;
+        }
 
         case 9:
             if (!Event_Get_417250(kEventAbeOhm_8))
@@ -3645,9 +3665,10 @@ s16 Scrab::Brain_WalkAround_460D80()
             return 1;
 
         case 1:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
                 {
                     if (!pLiftPoint->OnAnyFloor())
@@ -3726,6 +3747,7 @@ s16 Scrab::Brain_WalkAround_460D80()
                 return 3;
             }
             break;
+        }
 
         case 2:
         {
@@ -3762,9 +3784,9 @@ s16 Scrab::Brain_WalkAround_460D80()
 
             if (Math_NextRandom() >= 8u || !(field_188_flags & 0x20) || gnFrameCount_507670 - field_140_last_shriek_timer <= 90)
             {
-                if (field_F8_pLiftPoint)
+                auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+                if (pLiftPoint)
                 {
-                    auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                     if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
                     {
                         if (!pLiftPoint->OnAnyFloor())
@@ -3812,9 +3834,9 @@ s16 Scrab::Brain_WalkAround_460D80()
 
             if (Math_NextRandom() >= 8u || !(field_188_flags & 0x20) || gnFrameCount_507670 - field_140_last_shriek_timer <= 90)
             {
-                if (field_F8_pLiftPoint)
+                auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+                if (pLiftPoint)
                 {
-                    auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                     if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
                     {
                         if (!pLiftPoint->OnAnyFloor())
@@ -3850,9 +3872,10 @@ s16 Scrab::Brain_WalkAround_460D80()
             return 1;
 
         case 5:
-            if (field_F8_pLiftPoint)
+        {
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
-                auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                 if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && !pLiftPoint->OnAnyFloor())
                 {
                     field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
@@ -3866,6 +3889,7 @@ s16 Scrab::Brain_WalkAround_460D80()
             }
             field_FE_next_motion = eScrabMotions::Motion_1_Stand_45E620;
             return 1;
+        }
 
         case 6:
             if (Event_Get_417250(kEventAbeOhm_8))

@@ -112,7 +112,7 @@ SlingMudokon* SlingMudokon::ctor_46F940(Path_SlingMudokon* pTlv, s32 tlvInfo)
     field_156_always_4 = 99;
 
     field_110_tlvInfo = tlvInfo;
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     field_13A_brain_sub_state = 0;
     field_15A_bCodeMatches = 0;
 

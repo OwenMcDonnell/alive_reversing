@@ -16,6 +16,7 @@
 #include "CameraSwapper.hpp"
 #include "Particle.hpp"
 #include "Grid.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -612,11 +613,11 @@ void Meat::VOnTrapDoorOpen()
 
 void Meat::VOnTrapDoorOpen_438FD0()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove(this);
+        field_F8_id = -1;
         if (field_110_state == 3 || field_110_state == 4)
         {
             field_110_state = 1;

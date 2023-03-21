@@ -24,6 +24,8 @@ ALIVE_VAR(1, 0x500A18, SaveData, gSaveBuffer_500A18, {});
 
 ALIVE_VAR(1, 0x505668, SaveData, gSaveBuffer_505668, {});
 
+s32 sAccumulatedObjectCount_5C1BF4 = 0;
+
 EXPORT void Kill_Objects_451720()
 {
     ResourceManager::LoadingLoop_41EAD0(0);
@@ -63,6 +65,8 @@ void SaveGame::LoadFromMemory_459970(SaveData* pData, s32 bKillObjects)
     {
         Kill_Objects_451720();
     }
+
+    sAccumulatedObjectCount_5C1BF4 = pData->accumulatedObjectCount;
 
     bUseAltSaveHeader_5076B4 = pData->field_2AC_bUseAltSaveHeader;
 
@@ -345,6 +349,8 @@ void CC SaveGame::SaveToMemory_459490(SaveData* pSaveData)
             pSaveData->field_0_header.field_0_frame_1_name[47] = static_cast<s8>(path_id + 0x50);
         }
     }
+
+    pSaveData->accumulatedObjectCount = sAccumulatedObjectCount_5C1BF4;
     pSaveData->field_234_current_level = gMap_507BA8.field_0_current_level;
     pSaveData->field_206_clear_from_id = sActiveHero_507678->field_148_clear_from_id;
     pSaveData->field_20A_zone_top_left = sActiveHero_507678->field_138_zone_top_left;

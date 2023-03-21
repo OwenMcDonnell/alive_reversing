@@ -5,6 +5,7 @@
 #include "Collisions.hpp"
 #include "Game.hpp"
 #include "stdlib.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -118,7 +119,7 @@ void PlatformBase::KeepThingsOnPlatform_451690(FP xpos)
             break;
         }
 
-        if (pObjIter->field_F8_pLiftPoint == this)
+        if (sObjectIds_5C1B70.Find_449CF0(pObjIter->field_F8_id) == this)
         {
             pObjIter->field_A8_xpos += xpos;
             pObjIter->field_AC_ypos = FP_FromInteger(field_120_pCollisionLine->field_0_rect.y);

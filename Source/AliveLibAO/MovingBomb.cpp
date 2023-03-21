@@ -17,6 +17,8 @@
 #include "Abe.hpp"
 #include "Math.hpp"
 #include "Grid.hpp"
+#include "ObjectIds.hpp"
+#include "LiftPoint.hpp"
 
 namespace AO {
 
@@ -94,7 +96,7 @@ MovingBomb* MovingBomb::ctor_43AFE0(Path_MovingBomb* pTlv, s32 tlvInfo)
     ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Palt, AOResourceID::kAbeblowAOResID, 1, 0);
     ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Palt, AOResourceID::kSlogBlowAOResID, 1, 0);
 
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
 
     FP hitX = {};
     FP hitY = {};
@@ -141,11 +143,11 @@ BaseGameObject* MovingBomb::dtor_43B2C0()
     ResourceManager::FreeResource_455550(ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Palt, AOResourceID::kAbeblowAOResID, 0, 0));
     ResourceManager::FreeResource_455550(ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Palt, AOResourceID::kSlogBlowAOResID, 0, 0));
 
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove(this);
+        field_F8_id = -1;
     }
 
     if (field_10C_state == States::eBlowingUp_6 || field_10C_state == States::eKillMovingBomb_7)

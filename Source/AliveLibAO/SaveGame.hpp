@@ -17,6 +17,7 @@ ALIVE_ASSERT_SIZEOF(Save_PSX_Header, 0x200);
 
 struct SaveData final
 {
+    s32 accumulatedObjectCount; // NOTE: not part of OG save data
     Save_PSX_Header field_0_header;
     s32 field_200_hashValue;
     s16 field_204_zone_number;
@@ -104,5 +105,6 @@ public:
 };
 
 extern const s8 word_4BC670[6][8];
+extern s32 sAccumulatedObjectCount_5C1BF4;
 
 } // namespace AO

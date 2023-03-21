@@ -25,6 +25,7 @@
 #include "Particle.hpp"
 #include "SwitchStates.hpp"
 #include "Grid.hpp"
+#include "ObjectIds.hpp"
 
 void Paramite_ForceLink()
 { }
@@ -132,7 +133,7 @@ Paramite* Paramite::ctor_44A7A0(Path_Paramite* pTlv, s32 tlvInfo)
     field_110_brain_sub_state = 0;
     field_FE_next_motion = eParamiteMotions::Motion_0_Idle_44B900;
     field_EC = 3;
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     field_FC_current_motion = eParamiteMotions::Motion_0_Idle_44B900;
     field_140_use_prev_motion = 0;
 
@@ -472,11 +473,11 @@ void Paramite::VOnTrapDoorOpen()
 
 void Paramite::VOnTrapDoorOpen_44B8C0()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove(this);
+        field_F8_id = -1;
         field_FC_current_motion = eParamiteMotions::Motion_12_Falling_44C960;
     }
 }
@@ -852,7 +853,7 @@ void Paramite::MoveOnLine_44B740()
             field_B4_velx);
         if (field_F4_pLine)
         {
-            if (field_F8_pLiftPoint)
+            if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
             {
                 if (field_F4_pLine->field_8_type != eLineTypes::eUnknown_32 && field_F4_pLine->field_8_type != eLineTypes::eUnknown_36)
                 {
@@ -2988,19 +2989,20 @@ void Paramite::Motion_4_Unknown_44B6C0()
 {
     if (sNumCamSwappers_507668 <= 0)
     {
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
         if (sControlledCharacter_50767C == this)
         {
             field_FC_current_motion = field_E4_previous_motion;
-            if (field_F8_pLiftPoint)
+            if (pLiftPoint)
             {
                 // TODO: Correct type ??
-                static_cast<LiftPoint*>(field_F8_pLiftPoint)->field_12C_bMoving |= 1u;
+                pLiftPoint->field_12C_bMoving |= 1u;
             }
         }
         else
         {
             field_FC_current_motion = field_E4_previous_motion;
-            if (field_F8_pLiftPoint)
+            if (pLiftPoint)
             {
                 field_A8_xpos = FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2);
                 field_AC_ypos = FP_FromInteger(field_F4_pLine->field_0_rect.y);

@@ -9,6 +9,8 @@
 #include "Collisions.hpp"
 #include "Game.hpp"
 #include "PlatformBase.hpp"
+#include "ObjectIds.hpp"
+#include "LiftPoint.hpp"
 
 namespace AO {
 
@@ -128,20 +130,19 @@ void BaseThrowable::BaseAddToPlatform()
 
                     if (FP_GetExponent(field_A8_xpos) > objRect.x && FP_GetExponent(field_A8_xpos) < objRect.w && FP_GetExponent(field_AC_ypos) < objRect.h)
                     {
-                        if (field_F8_pLiftPoint)
+                        auto pOtherPlatform = static_cast<PlatformBase*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+                        if (pOtherPlatform)
                         {
-                            if (field_F8_pLiftPoint == pPlatformBase)
+                            if (pOtherPlatform == pPlatformBase)
                             {
                                 return;
                             }
-                            field_F8_pLiftPoint->VRemove(this);
-                            field_F8_pLiftPoint->field_C_refCount--;
-                            field_F8_pLiftPoint = nullptr;
+                            pOtherPlatform->VRemove(this);
+                            field_F8_id = -1;
                         }
 
-                        field_F8_pLiftPoint = pPlatformBase;
-                        field_F8_pLiftPoint->VAdd(this);
-                        field_F8_pLiftPoint->field_C_refCount++;
+                        pPlatformBase->VAdd(this);
+                        field_F8_id = pPlatformBase->field_8_object_id;
                         return;
                     }
                 }

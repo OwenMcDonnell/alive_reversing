@@ -8,6 +8,7 @@
 #include "SwitchStates.hpp"
 #include "Game.hpp"
 #include "Collisions.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -144,7 +145,7 @@ void TrapDoor::Open()
         {
             // That are on this trap door
             auto pAliveObj = static_cast<BaseAliveGameObject*>(pObj);
-            if (pAliveObj->field_F8_pLiftPoint == this)
+            if (sObjectIds_5C1B70.Find_449CF0(pAliveObj->field_F8_id) == this)
             {
                 pAliveObj->VOnTrapDoorOpen();
 

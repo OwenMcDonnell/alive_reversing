@@ -12,6 +12,8 @@
 #include "BirdPortal.hpp"
 #include "Sys_common.hpp"
 #include "Grid.hpp"
+#include "ObjectIds.hpp"
+#include "LiftPoint.hpp"
 
 namespace AO {
 
@@ -34,7 +36,7 @@ BaseAliveGameObject* BaseAliveGameObject::ctor_401090()
     field_10A_flags.Clear(Flags_10A::e10A_Bit6);
 
     field_F0_pTlv = nullptr;
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     field_F4_pLine = nullptr;
     field_100_health = FP_FromInteger(1);
     field_106_shot = 0;
@@ -57,11 +59,11 @@ BaseGameObject* BaseAliveGameObject::dtor_401000()
     SetVTable(this, 0x4BA000);
     gBaseAliveGameObjects_4FC8A0->Remove_Item(this);
 
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove(this);
+        field_F8_id = -1;
     }
 
     if (field_104_pending_resource_count)
@@ -164,15 +166,15 @@ void BaseAliveGameObject::VCheckCollisionLineStillValid_401A90(s32 distance)
         {
             field_F4_pLine = pLine;
             field_AC_ypos = hitY;
-            if (field_F8_pLiftPoint)
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
                 if (pLine->field_8_type == eLineTypes ::eUnknown_32 ||
                     pLine->field_8_type == eLineTypes::eUnknown_36)
                 {
                     // OG bug fix: didn't remove ourself from the lift!
-                    field_F8_pLiftPoint->VRemove(this);
-                    field_F8_pLiftPoint->field_C_refCount--;
-                    field_F8_pLiftPoint = nullptr;
+                    pLiftPoint->VRemove(this);
+                    field_F8_id = -1;
 
                     PSX_RECT bRect = {};
                     VGetBoundingRect(&bRect, 1);
@@ -395,14 +397,15 @@ void BaseAliveGameObject::VOnPathTransition_401470(s16 camWorldX, s32 camWorldY,
 
     field_A8_xpos = FP_FromInteger(camLoc.field_0_x + SnapToXGrid_41FAA0(field_BC_sprite_scale, FP_GetExponent(field_A8_xpos - FP_FromInteger(camLoc.field_0_x))));
 
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
         // Move lift point into the new path
         const FP rect_left = field_A8_xpos - oldx;
         const FP rect_right = field_AC_ypos - oldy;
 
-        field_F8_pLiftPoint->field_A8_xpos += rect_left;
-        field_F8_pLiftPoint->field_AC_ypos += rect_right;
+        pLiftPoint->field_A8_xpos += rect_left;
+        pLiftPoint->field_AC_ypos += rect_right;
 
         field_F4_pLine->field_0_rect.x += FP_GetExponent(rect_left);
         field_F4_pLine->field_0_rect.w += FP_GetExponent(rect_left);
@@ -641,11 +644,11 @@ s16 BaseAliveGameObject::OnTrapDoorIntersection_401C10(PlatformBase* pPlatform)
     // OG bug fix, when we call VCheckCollisionLineStillValid it can place us on a new lift
     // but then we call VOnCollisionWith which can sometimes add us to the same lift again
     // result in the lift being leaked and then memory corruption/crash later.
-    if (field_F8_pLiftPoint != pPlatform)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint != pPlatform)
     {
-        field_F8_pLiftPoint = pPlatform;
-        field_F8_pLiftPoint->VAdd(this);
-        field_F8_pLiftPoint->field_C_refCount++;
+        field_F8_id = pPlatform->field_8_object_id;
+        pPlatform->VAdd(this);
     }
     else
     {
@@ -710,9 +713,10 @@ void BaseAliveGameObject::VSetXSpawn_401150(s16 camWorldX, s32 screenXPos)
 
     field_F0_pTlv = gMap_507BA8.TLV_Get_At_446060(0, field_A8_xpos, old_y, field_A8_xpos, old_y);
 
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->field_A8_xpos += (field_A8_xpos - old_x);
+        pLiftPoint->field_A8_xpos += (field_A8_xpos - old_x);
 
         field_F4_pLine->field_0_rect.x += FP_GetExponent(field_A8_xpos - old_x);
         field_F4_pLine->field_0_rect.w += FP_GetExponent(field_A8_xpos - old_x);
@@ -803,10 +807,11 @@ void BaseAliveGameObject::VSetYSpawn_401380(s32 camWorldY, s16 bLeft)
         field_A8_xpos,
         field_AC_ypos);
 
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->field_A8_xpos += field_A8_xpos - oldx;
-        field_F8_pLiftPoint->field_AC_ypos += field_AC_ypos - oldy;
+        pLiftPoint->field_A8_xpos += field_A8_xpos - oldx;
+        pLiftPoint->field_AC_ypos += field_AC_ypos - oldy;
 
         field_F4_pLine->field_0_rect.x += FP_GetExponent(field_A8_xpos - oldx);
         field_F4_pLine->field_0_rect.w += FP_GetExponent(field_A8_xpos - oldx);

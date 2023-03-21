@@ -328,6 +328,8 @@ SET(AliveLibSrcAO
    RollingBallShaker.hpp
    RollingBallShaker.cpp
    Layer.hpp
+   ObjectIds.hpp
+   ObjectIds.cpp
 )
 
 add_library(AliveLibAO ${AliveLibSrcAO})

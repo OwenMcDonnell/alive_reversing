@@ -4,6 +4,8 @@
 #include "Function.hpp"
 #include "Events.hpp"
 #include "Map.hpp"
+#include "ObjectIds.hpp"
+#include "SaveGame.hpp"
 
 void AliveLibAO_ForceLink()
 { }
@@ -46,6 +48,12 @@ BaseGameObject* BaseGameObject::ctor_487E10(s16 arraySize)
     {
         field_6_flags.Set(Options::eListAddFailed_Bit1);
     }
+
+    s32 nextId = sObjectIds_5C1B70.EnsureIdIsUnique(sAccumulatedObjectCount_5C1BF4);
+    field_8_object_id = nextId;
+    sObjectIds_5C1B70.Insert_449C10(nextId, this);
+
+    sAccumulatedObjectCount_5C1BF4 = ++nextId;
 
     return this;
 }

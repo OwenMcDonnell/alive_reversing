@@ -25,6 +25,8 @@
 #include "Particle.hpp"
 #include "GameSpeak.hpp"
 #include "Grid.hpp"
+#include "ObjectIds.hpp"
+#include "LiftPoint.hpp"
 
 void Slog_ForceLink()
 { }
@@ -537,14 +539,14 @@ void Slog::MoveOnLine_4740F0()
             field_B4_velx);
         if (field_F4_pLine)
         {
-            if (field_F8_pLiftPoint)
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLiftPoint)
             {
                 if (field_F4_pLine->field_8_type != eLineTypes::eUnknown_32 &&
                     field_F4_pLine->field_8_type != eLineTypes::eUnknown_36)
                 {
-                    field_F8_pLiftPoint->VRemove(this);
-                    field_F8_pLiftPoint->field_C_refCount--;
-                    field_F8_pLiftPoint = nullptr;
+                    pLiftPoint->VRemove(this);
+                    field_F8_id = -1;
                 }
             }
             else
@@ -614,7 +616,7 @@ void Slog::Init_473130()
     field_EC = 3;
     field_13C_res_idx = 0;
     field_4_typeId = Types::eSlog_89;
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     field_118_always_zero = 0;
     field_134 = 2;
     field_17A = 1;
@@ -1011,11 +1013,11 @@ void Slog::VOnTrapDoorOpen()
 
 void Slog::VOnTrapDoorOpen_4740C0()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->VRemove_451680(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove_451680(this);
+        field_F8_id = -1;
     }
 }
 
@@ -1330,7 +1332,7 @@ void Slog::Motion_5_Unknown_474070()
     if (sNumCamSwappers_507668 <= 0)
     {
         field_FC_current_motion = field_E4_previous_motion;
-        if (field_F8_pLiftPoint)
+        if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
         {
             field_A8_xpos = FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2);
             field_AC_ypos = FP_FromInteger(field_F4_pLine->field_0_rect.y);

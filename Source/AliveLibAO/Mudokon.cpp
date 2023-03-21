@@ -30,6 +30,7 @@
 #include "CheatController.hpp"
 #include "Sys_common.hpp"
 #include "magic_enum/include/magic_enum.hpp"
+#include "ObjectIds.hpp"
 
 void Mud_ForceLink()
 { }
@@ -943,9 +944,9 @@ void Mudokon::DoPathTrans_43FE00()
     {
         if (field_F4_pLine->field_8_type == eLineTypes::eUnknown_32)
         {
-            field_F8_pLiftPoint->VRemove(this);
-            field_F8_pLiftPoint->field_C_refCount--;
-            field_F8_pLiftPoint = nullptr;
+            auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            pLiftPoint->VRemove(this);
+            field_F8_id = -1;
         }
 
         PathLine* pLine = nullptr;
@@ -987,9 +988,10 @@ void Mudokon::ToStand_43CA40()
 
 void Mudokon::CheckFloorGone_43C9B0()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        if (field_F8_pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        if (pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
         {
             VOnTrapDoorOpen();
             field_144_flags.Set(Flags_144::e144_Bit8);
@@ -1082,14 +1084,14 @@ void Mudokon::MoveOnLine_43C7E0()
 
     if (field_F4_pLine)
     {
-        if (field_F8_pLiftPoint)
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+        if (pLiftPoint)
         {
             if (field_F4_pLine->field_8_type != eLineTypes::eUnknown_32 &&
                 field_F4_pLine->field_8_type != eLineTypes::eUnknown_36)
             {
-                field_F8_pLiftPoint->VRemove(this);
-                field_F8_pLiftPoint->field_C_refCount--;
-                field_F8_pLiftPoint = nullptr;
+                pLiftPoint->VRemove(this);
+                field_F8_id = -1;
             }
         }
         else
@@ -1251,7 +1253,8 @@ void Mudokon::VOnTrapDoorOpen()
 
 void Mudokon::VOnTrapDoorOpen_43C9F0()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
         if (field_106_shot)
         {
@@ -1262,9 +1265,8 @@ void Mudokon::VOnTrapDoorOpen_43C9F0()
             VSetMotion(eMudMotions::Motion_49_WalkOffEdge_43E800);
         }
 
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove(this);
+        field_F8_id = -1;
     }
 }
 
@@ -1558,7 +1560,7 @@ void Mudokon::Motion_10_Unused_43D4D0()
     if (sNumCamSwappers_507668 <= 0)
     {
         field_FC_current_motion = field_E4_previous_motion;
-        if (field_F8_pLiftPoint)
+        if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
         {
             field_A8_xpos = FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2);
             field_AC_ypos = FP_FromInteger(field_F4_pLine->field_0_rect.y);

@@ -50,11 +50,13 @@
 #include "Sys.hpp"
 #include "PsxRender.hpp"
 #include "Psx.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
 void Static_Inits_AO()
 {
+    static_ObjectIds_init_43EC30();
     Dove_static_ctor_40EE10();
     LvlArchive::ctor_static_41BBA0();
     FontContext::static_ctor_41C010();

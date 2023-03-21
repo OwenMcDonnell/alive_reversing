@@ -10,6 +10,7 @@
 #include "Events.hpp"
 #include "Sfx.hpp"
 #include "Collisions.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -87,13 +88,15 @@ TimedMine* TimedMine::ctor_4083F0(Path_TimedMine* pTlv, s32 tlvInfo)
     field_D4_collection_rect.y = field_AC_ypos - ScaleToGridSize_41FA30(field_BC_sprite_scale);
 
     field_6_flags.Set(Options::eInteractive_Bit8);
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     return this;
 }
 
 BaseGameObject* TimedMine::dtor_408690()
 {
     SetVTable(this, 0x4BA2C8);
+
+    auto pPlatform = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
     if (field_10C_armed != 1 || static_cast<s32>(gnFrameCount_507670) < field_114_timer)
     {
         gMap_507BA8.TLV_Reset_446870(field_110_tlvInfo, -1, 0, 0);
@@ -105,11 +108,10 @@ BaseGameObject* TimedMine::dtor_408690()
 
     field_118_anim.vCleanUp();
 
-    if (field_F8_pLiftPoint)
+    if (pPlatform)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pPlatform->VRemove(this);
+        field_F8_id = -1;
     }
 
     field_6_flags.Clear(Options::eInteractive_Bit8);
@@ -257,9 +259,8 @@ void TimedMine::StickToLiftPoint_408CA0()
                         pLiftPoint->VGetBoundingRect(&pObjRect, 1);
                         if (FP_GetExponent(field_A8_xpos) > pObjRect.x && FP_GetExponent(field_A8_xpos) < pObjRect.w && FP_GetExponent(field_AC_ypos) < pObjRect.h)
                         {
-                            field_F8_pLiftPoint = pLiftPoint;
+                            field_F8_id = pLiftPoint->field_8_object_id;
                             pLiftPoint->VAdd(this);
-                            field_F8_pLiftPoint->field_C_refCount++;
                             return;
                         }
                     }
@@ -276,7 +277,7 @@ void TimedMine::VUpdate()
 
 void TimedMine::VUpdate_408760()
 {
-    auto pPlatform = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pPlatform = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
     if (Event_Get_417250(kEventDeathReset_4))
     {
         field_6_flags.Set(BaseGameObject::eDead_Bit3);

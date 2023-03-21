@@ -33,6 +33,7 @@
 #include "SwitchStates.hpp"
 #include <algorithm>
 #include "Psx_common.hpp"
+#include "ObjectIds.hpp"
 
 // TODO: fix
 #undef max
@@ -314,7 +315,7 @@ Slig* Slig::ctor_464D40(Path_Slig* pTlv, s32 tlvInfo)
     field_EC = 3;
     field_158_explode_timer = 0;
     field_154_death_by_being_shot_timer = 0;
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     field_FC_current_motion = eSligMotions::Motion_7_Falling_46A1A0;
     field_11E_return_to_previous_motion = 0;
     field_144_unused = 0;
@@ -832,11 +833,11 @@ void Slig::VOnTrapDoorOpen()
 
 void Slig::VOnTrapDoorOpen_466350()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove(this);
+        field_F8_id = -1;
         field_E8_LastLineYPos = field_AC_ypos;
         VSetMotion(eSligMotions::Motion_39_OutToFall_46A9E0);
     }
@@ -1864,9 +1865,10 @@ s16 CCSTD Slig::IsInZCover_46BDA0(BaseAnimatedWithPhysicsGameObject* pObj)
 
 void Slig::CheckPlatformVanished()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        if (field_F8_pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        if (pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
         {
             // Platform is somehow gone, fall.
             const auto oldMotion = field_FC_current_motion;
@@ -1880,7 +1882,7 @@ void Slig::CheckPlatformVanished()
 
 s16 Slig::MoveLift_4665E0(FP ySpeed)
 {
-    auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
 
     pLiftPoint->Move_435740(FP_FromInteger(0), ySpeed, 0);
     CheckPlatformVanished();
@@ -2058,7 +2060,7 @@ void Slig::MoveOnLine_467490()
             field_B4_velx);
         if (field_F4_pLine)
         {
-            if (field_F8_pLiftPoint)
+            if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
             {
                 if (field_F4_pLine->field_8_type != eLineTypes::eUnknown_32 && field_F4_pLine->field_8_type != eLineTypes::eUnknown_36)
                 {
@@ -2293,9 +2295,10 @@ s16 Slig::HandlePlayerControlled_4667B0()
 
     if (pressed & sInputKey_Down_4C659C)
     {
-        if (field_F8_pLiftPoint)
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+        if (pLiftPoint)
         {
-            if (field_F8_pLiftPoint && field_F8_pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
+            if (pLiftPoint && pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
             {
                 if (FP_Abs(field_A8_xpos - FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2)) < kScaleGrid / FP_FromInteger(2))
                 {
@@ -2318,9 +2321,10 @@ s16 Slig::HandlePlayerControlled_4667B0()
     }
     if (pressed & sInputKey_Up_4C6598)
     {
-        if (field_F8_pLiftPoint)
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+        if (pLiftPoint)
         {
-            if (field_F8_pLiftPoint->field_10C == 1)
+            if (pLiftPoint->field_10C == 1)
             {
                 if (FP_Abs(field_A8_xpos - FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2)) < kScaleGrid / FP_FromInteger(2))
                 {
@@ -3116,10 +3120,11 @@ void Slig::Motion_8_Unknown_4673E0()
 {
     if (sNumCamSwappers_507668 <= 0)
     {
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
         if (sControlledCharacter_50767C != this || field_100_health <= FP_FromInteger(0))
         {
             field_FC_current_motion = field_E4_previous_motion;
-            if (field_F8_pLiftPoint)
+            if (pLiftPoint)
             {
                 field_A8_xpos = FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2);
                 field_AC_ypos = FP_FromInteger(field_F4_pLine->field_0_rect.y);
@@ -3128,9 +3133,9 @@ void Slig::Motion_8_Unknown_4673E0()
         else
         {
             field_FC_current_motion = field_E4_previous_motion;
-            if (field_F8_pLiftPoint)
+            if (pLiftPoint)
             {
-                static_cast<LiftPoint*>(field_F8_pLiftPoint)->field_12C_bMoving |= 1u;
+                pLiftPoint->field_12C_bMoving |= 1u;
             }
         }
 
@@ -3983,7 +3988,7 @@ void Slig::Motion_48_LiftDown_4665C0()
 
 void Slig::Motion_49_LiftGrip_4663A0()
 {
-    auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
 
     pLiftPoint->Move_435740(FP_FromInteger(0), FP_FromInteger(0), 0);
     field_B8_vely = FP_FromInteger(0);
@@ -4034,7 +4039,7 @@ void Slig::Motion_51_LiftGripping_466480()
 {
     CheckPlatformVanished();
 
-    auto pLift = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pLift = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
 
     pLift->Move_435740(FP_FromInteger(0), FP_FromInteger(0), 0);
     field_B8_vely = FP_FromInteger(0);

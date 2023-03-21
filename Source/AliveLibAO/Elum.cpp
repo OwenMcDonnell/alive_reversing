@@ -20,6 +20,7 @@
 #include "GameSpeak.hpp"
 #include "Math.hpp"
 #include "BaseGameAutoPlayer.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -333,11 +334,11 @@ void Elum::ToKnockback()
 
 void Elum::VOnTrapDoorOpen_412700()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pLiftPoint->VRemove(this);
+        field_F8_id = -1;
     }
 }
 
@@ -587,9 +588,10 @@ void Elum::SlowOnX_414210(FP amount)
 
 void Elum::CheckLiftPointGoneAndSetCamera()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        if (field_F8_pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        if (pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
         {
             VOnTrapDoorOpen();
             field_170_flags.Set(Elum::Flags_170::eFalling_Bit3);
@@ -616,7 +618,7 @@ void Elum::MoveOnLine_412580(s16 xLookAhead)
     if (field_F4_pLine)
     {
         field_A8_xpos += field_B4_velx;
-        if (field_F8_pLiftPoint)
+        if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
         {
             if (field_F4_pLine->field_8_type != eLineTypes::eUnknown_32)
             {
@@ -740,7 +742,7 @@ s16 Elum::ToNextMotion_4120F0()
 
 s16 Elum::ToNextMotionAbeControlled_411E40()
 {
-    LiftPoint* pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
     if (pLiftPoint)
     {
         if (pLiftPoint->field_10C == 1)
@@ -840,7 +842,7 @@ void Elum::HandleElumPathTrans_411460()
 
     if (field_F4_pLine && field_F4_pLine->field_8_type == eLineTypes::eUnknown_32)
     {
-        field_F8_pLiftPoint = nullptr;
+        field_F8_id = -1;
     }
 
     PathLine* pLine = nullptr;
@@ -1010,7 +1012,7 @@ s16 Elum::NearHoney_411DA0()
 {
     if (field_170_flags.Get(Elum::Flags_170::eFoundHoney_Bit4))
     {
-        auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
         if (pLiftPoint && pLiftPoint->field_10C == 1 && !pLiftPoint->OnAnyFloor())
         {
             // We're on a lift that isn't on a floor
@@ -1125,11 +1127,11 @@ s16 Elum::Brain_0_WithoutAbe_416190()
                 return 4;
             }
 
-            if (field_F8_pLiftPoint)
+            auto pLift = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+            if (pLift)
             {
-                if (field_F8_pLiftPoint->field_10C == 1)
+                if (pLift->field_10C == 1)
                 {
-                    auto pLift = static_cast<LiftPoint*>(field_F8_pLiftPoint);
                     if (!pLift->OnAnyFloor()) // TODO: Check logic
                     {
                         if (field_A8_xpos == sActiveHero_507678->field_A8_xpos)
@@ -3686,7 +3688,7 @@ void Elum::VUpdate_4102A0()
                     1,
                     (TCollisionCallBack) &BaseAliveGameObject::OnTrapDoorIntersection_401C10);
 
-                if (field_F8_pLiftPoint)
+                if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
                 {
                     field_170_flags.Clear(Elum::Flags_170::eFalling_Bit3);
                 }
@@ -3863,7 +3865,7 @@ void Elum::vScreenChange_411340()
                 }
             }
 
-            if (field_F8_pLiftPoint)
+            if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
             {
                 VOnTrapDoorOpen();
                 field_170_flags.Set(Elum::Flags_170::eFalling_Bit3);
@@ -3983,7 +3985,7 @@ Elum* Elum::ctor_410870(s32, anythingForTheTimeBeing, anythingForTheTimeBeing, s
     field_170_flags.Clear(Elum::Flags_170::eChangedPathNotMounted_Bit5);
     field_170_flags.Clear(Elum::Flags_170::eChangedPathMounted_Bit7);
 
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     gElum_507680 = this;
 
     field_FC_current_motion = eElumMotions::Motion_21_Land_414A20;

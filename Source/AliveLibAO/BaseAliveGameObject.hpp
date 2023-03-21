@@ -115,7 +115,7 @@ public:
     s16 field_EE_type;
     Path_TLV* field_F0_pTlv;
     PathLine* field_F4_pLine;
-    PlatformBase* field_F8_pLiftPoint;
+    s32 field_F8_id; // id
     s16 field_FC_current_motion;
     s16 field_FE_next_motion;
     FP field_100_health;

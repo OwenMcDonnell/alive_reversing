@@ -55,6 +55,7 @@
 #include "GameSpeak.hpp"
 #include "ZBall.hpp"
 #include "Gibs.hpp"
+#include "ObjectIds.hpp"
 
 #include "Sys_common.hpp"
 
@@ -838,16 +839,16 @@ void Abe::VOnTrapDoorOpen()
 
 void Abe::VOnTrapDoorOpen_42EED0()
 {
-    if (field_F8_pLiftPoint)
+    auto pPlatform = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pPlatform)
     {
         if (!field_2A8_flags.Get(Flags_2A8::e2A8_Bit6_bShrivel))
         {
             VSetMotion(eAbeMotions::Motion_93_WalkOffEdge_429840);
         }
 
-        field_F8_pLiftPoint->VRemove(this);
-        field_F8_pLiftPoint->field_C_refCount--;
-        field_F8_pLiftPoint = nullptr;
+        pPlatform->VRemove(this);
+        field_F8_id = -1;
         field_E8_LastLineYPos = field_AC_ypos;
     }
 }
@@ -997,7 +998,7 @@ Abe* Abe::ctor_420770(s32 frameTableOffset, s32 /*r*/, s32 /*g*/, s32 /*b*/)
     field_114_gnFrame = gnFrameCount_507670;
     field_F0_pTlv = nullptr;
     field_160_pRope = nullptr;
-    field_F8_pLiftPoint = nullptr;
+    field_F8_id = -1;
     field_130_say = -1;
     field_134_auto_say_timer = 0;
     field_EC = 1;
@@ -1606,12 +1607,13 @@ Bool32 Abe::IsStanding_41FC10()
 
 void Abe::FollowLift_42EE90()
 {
-    if (field_F8_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+    if (pLiftPoint)
     {
-        field_B8_vely = field_F8_pLiftPoint->field_B8_vely;
-        if (field_F8_pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        field_B8_vely = pLiftPoint->field_B8_vely;
+        if (pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
         {
-            field_F8_pLiftPoint->VOnPickUpOrSlapped();
+            pLiftPoint->VOnPickUpOrSlapped();
             field_2A8_flags.Set(Flags_2A8::e2A8_Bit1);
         }
         SetActiveCameraDelayedFromDir_401C90();
@@ -1995,14 +1997,14 @@ void Abe::MoveForward_422FC0()
     const s32 mask = field_BC_sprite_scale != FP_FromDouble(0.5) ? 1 : 0x10;
     if (field_F4_pLine && (mask & (1 << field_F4_pLine->field_8_type)))
     {
-        if (field_F8_pLiftPoint)
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+        if (pLiftPoint)
         {
             if (field_F4_pLine->field_8_type != eLineTypes ::eUnknown_32 &&
                 field_F4_pLine->field_8_type != eLineTypes::eUnknown_36)
             {
-                field_F8_pLiftPoint->VRemove(this);
-                field_F8_pLiftPoint->field_C_refCount--;
-                field_F8_pLiftPoint = nullptr;
+                pLiftPoint->VRemove(this);
+                field_F8_id = -1;
             }
         }
         else if (field_F4_pLine->field_8_type == eLineTypes::eUnknown_32 ||
@@ -2025,12 +2027,11 @@ void Abe::MoveForward_422FC0()
     else
     {
         field_F4_pLine = nullptr;
-
-        if (field_F8_pLiftPoint)
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+        if (pLiftPoint)
         {
-            field_F8_pLiftPoint->VRemove(this);
-            field_F8_pLiftPoint->field_C_refCount--;
-            field_F8_pLiftPoint = nullptr;
+            pLiftPoint->VRemove(this);
+            field_F8_id = -1;
         }
 
         field_10C_prev_held = 0;
@@ -3098,7 +3099,7 @@ s16 Abe::RunTryEnterDoor_4259C0()
 
 s16 Abe::MoveLiftUpOrDown_42F190(FP yVelocity)
 {
-    auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
 
     pLiftPoint->Move_435740(FP_FromInteger(0), yVelocity, 0);
     FollowLift_42EE90();
@@ -3990,12 +3991,13 @@ void Abe::Motion_0_Idle_423520()
 
     if (Input().IsAnyPressed(sInputKey_Down_4C659C))
     {
-        if (field_F8_pLiftPoint)
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+        if (pLiftPoint)
         {
             const FP liftPlatformXMidPoint = FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2);
             const FP halfGrid = ScaleToGridSize_41FA30(field_BC_sprite_scale) / FP_FromInteger(2);
 
-            if (field_F8_pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && FP_Abs(field_A8_xpos - liftPlatformXMidPoint) < halfGrid)
+            if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51 && FP_Abs(field_A8_xpos - liftPlatformXMidPoint) < halfGrid)
             {
                 //AO exclusive - Abe only uses lift facing one side
                 if (field_10_anim.field_4_flags.Get(AnimFlags::eBit5_FlipX))
@@ -4050,9 +4052,10 @@ void Abe::Motion_0_Idle_423520()
     bool handleDoActionOrThrow = false;
     if (Input().IsAnyPressed(sInputKey_Up_4C6598))
     {
-        if (field_F8_pLiftPoint)
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+        if (pLiftPoint)
         {
-            if (field_F8_pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
+            if (pLiftPoint->field_4_typeId == Types::eLiftPoint_51)
             {
                 const FP halfGrid = ScaleToGridSize_41FA30(field_BC_sprite_scale) / FP_FromInteger(2);
                 const FP liftPlatformXMidPoint = FP_FromInteger((field_F4_pLine->field_0_rect.x + field_F4_pLine->field_0_rect.w) / 2);
@@ -4988,7 +4991,7 @@ void Abe::Motion_17_HoistIdle_4269E0()
                     field_AC_ypos = hitY;
                     field_F4_pLine = pPathLine;
                     field_B8_vely = FP_FromInteger(0);
-                    if (!field_F8_pLiftPoint)
+                    if (!sObjectIds_5C1B70.Find_449CF0(field_F8_id))
                     {
                         if (pPathLine->field_8_type == eLineTypes::eUnknown_32 ||
                             pPathLine->field_8_type == eLineTypes::eUnknown_36)
@@ -5926,7 +5929,7 @@ void Abe::Motion_33_RunJumpMid_426FA0()
                 field_B4_velx = FP_FromInteger(0);
                 field_B8_vely = FP_FromInteger(0);
                 field_FE_next_motion = eAbeMotions::Motion_0_Idle_423520;
-                if (!field_F8_pLiftPoint)
+                if (!sObjectIds_5C1B70.Find_449CF0(field_F8_id))
                 {
                     if (pLine->field_8_type == eLineTypes ::eUnknown_32 ||
                         pLine->field_8_type == eLineTypes::eUnknown_36)
@@ -7149,13 +7152,13 @@ void Abe::Motion_61_Respawn_42CD20()
 
             if (static_cast<s32>(gnFrameCount_507670) > field_118_timer)
             {
-                if (field_F8_pLiftPoint)
+                auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
+                if (pLiftPoint)
                 {
-                    if (field_F8_pLiftPoint->field_6_flags.Get(Options::eDrawable_Bit4))
+                    if (pLiftPoint->field_6_flags.Get(Options::eDrawable_Bit4))
                     {
-                        field_F8_pLiftPoint->VRemove_451680(this);
-                        field_F8_pLiftPoint->field_C_refCount--;
-                        field_F8_pLiftPoint = nullptr;
+                        pLiftPoint->VRemove_451680(this);
+                        field_F8_id = -1;
                     }
                 }
                 if (field_140_saved_camera > 300u)
@@ -7602,7 +7605,7 @@ void Abe::Motion_67_ToOffScreenHoist_428C50()
         field_AC_ypos = hitY;
         field_F4_pLine = pLine;
         field_B8_vely = FP_FromInteger(0);
-        if (!field_F8_pLiftPoint)
+        if (!sObjectIds_5C1B70.Find_449CF0(field_F8_id))
         {
             if (field_F4_pLine->field_8_type == eLineTypes ::eUnknown_32 ||
                 field_F4_pLine->field_8_type == eLineTypes::eUnknown_36)
@@ -9105,7 +9108,7 @@ void Abe::Motion_132_LiftUseDown_42F170()
 
 void Abe::Motion_133_LiftGrabBegin_42EF20()
 {
-    auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
     pLiftPoint->Move_435740(FP_FromInteger(0), FP_FromInteger(0), 0);
 
     field_B8_vely = FP_FromInteger(0);
@@ -9144,7 +9147,7 @@ void Abe::Motion_135_LiftGrabIdle_42F000()
 {
     FollowLift_42EE90();
 
-    auto pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
     pLiftPoint->Move_435740(FP_FromInteger(0), FP_FromInteger(0), 0);
 
     field_B8_vely = FP_FromInteger(0);
@@ -9313,7 +9316,7 @@ void Abe::Motion_138_ElumUnmountEnd_42E390()
 
         field_F4_pLine = gElum_507680->field_F4_pLine;
 
-        if (field_F8_pLiftPoint)
+        if (sObjectIds_5C1B70.Find_449CF0(field_F8_id))
         {
             if (field_F4_pLine->field_8_type != eLineTypes ::eUnknown_32 &&
                 field_F4_pLine->field_8_type != eLineTypes::eUnknown_36)
@@ -9376,7 +9379,7 @@ void Abe::Motion_140_BeesStruggling_423F30()
 
 void Abe::Motion_141_BeesStrugglingOnLift_42F390()
 {
-    LiftPoint* pLiftPoint = static_cast<LiftPoint*>(field_F8_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_F8_id));
 
     pLiftPoint->Move_435740(FP_FromInteger(0), FP_FromInteger(12), 0);
     if (pLiftPoint)
