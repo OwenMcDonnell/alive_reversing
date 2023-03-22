@@ -10,6 +10,7 @@
 #include "Abe.hpp"
 #include "Sfx.hpp"
 #include "Collisions.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -53,7 +54,7 @@ HoneySack* HoneySack::ctor_42BD10(Path_HoneySack* pTlv, s32 tlvInfo)
         field_E8_state = State::eUpdateHoneySackOnGround_3;
         const AnimRecord& groundRec = AO::AnimRec(AnimId::HoneySack_OnGround);
         field_10_anim.Set_Animation_Data_402A40(groundRec.mFrameTableOffset, 0);
-        field_F0_pBee = nullptr;
+        field_F0_pBee = -1;
     }
     else
     {
@@ -67,12 +68,12 @@ HoneySack* HoneySack::ctor_42BD10(Path_HoneySack* pTlv, s32 tlvInfo)
             ResourceManager::LoadResourceFile_455270("WASP.BAN", nullptr);
         }
 
-        field_F0_pBee = ao_new<BeeSwarm>();
-        if (field_F0_pBee)
+        auto pBeeMem = ao_new<BeeSwarm>();
+        if (pBeeMem)
         {
-            field_F0_pBee->ctor_47FC60(field_A8_xpos, field_AC_ypos, FP_FromInteger(0), 5, 0);
-            field_F0_pBee->field_C_refCount++;
-            field_F0_pBee->field_BC_sprite_scale = field_BC_sprite_scale;
+            pBeeMem->ctor_47FC60(field_A8_xpos, field_AC_ypos, FP_FromInteger(0), 5, 0);
+            pBeeMem->field_BC_sprite_scale = field_BC_sprite_scale;
+            field_F0_pBee = pBeeMem->field_8_object_id;
         }
 
         field_F4_drip_target_x = FP_FromInteger(0);
@@ -102,10 +103,10 @@ BaseGameObject* HoneySack::dtor_42BF20()
         gMap_507BA8.TLV_Reset_446870(field_E4_tlvInfo, FP_GetExponent(field_AC_ypos - field_FC_ypos2), 0, 0);
     }
 
-    if (field_F0_pBee)
+    auto pBee = static_cast<BeeSwarm*>(sObjectIds_5C1B70.Find_449CF0(field_F0_pBee));
+    if (pBee)
     {
-        field_F0_pBee->field_C_refCount--;
-        field_F0_pBee = nullptr;
+        field_F0_pBee = -1;
     }
 
     return dtor_417D10();
@@ -162,12 +163,12 @@ void HoneySack::VUpdate_42BFE0()
         field_6_flags.Set(Options::eDead_Bit3);
     }
 
-    if (field_F0_pBee)
+    auto pBee = static_cast<BeeSwarm*>(sObjectIds_5C1B70.Find_449CF0(field_F0_pBee));
+    if (pBee)
     {
-        if (field_F0_pBee->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        if (pBee->field_6_flags.Get(BaseGameObject::eDead_Bit3))
         {
-            field_F0_pBee->field_C_refCount--;
-            field_F0_pBee = nullptr;
+            field_F0_pBee = -1;
         }
     }
 
@@ -215,10 +216,11 @@ void HoneySack::VUpdate_42BFE0()
             const FP oldY = field_AC_ypos;
             field_AC_ypos += field_B8_vely;
 
-            if (field_F0_pBee)
+            pBee = static_cast<BeeSwarm*>(sObjectIds_5C1B70.Find_449CF0(field_F0_pBee));
+            if (pBee)
             {
-                field_F0_pBee->field_D70_chase_target_x = field_A8_xpos;
-                field_F0_pBee->field_D74_chase_target_y = field_AC_ypos;
+                pBee->field_D70_chase_target_x = field_A8_xpos;
+                pBee->field_D74_chase_target_y = field_AC_ypos;
             }
 
             PathLine* pLine = nullptr;
@@ -254,11 +256,10 @@ void HoneySack::VUpdate_42BFE0()
                 }
 
                 pNewBee->Chase_47FEB0(sActiveHero_507678);
-                if (field_F0_pBee)
+                if (pBee)
                 {
-                    field_F0_pBee->field_C_refCount--;
-                    field_F0_pBee->field_6_flags.Set(Options::eDead_Bit3);
-                    field_F0_pBee = nullptr;
+                    pBee->field_6_flags.Set(Options::eDead_Bit3);
+                    field_F0_pBee = -1;
                 }
 
                 for (s32 i = 0; i < gBaseGameObject_list_9F2DF0->Size(); i++)

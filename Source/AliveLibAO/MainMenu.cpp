@@ -25,6 +25,7 @@
 #include "Sound.hpp"
 #include "Particle.hpp"
 #include "../AliveLibAE/Io.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -793,7 +794,7 @@ Menu* Menu::ctor_47A6F0(Path_TLV* /*pTlv*/, s32 tlvInfo)
 
     field_1D0_fn_render = &Menu::Empty_Render_47AC80;
     field_1E0_selected_index.mainmenu = MainMenuOptions::eBegin_1;
-    field_1E8_pMenuTrans = 0;
+    field_1E8_pMenuTrans = -1;
     field_1EC_pObj1 = 0;
     field_1F0_pObj2 = 0;
     field_200 = 0;
@@ -859,11 +860,11 @@ BaseGameObject* Menu::dtor_47AAB0()
         }
     }
 
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        field_1E8_pMenuTrans->field_6_flags.Set(Options::eDead_Bit3);
-        field_1E8_pMenuTrans->field_C_refCount--;
-        field_1E8_pMenuTrans = nullptr;
+        pMenuTrans->field_6_flags.Set(Options::eDead_Bit3);
+        field_1E8_pMenuTrans = -1;
     }
 
     if (field_1EC_pObj1)
@@ -1037,19 +1038,21 @@ void Menu::FMV_Select_Update_47E8D0()
             }
         }
 
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
         if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop)) // TODO: Input constants
         {
             // Go back to main screen
             field_20C_bStartInSpecificMap = 0;
 
-            if (field_1E8_pMenuTrans)
+            if (pMenuTrans)
             {
-                field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+                pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
             }
             else
             {
-                field_1E8_pMenuTrans = ao_new<MainMenuTransition>();
-                field_1E8_pMenuTrans->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
+                auto pMenuTransMem = ao_new<MainMenuTransition>();
+                pMenuTransMem->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
+                field_1E8_pMenuTrans = pMenuTransMem->field_8_object_id;
             }
             field_1CC_fn_update = &Menu::FMV_Or_Level_Select_To_Back_Update_47EC70;
         }
@@ -1128,7 +1131,7 @@ void Menu::FMV_Select_Update_47E8D0()
 
                 field_20C_bStartInSpecificMap = 1;
 
-                field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+                pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
                 field_1CC_fn_update = &Menu::Level_Cheat_To_Loading_Update_47ED50;
             }
         }
@@ -1459,15 +1462,16 @@ EXPORT void Menu::MainScreen_Update_47AF60()
             }
             else
             {
-                if (field_1E8_pMenuTrans)
+                auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+                if (pMenuTrans)
                 {
-                    field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+                    pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
                 }
                 else
                 {
-                    field_1E8_pMenuTrans = ao_new<MainMenuTransition>();
-                    field_1E8_pMenuTrans->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
-                    field_1E8_pMenuTrans->field_C_refCount++;
+                    auto pMenuTransMem = ao_new<MainMenuTransition>();
+                    pMenuTransMem->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
+                    field_1E8_pMenuTrans = pMenuTransMem->field_8_object_id;
                 }
 
                 const AnimRecord& rec = AO::AnimRec(AnimId::MenuAbeSpeak_Idle);
@@ -1486,15 +1490,15 @@ EXPORT void Menu::MainScreen_Update_47AF60()
             sprintf(fileNameBuf, "PLAYBK%02d.JOY", sJoyResId_50769C);
             ResourceManager::LoadResourceFile_4551E0(fileNameBuf, 0, 0, 0);
 
-            if (field_1E8_pMenuTrans)
+            auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+            if (pMenuTrans)
             {
-                field_1E8_pMenuTrans->field_C_refCount--;
-                field_1E8_pMenuTrans->field_6_flags.Set(Options::eDead_Bit3);
+                pMenuTrans->field_6_flags.Set(Options::eDead_Bit3);
             }
 
-            field_1E8_pMenuTrans = ao_new<MainMenuTransition>();
-            field_1E8_pMenuTrans->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
-            field_1E8_pMenuTrans->field_C_refCount++;
+            auto pMenuTransMem = ao_new<MainMenuTransition>();
+            pMenuTransMem->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
+            field_1E8_pMenuTrans = pMenuTransMem->field_8_object_id;
             field_1CC_fn_update = &Menu::GoToSelectedMenuPage_47BC50;
         }
     }
@@ -1514,15 +1518,16 @@ EXPORT void Menu::MainScreen_Update_47AF60()
         }
         else
         {
-            if (field_1E8_pMenuTrans)
+            auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+            if (pMenuTrans)
             {
-                field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+                pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
             }
             else
             {
-                field_1E8_pMenuTrans = ao_new<MainMenuTransition>();
-                field_1E8_pMenuTrans->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
-                field_1E8_pMenuTrans->field_C_refCount++;
+                auto pMenuTransMem = ao_new<MainMenuTransition>();
+                pMenuTransMem->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
+                field_1E8_pMenuTrans = pMenuTransMem->field_8_object_id;
             }
 
             const AnimRecord& rec = AO::AnimRec(AnimId::MenuAbeSpeak_Idle);
@@ -1546,15 +1551,16 @@ EXPORT void Menu::MainScreen_Update_47AF60()
         }
         else
         {
-            if (field_1E8_pMenuTrans)
+            auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+            if (pMenuTrans)
             {
-                field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+                pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
             }
             else
             {
-                field_1E8_pMenuTrans = ao_new<MainMenuTransition>();
-                field_1E8_pMenuTrans->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
-                field_1E8_pMenuTrans->field_C_refCount++;
+                auto pMenuTransMem = ao_new<MainMenuTransition>();
+                pMenuTransMem->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
+                field_1E8_pMenuTrans = pMenuTransMem->field_8_object_id;
             }
 
             const AnimRecord& rec = AO::AnimRec(AnimId::MenuAbeSpeak_Idle);
@@ -1588,7 +1594,8 @@ EXPORT void Menu::MainScreen_Update_47AF60()
 // After fade out go to gamespeak/options/load/whatever
 void Menu::GoToSelectedMenuPage_47BC50()
 {
-    if (field_1E8_pMenuTrans == nullptr || field_1E8_pMenuTrans->field_16_bDone)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans == nullptr || pMenuTrans->field_16_bDone)
     {
         if (field_224_bToFmvSelect)
         {
@@ -1659,18 +1666,19 @@ void Menu::GoToSelectedMenuPage_47BC50()
 
 void Menu::WaitForSpeakFinishAndStartChangeEffect_47BB90()
 {
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
     // Abe finished speaking?
     if (field_10_anim.field_4_flags.Get(AnimFlags::eBit18_IsLastFrame))
     {
-        if (field_1E8_pMenuTrans)
+        if (pMenuTrans)
         {
-            field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+            pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         }
         else
         {
-            field_1E8_pMenuTrans = ao_new<MainMenuTransition>();
-            field_1E8_pMenuTrans->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
-            field_1E8_pMenuTrans->field_C_refCount++;
+            auto pMenuTransMem = ao_new<MainMenuTransition>();
+            pMenuTransMem->ctor_436370(Layer::eLayer_FadeFlash_40, 1, 0, 16, TPageAbr::eBlend_1);
+            field_1E8_pMenuTrans = pMenuTransMem->field_8_object_id;
         }
 
         const AnimRecord& rec = AO::AnimRec(AnimId::MenuAbeSpeak_Idle);
@@ -1738,17 +1746,19 @@ void Menu::ToNextMenuPage_47BD80()
                     break;
             }
         }
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
     }
 }
 
 void Menu::ToLoading_47B7E0()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
-            field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+            pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
             gMap_507BA8.SetActiveCam_444660(LevelIds::eMenu_0, 1, CameraIds::Menu::eLoading_21, CameraSwapEffects::eInstantChange_0, 0, 0);
             field_204_flags &= ~2u;
             field_1CC_fn_update = &Menu::Loading_Update_47B870;
@@ -1760,9 +1770,10 @@ void Menu::ToLoading_47B7E0()
 
 void Menu::ToGameSpeak_Update_47D620()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             field_1CC_fn_update = &Menu::GameSpeak_Update_47CBD0;
             field_1DC_idle_input_counter = 0;
@@ -1801,7 +1812,8 @@ void Menu::GameSpeak_Render_47D700(PrimHeader** ppOt)
 
 void Menu::To_FMV_Or_Level_Select_Update_47EC30()
 {
-    if (field_1E8_pMenuTrans->field_16_bDone)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans->field_16_bDone)
     {
         ResourceManager::FreeResource_455550(field_E4_res_array[0]);
         field_E4_res_array[0] = nullptr;
@@ -1830,9 +1842,10 @@ void Menu::To_Load_Update_47D8E0()
     field_230_bGoBack = 0;
     field_228 = FP_FromInteger(0);
 
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             sSaveIdx_9F2DD8 = 0;
             IO_EnumerateDirectory("*.sav", [](const char_type* fileName, u32 /*lastWriteTime*/)
@@ -2020,9 +2033,10 @@ void Menu::Load_Render_47DDA0(PrimHeader** ppOt)
 
 void Menu::To_Options_Update_47C250()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             field_1CC_fn_update = &Menu::Options_Update_47BF90;
             field_1DC_idle_input_counter = 0;
@@ -2061,7 +2075,8 @@ void Menu::FMV_Or_Level_Select_Back_Update_47ECB0()
     {
         ResourceManager::LoadResourceFile_455270("ABESPEAK.BAN", nullptr);
         field_E4_res_array[0] = ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Animation, AOResourceID::kAbespeakAOResID, 1, 0);
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
         field_1E0_selected_index.mainmenu = MainMenuOptions::eBegin_1;
 
         const AnimRecord& rec = AO::AnimRec(sMainScreenButtons_4D00B0[1].field_4_anim_id);
@@ -2078,9 +2093,10 @@ void Menu::Loading_Update_47B870()
 {
     if (!gAttract_507698 || ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Plbk, sJoyResId_50769C, 0, 0))
     {
-        if (field_1E8_pMenuTrans)
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        if (pMenuTrans)
         {
-            if (field_1E8_pMenuTrans->field_16_bDone)
+            if (pMenuTrans->field_16_bDone)
             {
                 if (gAttract_507698)
                 {
@@ -2090,9 +2106,8 @@ void Menu::Loading_Update_47B870()
                     LOG_INFO(buffer);
                 }
 
-                field_1E8_pMenuTrans->field_C_refCount--;
-                field_1E8_pMenuTrans->field_6_flags.Set(Options::eDead_Bit3);
-                field_1E8_pMenuTrans = nullptr;
+                pMenuTrans->field_6_flags.Set(Options::eDead_Bit3);
+                field_1E8_pMenuTrans = -1;
 
                 if (!field_E4_res_array[0])
                 {
@@ -2254,16 +2269,18 @@ void Menu::Options_WaitForAbeSpeak_Update_47C280()
     {
         const AnimRecord& rec = AO::AnimRec(AnimId::MenuAbeSpeak_Idle);
         field_10_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, field_E4_res_array[1]);
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         field_1CC_fn_update = &Menu::Option_GoTo_Selected_Update_47C2C0;
     }
 }
 
 void Menu::Option_GoTo_Selected_Update_47C2C0()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             switch (field_1E0_selected_index.options_menu)
             {
@@ -2335,17 +2352,18 @@ void Menu::Options_To_Selected_After_Cam_Change_Update_47C330()
                 LOG_ERROR("Unknown menu idx " << field_1E0_selected_index.raw);
                 break;
         }
-
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
     }
 }
 
 void Menu::To_Options_Controller_Update_47F2E0()
 {
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
     field_230_bGoBack = -1;
-    if (field_1E8_pMenuTrans)
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             field_1CC_fn_update = &Menu::Options_Controller_Update_47F210;
             field_1D0_fn_render = &Menu::Options_Controller_Render_47F430;
@@ -2481,9 +2499,10 @@ void Menu::Options_Controller_Render_47F430(PrimHeader** ppOt)
 
 void Menu::To_Options_Sound_Update_47C6F0()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             field_1CC_fn_update = &Menu::Options_Sound_Update_47C420;
             field_1DC_idle_input_counter = 0;
@@ -2493,9 +2512,10 @@ void Menu::To_Options_Sound_Update_47C6F0()
 
 void Menu::To_MainScreen_Update_47BB60()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             field_1CC_fn_update = &Menu::MainScreen_Update_47AF60;
             field_1DC_idle_input_counter = 0;
@@ -2628,16 +2648,18 @@ void Menu::Options_WaitForAbeSayOK_Update_47C720()
     {
         const AnimRecord& rec = AO::AnimRec(AnimId::MenuAbeSpeak_Idle);
         field_10_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, field_E4_res_array[1]);
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         field_1CC_fn_update = &Menu::Options_WaitForScreenTrans_Update_47C760;
     }
 }
 
 void Menu::Options_WaitForScreenTrans_Update_47C760()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             gMap_507BA8.SetActiveCam_444660(LevelIds::eMenu_0, 1, CameraIds::Menu::eOptions_2, CameraSwapEffects::eInstantChange_0, 0, 0);
             field_1CC_fn_update = &Menu::To_MainOptions_Screen_After_Camera_Change_Update_47C7A0;
@@ -2654,7 +2676,8 @@ void Menu::To_MainOptions_Screen_After_Camera_Change_Update_47C7A0()
         field_1E0_selected_index.options_menu = OptionsMenuOptions::eSound_1;
         const AnimRecord& rec = AO::AnimRec(sOptionsButtons_4D0148[1].field_4_anim_id);
         field_134_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, nullptr);
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
     }
 }
 
@@ -3010,7 +3033,8 @@ void Menu::CycleGameSpeakIdleAnims()
 
 void Menu::FMV_Or_Level_Select_To_Back_Update_47EC70()
 {
-    if (field_1E8_pMenuTrans->field_16_bDone)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans->field_16_bDone)
     {
         gMap_507BA8.SetActiveCam_444660(LevelIds::eMenu_0, 1, CameraIds::Menu::eMainMenu_1, CameraSwapEffects::eInstantChange_0, 0, 0);
         field_1CC_fn_update = &Menu::FMV_Or_Level_Select_Back_Update_47ECB0;
@@ -3026,7 +3050,8 @@ void Menu::To_Credits_Update_47F140()
 
 void Menu::Level_Cheat_To_Loading_Update_47ED50()
 {
-    if (field_1E8_pMenuTrans->field_16_bDone)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans->field_16_bDone)
     {
         field_1CC_fn_update = &Menu::ToLoading_47B7E0;
     }
@@ -3051,26 +3076,28 @@ void Menu::Options_Controller_Update_47F210()
         }
     }
 
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
     if (Input().IsAnyPressed(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
     {
         field_230_bGoBack = 1;
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         field_1CC_fn_update = &Menu::GoTo_ControllerConfigure_Or_Back_AfterScreenTrans_Update_47F330;
     }
 
     if (Input().IsAnyHeld(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction)))
     {
         field_230_bGoBack = 0;
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         field_1CC_fn_update = &Menu::GoTo_ControllerConfigure_Or_Back_AfterScreenTrans_Update_47F330;
     }
 }
 
 void Menu::GoTo_ControllerConfigure_Or_Back_AfterScreenTrans_Update_47F330()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             switch (field_230_bGoBack)
             {
@@ -3120,7 +3147,8 @@ void Menu::Goto_ConfigureController_OrSave_SettingIni_Update_47F380()
 
         }
 
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
     }
 }
 
@@ -3311,9 +3339,10 @@ void Menu::To_ButtonRemap_Update_47F860()
 {
     field_230_bGoBack = -1;
 
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             field_1CC_fn_update = &Menu::ButtonRemap_Update_47F6F0;
             field_1D0_fn_render = &Menu::ButtonRemap_Render_47F940;
@@ -3333,6 +3362,7 @@ void Menu::ButtonRemap_Update_47F6F0()
         return;
     }
 
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
     if (field_230_bGoBack == 8)
     {
         if (!Input_Remap_44F300(static_cast<InputCommands>(sRemappableInputs_4D0030.buttons[Input_JoyStickEnabled() ? 1 : 0][field_1E0_selected_index.raw])))
@@ -3341,7 +3371,7 @@ void Menu::ButtonRemap_Update_47F6F0()
         }
 
         field_230_bGoBack = -1;
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
         bWaitingForRemapInput_9F2DE8 = 1;
         return;
     }
@@ -3414,7 +3444,7 @@ void Menu::ButtonRemap_Update_47F6F0()
     if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
     {
         // Show abe motions screen
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         field_230_bGoBack = 9;
         field_1CC_fn_update = &Menu::To_ShowAbeMotions_ChangeCamera_Update_47F8A0;
     }
@@ -3422,7 +3452,7 @@ void Menu::ButtonRemap_Update_47F6F0()
     if (Input().IsAnyHeld(InputObject::PadIndex::First, (InputCommands::eThrowItem | InputCommands::eUnPause_OrConfirm | InputCommands::eDoAction)))
     {
         // Rebind a key (in that horrible white blinding screen)
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         field_230_bGoBack = 8;
         bWaitingForRemapInput_9F2DE8 = 1;
     }
@@ -3430,9 +3460,10 @@ void Menu::ButtonRemap_Update_47F6F0()
 
 void Menu::To_LoadSave_Update_47DB10()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             field_1CC_fn_update = &Menu::LoadSave_Update_47DB40;
             field_1D0_fn_render = &Menu::Empty_Render_47AC80;
@@ -3442,11 +3473,11 @@ void Menu::To_LoadSave_Update_47DB10()
 
 void Menu::LoadSave_Update_47DB40()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        field_1E8_pMenuTrans->field_C_refCount--;
-        field_1E8_pMenuTrans->field_6_flags.Set(Options::eDead_Bit3);
-        field_1E8_pMenuTrans = nullptr;
+        pMenuTrans->field_6_flags.Set(Options::eDead_Bit3);
+        field_1E8_pMenuTrans = -1;
     }
 
     if (!field_E4_res_array[0])
@@ -3530,9 +3561,10 @@ void Menu::SaveLoadFailed_Render_47DCF0(PrimHeader** ppOt)
 
 void Menu::To_ShowAbeMotions_ChangeCamera_Update_47F8A0()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             if (field_230_bGoBack == 9)
             {
@@ -3554,15 +3586,17 @@ void Menu::To_ShowAbeMotions_SaveSettings_Update_47F8E0()
         field_1CC_fn_update = &Menu::To_ToggleMotions_Update_47C9E0;
         field_1D0_fn_render = &Menu::ToggleMotions_Render_47CAB0;
         field_1E0_selected_index.motions_menu = MotionsOptions::eMotions_0;
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
     }
 }
 
 void Menu::To_ToggleMotions_Update_47C9E0()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             SetBrain(&Menu::ToggleMotions_Update_47C800, field_1CC_fn_update, kUpdateTable);
             field_1DC_idle_input_counter = 0;
@@ -3609,6 +3643,7 @@ void Menu::Load_Update_47D760()
         field_1DC_idle_input_counter++;
     }
 
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
     if ((Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop)
          && !field_1FE)
         || field_1DC_idle_input_counter > 1000)
@@ -3619,7 +3654,7 @@ void Menu::Load_Update_47D760()
 #endif
         const AnimRecord& rec = AO::AnimRec(stru_4D01F0[1].field_4_anim_id);
         field_134_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, nullptr);
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         field_1CC_fn_update = &Menu::Load_BackToMainScreen_Update_47DA40;
         field_202 = 0;
     }
@@ -3635,7 +3670,7 @@ void Menu::Load_Update_47D760()
             if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
             {
                 field_230_bGoBack = 1;
-                field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+                pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
                 field_1CC_fn_update = &Menu::Load_BackToMainScreen_Update_47DA40;
                 field_202 = 0;
                 return;
@@ -3655,7 +3690,7 @@ void Menu::Load_Update_47D760()
                 if (Input().IsAnyHeld(InputObject::PadIndex::First, InputCommands::eBack | InputCommands::eHop))
                 {
                     field_230_bGoBack = 1;
-                    field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+                    pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
                     field_1CC_fn_update = &Menu::Load_BackToMainScreen_Update_47DA40;
                     field_202 = 0;
                     return;
@@ -3670,14 +3705,14 @@ void Menu::Load_Update_47D760()
         {
             field_230_bGoBack = 0;
             field_1FC = field_1E0_selected_index.raw;
-            field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+            pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
             field_1CC_fn_update = &Menu::Load_BackToMainScreen_Update_47DA40;
             field_202 = 1;
         }
         else
         {
             field_230_bGoBack = 1;
-            field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+            pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
             field_1CC_fn_update = &Menu::Load_BackToMainScreen_Update_47DA40;
             field_202 = 0;
         }
@@ -3778,7 +3813,8 @@ void Menu::ToggleMotions_Update_47C800()
             field_1E0_selected_index.motions_menu = MotionsOptions::eExit_2;
             const AnimRecord& rec = AO::AnimRec(stru_4D01D8[2].field_4_anim_id);
             field_134_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, nullptr);
-            field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+            auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+            pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
             field_1CC_fn_update = &Menu::MotionsScreen_Back_Update_47CA10;
         }
     }
@@ -3819,7 +3855,8 @@ void Menu::Toggle_Motions_Screens_Update_47C8F0()
             field_1E0_selected_index.motions_menu = MotionsOptions::eExit_2;
             const AnimRecord& rec = AO::AnimRec(stru_4D01D8[2].field_4_anim_id);
             field_134_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, 0);
-            field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+            auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+            pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
             field_1CC_fn_update = &Menu::MotionsScreen_Back_Update_47CA10;
         }
     }
@@ -3827,9 +3864,10 @@ void Menu::Toggle_Motions_Screens_Update_47C8F0()
 
 void Menu::MotionsScreen_Back_Update_47CA10()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             gMap_507BA8.SetActiveCam_444660(LevelIds::eMenu_0, 1, CameraIds::Menu::eOptions_2, CameraSwapEffects::eInstantChange_0, 0, 0);
             field_1CC_fn_update = &Menu::Motions_ToOptions_Update_47CA50;
@@ -3847,7 +3885,8 @@ void Menu::Motions_ToOptions_Update_47CA50()
         field_1E0_selected_index.options_menu = OptionsMenuOptions::eController_0;
         const AnimRecord& rec = AO::AnimRec(sOptionsButtons_4D0148[0].field_4_anim_id);
         field_134_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, nullptr);
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
     }
 }
 
@@ -3855,7 +3894,8 @@ void Menu::To_MainScreenOrLoad_Update_47DA90()
 {
     if (sNumCamSwappers_507668 <= 0)
     {
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
         if (field_202)
         {
             field_1CC_fn_update = &Menu::To_LoadSave_Update_47DB10;
@@ -3875,9 +3915,10 @@ void Menu::To_MainScreenOrLoad_Update_47DA90()
 
 void Menu::Load_BackToMainScreen_Update_47DA40()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             if (field_202 == 0)
             {
@@ -3899,16 +3940,18 @@ void Menu::GameSpeakBack_WaitForAbeGoodbye_Update_47D5E0()
     {
         const AnimRecord& rec = AO::AnimRec(AnimId::MenuAbeSpeak_Idle);
         field_10_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, field_E4_res_array[1]);
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 1, 0, 16);
         field_1CC_fn_update = &Menu::GamespeakBack_WaitForScreenTrans_Update_47D650;
     }
 }
 
 void Menu::GamespeakBack_WaitForScreenTrans_Update_47D650()
 {
-    if (field_1E8_pMenuTrans)
+    auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+    if (pMenuTrans)
     {
-        if (field_1E8_pMenuTrans->field_16_bDone)
+        if (pMenuTrans->field_16_bDone)
         {
             field_204_flags &= ~1u;
             gMap_507BA8.SetActiveCam_444660(LevelIds::eMenu_0, 1, CameraIds::Menu::eMainMenu_1, CameraSwapEffects::eInstantChange_0, 0, 0);
@@ -3926,7 +3969,8 @@ void Menu::GameSpeak_To_MainScreen_Update_47D690()
         field_1E0_selected_index.mainmenu = MainMenuOptions::eGameSpeak_0;
         const AnimRecord& rec = AO::AnimRec(sMainScreenButtons_4D00B0[0].field_4_anim_id);
         field_134_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, nullptr);
-        field_1E8_pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
+        auto pMenuTrans = static_cast<MainMenuTransition*>(sObjectIds_5C1B70.Find_449CF0(field_1E8_pMenuTrans));
+        pMenuTrans->StartTrans_436560(Layer::eLayer_FadeFlash_40, 0, 0, 16);
         field_134_anim.LoadPal_403090(field_E4_res_array[5], 0);
     }
 }

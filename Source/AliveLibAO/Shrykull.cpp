@@ -15,6 +15,7 @@
 #include "AbilityRing.hpp"
 #include "Math.hpp"
 #include "Game.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -22,15 +23,10 @@ BaseGameObject* Shrykull::dtor_463990()
 {
     SetVTable(this, 0x4BC9B8);
 
-    if (field_118_zap_line)
+    auto pZapLine = static_cast<ZapLine*>(sObjectIds_5C1B70.Find_449CF0(field_118_zap_line));
+    if (pZapLine)
     {
-        field_118_zap_line->field_C_refCount--;
-        field_118_zap_line->field_6_flags.Set(Options::eDead_Bit3);
-    }
-
-    if (field_11C_obj_being_zapped)
-    {
-        field_11C_obj_being_zapped->field_C_refCount--;
+        pZapLine->field_6_flags.Set(Options::eDead_Bit3);
     }
 
     return dtor_401000();
@@ -74,8 +70,8 @@ Shrykull* Shrykull::ctor_463880()
     const AnimRecord& rec = AO::AnimRec(AnimId::Mudokon_ToShrykull);
     u8** ppRes = ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Animation, rec.mResourceId, 1, 0);
     Animation_Init_417FD0(rec.mFrameTableOffset, rec.mMaxW, rec.mMaxH, ppRes, 1);
-    field_118_zap_line = nullptr;
-    field_11C_obj_being_zapped = nullptr;
+    field_118_zap_line = -1;
+    field_11C_obj_being_zapped = -1;
 
     field_A8_xpos = sActiveHero_507678->field_A8_xpos;
     field_AC_ypos = sActiveHero_507678->field_AC_ypos;
@@ -162,6 +158,7 @@ void Shrykull::VUpdate_463AE0()
             break;
 
         case State::eZapTargets_1:
+        {
             if (field_10_anim.field_92_current_frame == 0)
             {
                 if (Math_NextRandom() >= 128u)
@@ -184,8 +181,7 @@ void Shrykull::VUpdate_463AE0()
 
                 if (CanKill(pObj) && !pObj->field_10A_flags.Get(Flags_10A::e10A_Bit3))
                 {
-                    pObj->field_C_refCount++;
-                    field_11C_obj_being_zapped = pObj;
+                    field_11C_obj_being_zapped = pObj->field_8_object_id;
 
                     PSX_RECT objRect = {};
                     pObj->VGetBoundingRect(&objRect, 1);
@@ -193,9 +189,10 @@ void Shrykull::VUpdate_463AE0()
                     PSX_RECT ourRect = {};
                     VGetBoundingRect(&ourRect, 1);
 
-                    if (field_118_zap_line)
+                    auto pZapLine = static_cast<ZapLine*>(sObjectIds_5C1B70.Find_449CF0(field_118_zap_line));
+                    if (pZapLine)
                     {
-                        field_118_zap_line->CalculateSourceAndDestinationPositions_478CF0(
+                        pZapLine->CalculateSourceAndDestinationPositions_478CF0(
                             FP_FromInteger((ourRect.x + ourRect.w) / 2),
                             FP_FromInteger((ourRect.y + ourRect.h) / 2),
                             FP_FromInteger((objRect.x + objRect.w) / 2),
@@ -203,19 +200,18 @@ void Shrykull::VUpdate_463AE0()
                     }
                     else
                     {
-                        auto pZapLine = ao_new<ZapLine>();
-                        if (pZapLine)
+                        auto pZapLineMem = ao_new<ZapLine>();
+                        if (pZapLineMem)
                         {
-                            pZapLine->ctor_4789A0(
+                            pZapLineMem->ctor_4789A0(
                                 FP_FromInteger((ourRect.x + ourRect.w) / 2),
                                 FP_FromInteger((ourRect.y + ourRect.h) / 2),
                                 FP_FromInteger((objRect.x + objRect.w) / 2),
                                 FP_FromInteger((objRect.y + objRect.h) / 2),
                                 0, ZapLineType::eThin_1,
                                 Layer::eLayer_ZapLinesElum_28);
+                            field_118_zap_line = pZapLineMem->field_8_object_id;
                         }
-                        pZapLine->field_C_refCount++;
-                        field_118_zap_line = pZapLine;
                     }
 
                     field_120_bElectrocute = CanElectrocute(pObj);
@@ -234,10 +230,11 @@ void Shrykull::VUpdate_463AE0()
                         }
                     }
 
+                    auto pObjBeingZapped = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_11C_obj_being_zapped));
                     auto pFlicker1 = ao_new<PossessionFlicker>();
                     if (pFlicker1)
                     {
-                        pFlicker1->ctor_41A8C0(field_11C_obj_being_zapped, 8, 255, 255, 255);
+                        pFlicker1->ctor_41A8C0(pObjBeingZapped, 8, 255, 255, 255);
                     }
 
                     auto pRing1 = ao_new<AbilityRing>();
@@ -264,7 +261,7 @@ void Shrykull::VUpdate_463AE0()
                             RingTypes::eShrykull_Pulse_Large_5);
                     }
 
-                    field_11C_obj_being_zapped->field_10A_flags.Set(Flags_10A::e10A_Bit3);
+                    pObjBeingZapped->field_10A_flags.Set(Flags_10A::e10A_Bit3);
 
                     SFX_Play_43AE60(SoundEffect::Respawn_22, 100, 2000);
                     SFX_Play_43AD70(SoundEffect::Zap1_57, 0);
@@ -276,14 +273,15 @@ void Shrykull::VUpdate_463AE0()
                 }
             }
 
-            if (field_118_zap_line)
+            auto pZapLine = static_cast<ZapLine*>(sObjectIds_5C1B70.Find_449CF0(field_118_zap_line));
+            if (pZapLine)
             {
-                field_118_zap_line->field_C_refCount--;
-                field_118_zap_line->field_6_flags.Set(Options::eDead_Bit3);
-                field_118_zap_line = nullptr;
+                pZapLine->field_6_flags.Set(Options::eDead_Bit3);
+                field_118_zap_line = -1;
             }
             field_10C_state = State::eDetransform_2;
             break;
+        }
 
         case State::eDetransform_2:
             if (field_10_anim.field_4_flags.Get(AnimFlags::eBit18_IsLastFrame))
@@ -308,6 +306,7 @@ void Shrykull::VUpdate_463AE0()
             break;
 
         case State::eKillTargets_4:
+        {
             if (field_10_anim.field_92_current_frame == 0)
             {
                 if (Math_NextRandom() >= 128u)
@@ -320,17 +319,17 @@ void Shrykull::VUpdate_463AE0()
                 }
             }
 
-            if (field_11C_obj_being_zapped)
+            auto pObjBeingZapped = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_11C_obj_being_zapped));
+            if (pObjBeingZapped)
             {
-                if (field_11C_obj_being_zapped->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+                if (pObjBeingZapped->field_6_flags.Get(BaseGameObject::eDead_Bit3))
                 {
-                    field_11C_obj_being_zapped->field_C_refCount--;
-                    field_11C_obj_being_zapped = nullptr;
+                    field_11C_obj_being_zapped = -1;
                 }
                 else
                 {
                     PSX_RECT zapRect = {};
-                    field_11C_obj_being_zapped->VGetBoundingRect(&zapRect, 1);
+                    pObjBeingZapped->VGetBoundingRect(&zapRect, 1);
 
                     PSX_RECT ourRect = {};
                     VGetBoundingRect(&ourRect, 1);
@@ -353,7 +352,8 @@ void Shrykull::VUpdate_463AE0()
                             pFlash->ctor_41A810(Layer::eLayer_Above_FG1_39, 255u, 255u, 255u);
                         }
                     }
-                    field_118_zap_line->CalculateSourceAndDestinationPositions_478CF0(
+                    auto pZapLine = static_cast<ZapLine*>(sObjectIds_5C1B70.Find_449CF0(field_118_zap_line));
+                    pZapLine->CalculateSourceAndDestinationPositions_478CF0(
                         FP_FromInteger((ourRect.x + ourRect.w) / 2),
                         FP_FromInteger((ourRect.y + ourRect.h) / 2),
                         FP_FromInteger((zapRect.x + zapRect.w) / 2),
@@ -365,18 +365,18 @@ void Shrykull::VUpdate_463AE0()
             {
                 field_10C_state = State::eZapTargets_1;
 
-                if (field_11C_obj_being_zapped)
+                if (pObjBeingZapped)
                 {
                     if (!field_120_bElectrocute)
                     {
-                        field_11C_obj_being_zapped->VTakeDamage(this);
+                        pObjBeingZapped->VTakeDamage(this);
                     }
 
-                    field_11C_obj_being_zapped->field_C_refCount--;
-                    field_11C_obj_being_zapped = nullptr;
+                    field_11C_obj_being_zapped = -1;
                 }
             }
             break;
+        }
 
         default:
             return;

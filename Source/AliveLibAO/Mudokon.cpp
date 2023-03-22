@@ -372,7 +372,7 @@ Mudokon* Mudokon::ctor_43EED0(Path_TLV* pTlv, s32 tlvInfo)
     }
 
     field_1AC_pBirdPortal = -1;
-    field_194_pLiftPoint = nullptr;
+    field_194_pLiftPoint = -1;
 
     field_D0_pShadow = ao_new<Shadow>();
     if (field_D0_pShadow)
@@ -439,10 +439,10 @@ BaseGameObject* Mudokon::dtor_43F6A0()
 
 void Mudokon::KillLiftPoint_194()
 {
-    if (field_194_pLiftPoint)
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_194_pLiftPoint));
+    if (pLiftPoint)
     {
-        field_194_pLiftPoint->field_C_refCount--;
-        field_194_pLiftPoint = nullptr;
+        field_194_pLiftPoint = -1;
     }
 }
 
@@ -1576,7 +1576,7 @@ void Mudokon::Motion_11_Null_43D350()
 
 void Mudokon::Motion_12_LiftUse_43D360()
 {
-    auto pLiftPoint = static_cast<LiftPoint*>(field_194_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_194_pLiftPoint));
     if (!pLiftPoint->OnAnyFloor() || pLiftPoint->field_27A_flags.Get(LiftPoint::Flags::eBit7_bIgnoreLiftMover))
     {
         pLiftPoint->Move_435740(FP_FromInteger(0), FP_FromInteger(3), 0);
@@ -1594,7 +1594,8 @@ void Mudokon::Motion_13_LiftGrabBegin_43D3F0()
     if (field_10_anim.field_4_flags.Get(AnimFlags::eBit18_IsLastFrame))
     {
         field_FC_current_motion = field_FE_next_motion;
-        field_194_pLiftPoint->field_27A_flags.Set(LiftPoint::Flags::eBit8_KeepOnMiddleFloor);
+        auto pLiftPoint = static_cast<LiftPoint*>(sObjectIds_5C1B70.Find_449CF0(field_194_pLiftPoint));
+        pLiftPoint->field_27A_flags.Set(LiftPoint::Flags::eBit8_KeepOnMiddleFloor);
     }
 }
 
@@ -3237,7 +3238,7 @@ s16 Mudokon::Brain_LiftUse_5_43C180()
     {
         field_FC_current_motion = eMudMotions::Motion_13_LiftGrabBegin_43D3F0;
         field_FE_next_motion = eMudMotions::Motion_12_LiftUse_43D360;
-        field_194_pLiftPoint = nullptr;
+        field_194_pLiftPoint = -1;
         for (s32 i = 0; i < gBaseAliveGameObjects_4FC8A0->Size(); i++)
         {
             BaseAliveGameObject* pObj = gBaseAliveGameObjects_4FC8A0->ItemAt(i);
@@ -3251,8 +3252,7 @@ s16 Mudokon::Brain_LiftUse_5_43C180()
                 auto pLiftPoint = static_cast<LiftPoint*>(pObj);
                 if (field_110_lift_switch_id == pLiftPoint->field_278_lift_point_id)
                 {
-                    field_194_pLiftPoint = pLiftPoint;
-                    pObj->field_C_refCount++;
+                    field_194_pLiftPoint = pLiftPoint->field_8_object_id;
                     break;
                 }
             }

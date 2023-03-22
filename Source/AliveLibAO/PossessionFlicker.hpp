@@ -26,7 +26,7 @@ public:
 
     EXPORT void VUpdate_41A9B0();
 
-    BaseAliveGameObject* field_10_pObj;
+    s32 field_10_pObj;
     s32 field_14_time_to_flicker;
 
     s16 field_18_r;

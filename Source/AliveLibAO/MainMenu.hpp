@@ -293,7 +293,7 @@ public:
     s16 field_1E2_rgb;
     s16 field_1E4_colour_counter;
     s16 field_1E6;
-    MainMenuTransition* field_1E8_pMenuTrans;
+    s32 field_1E8_pMenuTrans;
     MainMenuFade* field_1EC_pObj1;
     MainMenuFade* field_1F0_pObj2;
     const char_type* field_1F4_text;

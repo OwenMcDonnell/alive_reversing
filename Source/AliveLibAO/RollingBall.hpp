@@ -51,7 +51,7 @@ public:
         eCrushedBees_4
     };
     States field_112_state;
-    RollingBallShaker* field_114_pRollingBallShaker;
+    s32 field_114_pRollingBallShaker;
     FP field_118_speed;
     FP field_11C_acceleration;
     PathLine* field_120_pCollisionLine;

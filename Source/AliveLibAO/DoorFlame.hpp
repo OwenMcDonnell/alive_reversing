@@ -65,8 +65,8 @@ public:
     s16 field_EE_2_random;
     s32 field_F0_sounds_mask;
     s32 field_F4_padding;
-    FireBackgroundGlow* field_F8_pFireBackgroundGlow;
-    FlameSparks* field_FC_pFlameSparks;
+    s32 field_F8_pFireBackgroundGlow;
+    s32 field_FC_pFlameSparks;
 };
 ALIVE_ASSERT_SIZEOF(DoorFlame, 0x100);
 

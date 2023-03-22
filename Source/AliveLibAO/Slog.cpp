@@ -179,7 +179,6 @@ Slog* Slog::ctor_473050(FP xpos, FP ypos, FP scale)
 
     field_10C_pTarget = sControlledCharacter_50767C->field_8_object_id;
     field_176 = 0;
-    sControlledCharacter_50767C->field_C_refCount++;
     field_17E_asleep = Choice_short::eNo_0;
     field_158_wake_up_anger = 0;
 

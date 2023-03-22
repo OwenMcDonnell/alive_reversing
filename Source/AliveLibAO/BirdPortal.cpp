@@ -21,6 +21,7 @@
 #include "BaseGameObject.hpp"
 #include "AbilityRing.hpp"
 #include "Sys_common.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -188,11 +189,11 @@ BaseGameObject* BirdPortal::dtor_452230()
         }
     }
 
-    if (field_5C_pThrowableTotalIndicator)
+    auto pTotalIndicator = static_cast<ThrowableTotalIndicator*>(sObjectIds_5C1B70.Find_449CF0(field_5C_pThrowableTotalIndicator));
+    if (pTotalIndicator)
     {
-        field_5C_pThrowableTotalIndicator->field_6_flags.Set(Options::eDead_Bit3);
-        field_5C_pThrowableTotalIndicator->field_C_refCount--;
-        field_5C_pThrowableTotalIndicator = nullptr;
+        pTotalIndicator->field_6_flags.Set(Options::eDead_Bit3);
+        field_5C_pThrowableTotalIndicator = -1;
     }
 
     u8** ppRes = nullptr;
@@ -271,7 +272,7 @@ BirdPortal* BirdPortal::ctor_4520A0(Path_BirdPortal* pTlv, s32 tlvInfo)
     field_48_pScreenClipper2 = nullptr;
     field_4C_pDovesArray = nullptr;
     field_60_pOrbWhirlWind = nullptr;
-    field_5C_pThrowableTotalIndicator = nullptr;
+    field_5C_pThrowableTotalIndicator = -1;
 
     PathLine* pLine = nullptr;
     FP hitX = {};
@@ -340,8 +341,8 @@ void BirdPortal::CreateDovesAndShrykullNumber()
 
     if (field_10_portal_type == PortalType::eShrykull_2)
     {
-        field_5C_pThrowableTotalIndicator = ao_new<ThrowableTotalIndicator>();
-        if (field_5C_pThrowableTotalIndicator)
+        auto pTotalIndicator = ao_new<ThrowableTotalIndicator>();
+        if (pTotalIndicator)
         {
             Layer indicatorLayer = Layer::eLayer_0;
             if (field_34_scale != FP_FromDouble(0.5))
@@ -352,14 +353,14 @@ void BirdPortal::CreateDovesAndShrykullNumber()
             {
                 indicatorLayer = Layer::eLayer_8;
             }
-            field_5C_pThrowableTotalIndicator->ctor_41B520(
+            pTotalIndicator->ctor_41B520(
                 field_18_xpos,
                 field_1C_ypos + FP_FromInteger(10),
                 indicatorLayer,
                 field_34_scale,
                 field_56_num_muds_for_shrykull,
                 0);
-            field_5C_pThrowableTotalIndicator->field_C_refCount++;
+            field_5C_pThrowableTotalIndicator = pTotalIndicator->field_8_object_id;
         }
     }
 }
@@ -389,6 +390,7 @@ void BirdPortal::CreateTerminators()
 
 void BirdPortal::VUpdate_4523D0()
 {
+    auto pTotalIndicator = static_cast<ThrowableTotalIndicator*>(sObjectIds_5C1B70.Find_449CF0(field_5C_pThrowableTotalIndicator));
     const CameraPos direction = gMap_507BA8.GetDirection(
         field_64_level,
         field_66_path,
@@ -449,11 +451,10 @@ void BirdPortal::VUpdate_4523D0()
 
                     field_4C_pDovesArray = nullptr;
 
-                    if (field_5C_pThrowableTotalIndicator)
+                    if (pTotalIndicator)
                     {
-                        field_5C_pThrowableTotalIndicator->field_6_flags.Set(Options::eDead_Bit3);
-                        field_5C_pThrowableTotalIndicator->field_C_refCount--;
-                        field_5C_pThrowableTotalIndicator = nullptr;
+                        pTotalIndicator->field_6_flags.Set(Options::eDead_Bit3);
+                        field_5C_pThrowableTotalIndicator = -1;
                     }
 
                     SFX_Play_43AD70(SoundEffect::Dove_16, 70, 0);
@@ -462,11 +463,10 @@ void BirdPortal::VUpdate_4523D0()
             }
             else
             {
-                if (field_5C_pThrowableTotalIndicator)
+                if (pTotalIndicator)
                 {
-                    field_5C_pThrowableTotalIndicator->field_6_flags.Set(Options::eDead_Bit3);
-                    field_5C_pThrowableTotalIndicator->field_C_refCount--;
-                    field_5C_pThrowableTotalIndicator = nullptr;
+                    pTotalIndicator->field_6_flags.Set(Options::eDead_Bit3);
+                    field_5C_pThrowableTotalIndicator = -1;
                 }
 
                 for (s32 i = 0; i < field_4C_pDovesArray->Size(); i++)

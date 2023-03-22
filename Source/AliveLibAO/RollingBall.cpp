@@ -16,6 +16,7 @@
 #include "Abe.hpp"
 #include "Midi.hpp"
 #include "Grid.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -56,11 +57,11 @@ BaseGameObject* RollingBall::dtor_458230()
         Rect_Clear_40C920(&field_120_pCollisionLine->field_0_rect);
     }
 
-    if (field_114_pRollingBallShaker)
+    auto pRollingBallShaker = static_cast<RollingBallShaker*>(sObjectIds_5C1B70.Find_449CF0(field_114_pRollingBallShaker));
+    if (pRollingBallShaker)
     {
-        field_114_pRollingBallShaker->field_32_bKillMe = TRUE;
-        field_114_pRollingBallShaker->field_C_refCount--;
-        field_114_pRollingBallShaker = nullptr;
+        pRollingBallShaker->field_32_bKillMe = TRUE;
+        field_114_pRollingBallShaker = -1;
     }
 
     u8** pRes = ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Animation, AOResourceID::kDebrisID00AOResID, 0, 0);
@@ -126,7 +127,7 @@ RollingBall* RollingBall::ctor_4578C0(Path_RollingBall* pTlv, s32 tlvInfo)
     MapFollowMe_401D30(TRUE);
     field_10C_tlvInfo = tlvInfo;
     field_112_state = States::eInactive_0;
-    field_114_pRollingBallShaker = nullptr;
+    field_114_pRollingBallShaker = -1;
     field_120_pCollisionLine = nullptr;
 
     field_D0_pShadow = ao_new<Shadow>();
@@ -157,6 +158,7 @@ RollingBall* RollingBall::ctor_4578C0(Path_RollingBall* pTlv, s32 tlvInfo)
 
 void RollingBall::VUpdate_457AF0()
 {
+    auto pRollingBallShaker = static_cast<RollingBallShaker*>(sObjectIds_5C1B70.Find_449CF0(field_114_pRollingBallShaker));
     switch (field_112_state)
     {
         case States::eInactive_0:
@@ -165,11 +167,11 @@ void RollingBall::VUpdate_457AF0()
                 field_B8_vely = FP_FromDouble(2.5);
                 field_112_state = States::eStartRolling_1;
                 field_10_anim.Set_Animation_Data_402A40(15608, 0);
-                field_114_pRollingBallShaker = ao_new<RollingBallShaker>();
-                if (field_114_pRollingBallShaker)
+                auto pRollingBallShakerMem = ao_new<RollingBallShaker>();
+                if (pRollingBallShakerMem)
                 {
-                    field_114_pRollingBallShaker->ctor_4361A0();
-                    field_114_pRollingBallShaker->field_C_refCount++;
+                    pRollingBallShakerMem->ctor_4361A0();
+                    field_114_pRollingBallShaker = pRollingBallShakerMem->field_8_object_id;
                 }
             }
             else if (!gMap_507BA8.Is_Point_In_Current_Camera_4449C0(
@@ -237,18 +239,16 @@ void RollingBall::VUpdate_457AF0()
 
             if (Event_Get_417250(kEventDeathReset_4))
             {
-                field_114_pRollingBallShaker->field_C_refCount--;
-                field_114_pRollingBallShaker->field_32_bKillMe = 1;
+                pRollingBallShaker->field_32_bKillMe = 1;
                 field_6_flags.Set(BaseGameObject::eDead_Bit3);
-                field_114_pRollingBallShaker = nullptr;
+                field_114_pRollingBallShaker = -1;
             }
             else if (!field_F4_pLine)
             {
                 field_112_state = States::eFallingAndHittingWall_3;
 
-                field_114_pRollingBallShaker->field_C_refCount--;
-                field_114_pRollingBallShaker->field_32_bKillMe = 1;
-                field_114_pRollingBallShaker = nullptr;
+                pRollingBallShaker->field_32_bKillMe = 1;
+                field_114_pRollingBallShaker = -1;
 
                 field_A8_xpos += field_B4_velx;
                 field_E8_LastLineYPos = field_AC_ypos;

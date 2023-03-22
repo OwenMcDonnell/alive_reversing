@@ -214,8 +214,8 @@ public:
     s16 field_114_attack_delay;
     ScrabPatrolType field_116_patrol_type;
     s32 field_118_timer;
-    Scrab* field_11C_pFight_target;
-    BaseAliveGameObject* field_120_pTarget;
+    s32 field_11C_pFight_target;
+    s32 field_120_pTarget;
     s32 field_124;
     FP field_128;
     FP field_12C;

@@ -44,8 +44,8 @@ public:
     s16 field_10E_pad;
     s32 field_110_timer;
     s32 field_114_timer;
-    ZapLine* field_118_zap_line;
-    BaseAliveGameObject* field_11C_obj_being_zapped;
+    s32 field_118_zap_line;
+    s32 field_11C_obj_being_zapped;
     s16 field_120_bElectrocute;
     s16 field_122_bResetRingTimer;
 };

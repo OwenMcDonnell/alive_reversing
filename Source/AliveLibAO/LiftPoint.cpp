@@ -11,6 +11,7 @@
 #include "Events.hpp"
 #include "ShadowZone.hpp"
 #include "ScreenManager.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -176,8 +177,7 @@ LiftPoint* LiftPoint::ctor_434710(Path_LiftPoint* pTlv, Map* pPath, s32 tlvInfo)
                 0,
                 FP_GetExponent(field_AC_ypos + (FP_FromInteger(25) * field_BC_sprite_scale)),
                 field_BC_sprite_scale);
-            pRopeMem->field_C_refCount++;
-            field_138_pRope1 = pRopeMem;
+            field_138_pRope1 = pRopeMem->field_8_object_id;
         }
 
         auto pRopeMem2 = ao_new<Rope>();
@@ -188,16 +188,17 @@ LiftPoint* LiftPoint::ctor_434710(Path_LiftPoint* pTlv, Map* pPath, s32 tlvInfo)
                 0,
                 FP_GetExponent(field_AC_ypos + (FP_FromInteger(25) * field_BC_sprite_scale)),
                 field_BC_sprite_scale);
-            pRopeMem2->field_C_refCount++;
-            field_134_pRope2 = pRopeMem2;
+            field_134_pRope2 = pRopeMem2->field_8_object_id;
         }
 
-        field_134_pRope2->field_F2_bottom = FP_GetExponent((FP_FromInteger(25) * field_BC_sprite_scale) + FP_FromInteger(field_120_pCollisionLine->field_0_rect.y));
-        field_138_pRope1->field_F2_bottom = FP_GetExponent((FP_FromInteger(25) * field_BC_sprite_scale) + FP_FromInteger(field_120_pCollisionLine->field_0_rect.y));
+        auto pRope1 = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_138_pRope1));
+        auto pRope2 = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_134_pRope2));
+        pRope2->field_F2_bottom = FP_GetExponent((FP_FromInteger(25) * field_BC_sprite_scale) + FP_FromInteger(field_120_pCollisionLine->field_0_rect.y));
+        pRope1->field_F2_bottom = FP_GetExponent((FP_FromInteger(25) * field_BC_sprite_scale) + FP_FromInteger(field_120_pCollisionLine->field_0_rect.y));
 
-        const FP v29 = FP_FromRaw(FP_GetExponent((field_AC_ypos * FP_FromDouble(1.5)) * field_BC_sprite_scale) % FP_FromInteger(field_134_pRope2->field_E6_rope_length).fpValue);
-        field_134_pRope2->field_AC_ypos = FP_NoFractional(field_AC_ypos + v29 + (FP_FromInteger(25) * field_BC_sprite_scale) + FP_FromInteger(field_134_pRope2->field_E6_rope_length));
-        field_138_pRope1->field_AC_ypos = FP_NoFractional(field_AC_ypos + v29 - (FP_FromInteger(25) * field_BC_sprite_scale) + FP_FromInteger(field_138_pRope1->field_E6_rope_length));
+        const FP v29 = FP_FromRaw(FP_GetExponent((field_AC_ypos * FP_FromDouble(1.5)) * field_BC_sprite_scale) % FP_FromInteger(pRope2->field_E6_rope_length).fpValue);
+        pRope2->field_AC_ypos = FP_NoFractional(field_AC_ypos + v29 + (FP_FromInteger(25) * field_BC_sprite_scale) + FP_FromInteger(pRope2->field_E6_rope_length));
+        pRope1->field_AC_ypos = FP_NoFractional(field_AC_ypos + v29 - (FP_FromInteger(25) * field_BC_sprite_scale) + FP_FromInteger(pRope1->field_E6_rope_length));
 
         field_27A_flags.Clear(Flags::eBit5_bHasPulley);
 
@@ -506,8 +507,8 @@ void LiftPoint::VUpdate_434D10()
     const FP FP_25xScale = FP_FromInteger(25) * field_BC_sprite_scale;
     const FP FP_m19xScale = FP_FromInteger(-19) * field_BC_sprite_scale;
 
-    Rope* pRope2 = field_134_pRope2;
-    Rope* pRope1 = field_138_pRope1;
+    Rope* pRope2 = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_134_pRope2));;
+    Rope* pRope1 = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_138_pRope1));
 
     const FP rope2_rope_length = FP_FromInteger(pRope2->field_E6_rope_length);
     const FP rope1_rope_length = FP_FromInteger(pRope1->field_E6_rope_length);
@@ -707,20 +708,20 @@ BaseGameObject* LiftPoint::dtor_4355E0()
         return dtor_451490();
     }
 
-    if (field_134_pRope2)
+    auto pRope2 = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_134_pRope2));
+    if (pRope2)
     {
-        field_134_pRope2->field_C_refCount--;
-        field_134_pRope2->field_6_flags.Set(Options::eDead_Bit3);
+        pRope2->field_6_flags.Set(Options::eDead_Bit3);
     }
 
-    if (field_138_pRope1)
+    auto pRope1 = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_138_pRope1));
+    if (pRope1)
     {
-        field_138_pRope1->field_C_refCount--;
-        field_138_pRope1->field_6_flags.Set(Options::eDead_Bit3);
+        pRope1->field_6_flags.Set(Options::eDead_Bit3);
     }
 
-    field_134_pRope2 = nullptr;
-    field_138_pRope1 = nullptr;
+    field_134_pRope2 = -1;
+    field_138_pRope1 = -1;
 
     gMap_507BA8.TLV_Reset_446870(field_128_tlvInfo, -1, 0, 0);
 
@@ -812,8 +813,11 @@ void LiftPoint::CreatePulleyIfExists_435AE0(s16 camX, s16 camY)
         field_1D4_pulley_anim.field_14_scale = field_BC_sprite_scale;
         field_1D4_pulley_anim.field_B_render_mode = TPageAbr::eBlend_0;
 
-        field_134_pRope2->field_EE_top = FP_GetExponent(FP_FromInteger(field_26E_pulley_ypos) + (FP_FromInteger(-19) * field_1D4_pulley_anim.field_14_scale));
-        field_138_pRope1->field_EE_top = FP_GetExponent(FP_FromInteger(field_26E_pulley_ypos) + (FP_FromInteger(-19) * field_1D4_pulley_anim.field_14_scale));
+        auto pRope1 = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_138_pRope1));
+        auto pRope2 = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_134_pRope2));
+
+        pRope2->field_EE_top = FP_GetExponent(FP_FromInteger(field_26E_pulley_ypos) + (FP_FromInteger(-19) * field_1D4_pulley_anim.field_14_scale));
+        pRope1->field_EE_top = FP_GetExponent(FP_FromInteger(field_26E_pulley_ypos) + (FP_FromInteger(-19) * field_1D4_pulley_anim.field_14_scale));
     }
 }
 

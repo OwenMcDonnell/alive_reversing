@@ -41,7 +41,7 @@ public:
     u16 field_10_lift_mover_switch_id;
     s16 field_12_target_lift_point_id;
     s32 field_14_tlvInfo;
-    BaseGameObject* field_18_pLiftPoint; // TODO: LiftPoint* or actually no because it can be a platform as well?
+    s32 field_18_pLiftPoint; // TODO: LiftPoint* or actually no because it can be a platform as well?
     FP field_1C_speed;
     s16 field_20_state;
     s16 field_22_pad;

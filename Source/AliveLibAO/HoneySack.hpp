@@ -51,7 +51,7 @@ public:
     State field_E8_state;
     s16 field_EA_bHit_ground;
     s32 field_EC_timer;
-    BeeSwarm* field_F0_pBee;
+    s32 field_F0_pBee;
     FP field_F4_drip_target_x;
     FP field_F8_drip_target_y;
     FP field_FC_ypos2;

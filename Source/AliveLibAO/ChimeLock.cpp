@@ -16,6 +16,7 @@
 #include "Input.hpp"
 #include "Particle.hpp"
 #include "Sys_common.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -45,37 +46,37 @@ ChimeLock* ChimeLock::ctor_40AB20(Path_ChimeLock* pTlv, s32 tlvInfo)
         scale = FP_FromInteger(1);
     }
 
-    field_114_left_bell = ao_new<Bells>();
-    if (field_114_left_bell)
+    auto pLeftBellMem = ao_new<Bells>();
+    if (pLeftBellMem)
     {
-        field_114_left_bell->ctor_40A650(
+        pLeftBellMem->ctor_40A650(
             BellSize::eBig_0,
             FP_FromInteger(pTlv->field_10_top_left.field_0_x),
             FP_FromInteger(pTlv->field_10_top_left.field_2_y),
             scale);
-        field_114_left_bell->field_C_refCount++;
+        field_114_left_bell = pLeftBellMem->field_8_object_id;
     }
 
-    field_118_center_bell = ao_new<Bells>();
-    if (field_118_center_bell)
+    auto pCenterBellMem = ao_new<Bells>();
+    if (pCenterBellMem)
     {
-        field_118_center_bell->ctor_40A650(
+        pCenterBellMem->ctor_40A650(
             BellSize::eMedium_1,
             FP_FromInteger(pTlv->field_10_top_left.field_0_x),
             FP_FromInteger(pTlv->field_10_top_left.field_2_y),
             scale);
-        field_118_center_bell->field_C_refCount++;
+        field_118_center_bell = pCenterBellMem->field_8_object_id;
     }
 
-    field_11C_right_bell = ao_new<Bells>();
-    if (field_11C_right_bell)
+    auto pRightBellMem = ao_new<Bells>();
+    if (pRightBellMem)
     {
-        field_11C_right_bell->ctor_40A650(
+        pRightBellMem->ctor_40A650(
             BellSize::eSmall_2,
             FP_FromInteger(pTlv->field_10_top_left.field_0_x),
             FP_FromInteger(pTlv->field_10_top_left.field_2_y),
             scale);
-        field_11C_right_bell->field_C_refCount++;
+        field_11C_right_bell = pRightBellMem->field_8_object_id;
     }
 
 
@@ -143,25 +144,25 @@ BaseGameObject* ChimeLock::dtor_40AE60()
 {
     SetVTable(this, 0x4BA3C8);
 
-    if (field_114_left_bell)
+    auto pLeftBell = static_cast<Bells*>(sObjectIds_5C1B70.Find_449CF0(field_114_left_bell));
+    if (pLeftBell)
     {
-        field_114_left_bell->field_6_flags.Set(Options::eDead_Bit3);
-        field_114_left_bell->field_C_refCount--;
-        field_114_left_bell = nullptr;
+        pLeftBell->field_6_flags.Set(Options::eDead_Bit3);
+        field_114_left_bell = -1;
     }
 
-    if (field_118_center_bell)
+    auto pCenterBell = static_cast<Bells*>(sObjectIds_5C1B70.Find_449CF0(field_118_center_bell));
+    if (pCenterBell)
     {
-        field_118_center_bell->field_6_flags.Set(Options::eDead_Bit3);
-        field_118_center_bell->field_C_refCount--;
-        field_118_center_bell = nullptr;
+        pCenterBell->field_6_flags.Set(Options::eDead_Bit3);
+        field_118_center_bell = -1;
     }
 
-    if (field_11C_right_bell)
+    auto pRightBell = static_cast<Bells*>(sObjectIds_5C1B70.Find_449CF0(field_11C_right_bell));
+    if (pRightBell)
     {
-        field_11C_right_bell->field_6_flags.Set(Options::eDead_Bit3);
-        field_11C_right_bell->field_C_refCount--;
-        field_11C_right_bell = nullptr;
+        pRightBell->field_6_flags.Set(Options::eDead_Bit3);
+        field_11C_right_bell = -1;
     }
 
     gMap_507BA8.TLV_Reset_446870(field_10C_tlvInfo, -1, 0, 0);
@@ -350,6 +351,10 @@ void ChimeLock::VUpdate()
 
 void ChimeLock::VUpdate_40AEF0()
 {
+    auto pLeftBell = static_cast<Bells*>(sObjectIds_5C1B70.Find_449CF0(field_114_left_bell));
+    auto pCenterBell = static_cast<Bells*>(sObjectIds_5C1B70.Find_449CF0(field_118_center_bell));
+    auto pRightBell = static_cast<Bells*>(sObjectIds_5C1B70.Find_449CF0(field_11C_right_bell));
+
     if (Event_Get_417250(kEventDeathReset_4))
     {
         field_6_flags.Set(Options::eDead_Bit3);
@@ -379,7 +384,7 @@ void ChimeLock::VUpdate_40AEF0()
                 switch (Bell)
                 {
                     case BellPositions::eLeftBell_1:
-                        field_114_left_bell->Ring_40AA80();
+                        pLeftBell->Ring_40AA80();
                         if ((field_138_flags >> 1) & 1)
                         {
                             SetTargetBellIfSpace(2);
@@ -387,7 +392,7 @@ void ChimeLock::VUpdate_40AEF0()
                         break;
 
                     case BellPositions::eCenterBell_2:
-                        field_118_center_bell->Ring_40AA80();
+                        pCenterBell->Ring_40AA80();
                         if ((field_138_flags >> 1) & 1)
                         {
                             SetTargetBellIfSpace(3);
@@ -395,7 +400,7 @@ void ChimeLock::VUpdate_40AEF0()
                         break;
 
                     case BellPositions::eRightBell_3:
-                        field_11C_right_bell->Ring_40AA80();
+                        pRightBell->Ring_40AA80();
                         if ((field_138_flags >> 1) & 1)
                         {
                             field_138_flags &= ~2u;
@@ -430,7 +435,7 @@ void ChimeLock::VUpdate_40AEF0()
                 switch (field_164_ChimeLock_num[0])
                 {
                     case BellPositions::eLeftBell_1:
-                        if (field_114_left_bell->CanSmash_40AA70())
+                        if (pLeftBell->CanSmash_40AA70())
                         {
                             SetBallTarget_40B7B0(
                                 field_13C_targetX - FP_FromInteger(35),
@@ -443,7 +448,7 @@ void ChimeLock::VUpdate_40AEF0()
                         break;
 
                     case BellPositions::eCenterBell_2:
-                        if (field_118_center_bell->CanSmash_40AA70())
+                        if (pCenterBell->CanSmash_40AA70())
                         {
                             SetBallTarget_40B7B0(
                                 field_13C_targetX - FP_FromInteger(4),
@@ -456,7 +461,7 @@ void ChimeLock::VUpdate_40AEF0()
                         break;
 
                     case BellPositions::eRightBell_3:
-                        if (field_11C_right_bell->CanSmash_40AA70())
+                        if (pRightBell->CanSmash_40AA70())
                         {
                             SetBallTarget_40B7B0(
                                 field_13C_targetX + FP_FromInteger(37),

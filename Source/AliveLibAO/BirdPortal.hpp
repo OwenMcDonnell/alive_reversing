@@ -156,7 +156,7 @@ public:
     s16 field_56_num_muds_for_shrykull;
     s16 field_58_received_doves;
     s16 field_5A;
-    ThrowableTotalIndicator* field_5C_pThrowableTotalIndicator;
+    s32 field_5C_pThrowableTotalIndicator;
     OrbWhirlWind* field_60_pOrbWhirlWind;
     LevelIds field_64_level;
     s16 field_66_path;

@@ -5,6 +5,7 @@
 #include "Events.hpp"
 #include "SwitchStates.hpp"
 #include "stdlib.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -14,7 +15,7 @@ LiftMover* LiftMover::ctor_4054E0(Path_LiftMover* pTlv, s32 tlvInfo)
     SetVTable(this, 0x4BA158);
 
     field_14_tlvInfo = tlvInfo;
-    field_18_pLiftPoint = nullptr;
+    field_18_pLiftPoint = -1;
     field_4_typeId = Types::eLiftMover_7;
 
     field_10_lift_mover_switch_id = pTlv->field_18_lift_mover_switch_id;
@@ -37,10 +38,11 @@ LiftMover* LiftMover::ctor_4054E0(Path_LiftMover* pTlv, s32 tlvInfo)
 BaseGameObject* LiftMover::dtor_405550()
 {
     SetVTable(this, 0x4BA158);
-    if (field_18_pLiftPoint)
+
+    auto pLiftPoint = static_cast<BaseGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_18_pLiftPoint));
+    if (pLiftPoint)
     {
-        field_18_pLiftPoint->field_C_refCount--;
-        field_18_pLiftPoint = nullptr;
+        field_18_pLiftPoint = -1;
     }
     gMap_507BA8.TLV_Reset_446870(field_14_tlvInfo, -1, 0, 0);
     return dtor_487DF0();
@@ -68,16 +70,16 @@ void LiftMover::VUpdate()
 
 void LiftMover::VUpdate_4055C0()
 {
-    if (field_18_pLiftPoint && field_18_pLiftPoint->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+    auto pObj = static_cast<BaseGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_18_pLiftPoint));
+    if (pObj && pObj->field_6_flags.Get(BaseGameObject::eDead_Bit3))
     {
-        field_18_pLiftPoint->field_C_refCount--;
-        field_18_pLiftPoint = nullptr;
+        field_18_pLiftPoint = -1;
         field_6_flags.Set(BaseGameObject::eDead_Bit3);
         return;
     }
 
     // NOTE: Isn't null checked, could easily crash later :)
-    auto pLiftPoint = static_cast<LiftPoint*>(field_18_pLiftPoint);
+    auto pLiftPoint = static_cast<LiftPoint*>(pObj);
 
     switch (field_20_state)
     {
@@ -91,9 +93,9 @@ void LiftMover::VUpdate_4055C0()
                 else
                 {
                     // Find the lift point
-                    field_18_pLiftPoint = FindLiftPointWithId(field_12_target_lift_point_id);
+                    auto pNewLiftPoint = FindLiftPointWithId(field_12_target_lift_point_id);
 
-                    if (!field_18_pLiftPoint)
+                    if (!pNewLiftPoint)
                     {
                         // Load lift point objects (I guess in case for some reason it got unloaded ??)
                         // AE doesn't do this.
@@ -106,12 +108,12 @@ void LiftMover::VUpdate_4055C0()
                         }
 
                         // And have another look now that we might have just loaded it in
-                        field_18_pLiftPoint = FindLiftPointWithId(field_12_target_lift_point_id);
+                        pNewLiftPoint = FindLiftPointWithId(field_12_target_lift_point_id);
                     }
 
-                    if (field_18_pLiftPoint)
+                    if (pNewLiftPoint)
                     {
-                        field_18_pLiftPoint->field_C_refCount++;
+                        field_18_pLiftPoint = pNewLiftPoint->field_8_object_id;
                         field_20_state = 1;
                     }
                 }

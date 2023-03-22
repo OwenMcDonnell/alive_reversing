@@ -69,9 +69,9 @@ public:
     };
     ChimeLockStates field_110_state;
     s16 field_112_padding;
-    Bells* field_114_left_bell;
-    Bells* field_118_center_bell;
-    Bells* field_11C_right_bell;
+    s32 field_114_left_bell;
+    s32 field_118_center_bell;
+    s32 field_11C_right_bell;
     u16 field_120_max_idx;
     s16 field_122_padding;
     s32 field_124_code1;

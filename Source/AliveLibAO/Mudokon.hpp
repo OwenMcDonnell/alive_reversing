@@ -345,7 +345,7 @@ public:
     s16 field_18A;
     FP field_18C_how_far_to_walk;
     FP field_190;
-    LiftPoint* field_194_pLiftPoint;
+    s32 field_194_pLiftPoint;
     s16 field_198_abe_must_face_mud;
     s16 field_19A;
     s16 field_19C;

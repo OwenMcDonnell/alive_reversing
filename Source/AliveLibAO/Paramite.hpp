@@ -212,8 +212,8 @@ public:
     s16 field_142_bSnapped;
     Choice_short field_144_delete_when_far_away;
     s16 field_146_not_used;
-    Meat* field_148_pMeat;
-    ParamiteWeb* field_14C_pWeb;
+    s32 field_148_pMeat;
+    s32 field_14C_pWeb;
     u8** field_150_resources[16];
 };
 ALIVE_ASSERT_SIZEOF(Paramite, 0x190);

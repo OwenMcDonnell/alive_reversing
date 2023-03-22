@@ -93,8 +93,8 @@ public:
     s16 field_12E;
     LiftPointStopType field_130_lift_point_stop_type;
     s16 field_132;
-    Rope* field_134_pRope2;
-    Rope* field_138_pRope1;
+    s32 field_134_pRope2;
+    s32 field_138_pRope1;
     Animation field_13C_lift_wheel;
     Animation field_1D4_pulley_anim;
     s16 field_26C_pulley_xpos;
