@@ -24,6 +24,7 @@
 #include "Blood.hpp"
 #include "Renderer/IRenderer.hpp"
 #include "AnimResources.hpp"
+#include "ObjectIds.hpp"
 
 // Fix pollution from windows.h
 #undef min
@@ -233,14 +234,14 @@ EXPORT s16* CC Abe_OnFrame_429E30(void* pObj, s16* pData)
         xVel = -xVel;
     }
 
-    if (sActiveHero_507678->field_198_pThrowable)
+    auto pThrowable = static_cast<BaseThrowable*>(sObjectIds_5C1B70.Find_449CF0(sActiveHero_507678->field_198_pThrowable));
+    if (pThrowable)
     {
-        sActiveHero_507678->field_198_pThrowable->field_A8_xpos = directed_x + sActiveHero_507678->field_A8_xpos;
-        BaseThrowable* pThrowable = sActiveHero_507678->field_198_pThrowable;
+        pThrowable->field_A8_xpos = directed_x + sActiveHero_507678->field_A8_xpos;
         pThrowable->field_AC_ypos = (pAbe->field_BC_sprite_scale * data_y) + sActiveHero_507678->field_AC_ypos;
         pThrowable->VThrow(xVel, yVel);
         pThrowable->field_BC_sprite_scale = pAbe->field_BC_sprite_scale;
-        sActiveHero_507678->field_198_pThrowable = nullptr;
+        sActiveHero_507678->field_198_pThrowable = -1;
     }
     return pData + 2;
 }
