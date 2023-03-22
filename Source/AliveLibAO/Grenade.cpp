@@ -73,18 +73,13 @@ Grenade* Grenade::ctor_41EBD0(FP xpos, FP ypos, s16 numGrenades)
     }
 
     field_118 = 0;
-    field_11C = 0;
+    field_11C = -1;
     return this;
 }
 
 BaseGameObject* Grenade::dtor_41ECD0()
 {
     SetVTable(this, 0x4BB0A0);
-
-    if (field_11C)
-    {
-        field_11C->field_C_refCount--;
-    }
 
     if (!gInfiniteGrenades_5076EC && !field_10E_bDead)
     {
@@ -310,13 +305,15 @@ void Grenade::VUpdate_41F240()
         }
 
         case States::eWaitForExplodeEnd_6:
-            if (field_11C->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        {
+            auto pExplosion = sObjectIds_5C1B70.Find_449CF0(field_11C);
+            if (pExplosion->field_6_flags.Get(BaseGameObject::eDead_Bit3))
             {
                 field_110_state = States::eExploded_7;
-                field_11C->field_C_refCount--;
-                field_11C = nullptr;
+                field_11C = -1;
             }
             break;
+        }
 
         case States::eExploded_7:
             field_6_flags.Set(Options::eDead_Bit3);
@@ -526,8 +523,7 @@ s16 Grenade::BlowUpAfterCountdown_41EDD0()
     }
 
     field_10_anim.field_4_flags.Clear(AnimFlags::eBit3_Render);
-    field_11C = pExplosion;
-    pExplosion->field_C_refCount++;
+    field_11C = pExplosion->field_8_object_id;
     field_110_state = States::eWaitForExplodeEnd_6;
 
     auto pGibs = ao_new<Gibs>();

@@ -11,6 +11,7 @@
 #include "BaseAliveGameObject.hpp"
 #include "PossessionFlicker.hpp"
 #include "Math.hpp"
+#include "ObjectIds.hpp"
 #include "stdlib.hpp"
 #undef min
 #undef max
@@ -47,7 +48,7 @@ AbilityRing* AbilityRing::ctor_455860(FP xpos, FP ypos, RingTypes ring_type)
     SetVTable(this, 0x4BC090);
 
     field_4_typeId = Types::eAbilityRing_69;
-    field_278_pTarget_obj = nullptr;
+    field_278_pTarget_obj = -1;
     gObjList_drawables_504618->Push_Back(this);
     field_6_flags.Set(Options::eDrawable_Bit4);
 
@@ -186,11 +187,6 @@ BaseGameObject* AbilityRing::dtor_455E50()
 {
     SetVTable(this, 0x4BC090);
 
-    if (field_278_pTarget_obj)
-    {
-        field_278_pTarget_obj->field_C_refCount--;
-    }
-
     ResourceManager::FreeResource_455550(field_18_ppRes);
     gObjList_drawables_504618->Remove_Item(this);
     return dtor_487DF0();
@@ -297,12 +293,12 @@ void AbilityRing::VUpdate()
 
 void AbilityRing::VUpdate_455ED0()
 {
-    if (field_278_pTarget_obj)
+    auto pTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_278_pTarget_obj));
+    if (pTarget)
     {
-        if (field_278_pTarget_obj->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        if (pTarget->field_6_flags.Get(BaseGameObject::eDead_Bit3))
         {
-            field_278_pTarget_obj->field_C_refCount--;
-            field_278_pTarget_obj = nullptr;
+            field_278_pTarget_obj = -1;
         }
         else
         {
@@ -310,7 +306,7 @@ void AbilityRing::VUpdate_455ED0()
             field_260_screenY = FP_GetExponent(pScreenManager_4FF7C8->field_10_pCamPos->field_4_y - FP_FromInteger(pScreenManager_4FF7C8->field_16_ypos));
 
             PSX_RECT bRect = {};
-            field_278_pTarget_obj->VGetBoundingRect(&bRect, 1);
+            pTarget->VGetBoundingRect(&bRect, 1);
 
             field_262_screenXPos = (bRect.w + bRect.x) / 2 - field_25E_screenX;
             field_264_screenYPos = (bRect.h + bRect.y) / 2 - field_260_screenY;
@@ -455,8 +451,7 @@ void AbilityRing::CollideWithObjects_456250()
 
 void AbilityRing::SetTarget_455EC0(BaseAliveGameObject* pTarget)
 {
-    field_278_pTarget_obj = pTarget;
-    field_278_pTarget_obj->field_C_refCount++;
+    field_278_pTarget_obj = pTarget->field_8_object_id;
 }
 
 } // namespace AO

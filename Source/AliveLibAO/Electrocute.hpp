@@ -30,7 +30,7 @@ public:
 
     EXPORT void VUpdate_48D5C0();
 
-    BaseAliveGameObject* field_10_obj_target;
+    s32 field_10_obj_target;
     s16 field_14_overwriter_count;
     s16 field_16_pad;
     PalleteOverwriter* field_18_pPalOverwriters[3];

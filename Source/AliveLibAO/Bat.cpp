@@ -11,6 +11,7 @@
 #include "CameraSwapper.hpp"
 #include "stdlib.hpp"
 #include "Midi.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -73,7 +74,7 @@ Bat* Bat::ctor_4046E0(Path_Bat* pTlv, s32 tlvInfo)
     }
 
     field_F4_state = BatStates::eSetTimer_0;
-    field_10C = nullptr;
+    field_10C = -1;
     field_F6_attack_duration = pTlv->field_1E_attack_duration;
 
     return this;
@@ -82,10 +83,6 @@ Bat* Bat::ctor_4046E0(Path_Bat* pTlv, s32 tlvInfo)
 BaseGameObject* Bat::dtor_404870()
 {
     SetVTable(this, 0x4BA0E8);
-    if (field_10C)
-    {
-        field_10C->field_C_refCount--;
-    }
     gMap_507BA8.TLV_Reset_446870(field_F0_tlvInfo, -1, 0, 0);
     return dtor_417D10();
 }
@@ -274,8 +271,7 @@ void Bat::VUpdate_404950()
                                 {
                                     auto pBat = static_cast<Bat*>(pMaybeBat);
 
-                                    pBat->field_10C = pObjIter;
-                                    pBat->field_10C->field_C_refCount++;
+                                    pBat->field_10C = pObjIter->field_8_object_id;
 
                                     pBat->field_F4_state = BatStates::eAttackTarget_4;
                                     const AnimRecord& rec = AO::AnimRec(AnimId::Bat_Flying);
@@ -284,8 +280,9 @@ void Bat::VUpdate_404950()
                                     pBat->field_F8_timer = 0;
                                     pBat->field_FC_attack_duration_timer = gnFrameCount_507670 + pBat->field_F6_attack_duration;
 
-                                    pBat->field_104_target_xpos = pBat->field_10C->field_A8_xpos;
-                                    pBat->field_108_target_ypos = pBat->field_10C->field_AC_ypos;
+                                    auto pTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(pBat->field_10C));
+                                    pBat->field_104_target_xpos = pTarget->field_A8_xpos;
+                                    pBat->field_108_target_ypos = pTarget->field_AC_ypos;
                                 }
                             }
                         }
@@ -296,14 +293,15 @@ void Bat::VUpdate_404950()
 
         case BatStates::eAttackTarget_4:
         {
-            if (field_10C->field_6_flags.Get(BaseGameObject::eDead_Bit3) || Event_Get_417250(kEventDeathReset_4) || Event_Get_417250(kEvent_9))
+            auto pUnknown = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_10C));
+            if (pUnknown->field_6_flags.Get(BaseGameObject::eDead_Bit3) || Event_Get_417250(kEventDeathReset_4) || Event_Get_417250(kEvent_9))
             {
                 field_6_flags.Set(Options::eDead_Bit3);
                 return;
             }
 
             PSX_RECT bRect = {};
-            field_10C->VGetBoundingRect(&bRect, 1);
+            pUnknown->VGetBoundingRect(&bRect, 1);
             FlyTo_404E50(
                 FP_FromInteger((bRect.w + bRect.x) / 2),
                 FP_FromInteger((bRect.h + bRect.y) / 2),
@@ -314,7 +312,7 @@ void Bat::VUpdate_404950()
             {
                 if (FP_Abs(ySpeed) < FP_FromInteger(20) && static_cast<s32>(gnFrameCount_507670) > field_F8_timer)
                 {
-                    field_10C->VTakeDamage(this);
+                    pUnknown->VTakeDamage(this);
                     field_F8_timer = gnFrameCount_507670 + 30;
                     SND_SEQ_PlaySeq_4775A0(SeqId::eBatSqueaking_18, 1, 1);
                 }
@@ -322,8 +320,7 @@ void Bat::VUpdate_404950()
 
             if (field_FC_attack_duration_timer <= static_cast<s32>(gnFrameCount_507670))
             {
-                field_10C->field_C_refCount--;
-                field_10C = nullptr;
+                field_10C = -1;
                 field_F4_state = BatStates::eFlyAwayAndDie_5;
             }
         }

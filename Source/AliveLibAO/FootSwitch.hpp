@@ -56,7 +56,7 @@ public:
     s16 field_EA_switch_id;
     SwitchOp field_EC_action;
     FootSwitchTriggerBy field_EE_trigger_by;
-    BaseAliveGameObject* field_F0_pStoodOnMe;
+    s32 field_F0_pStoodOnMe;
 };
 ALIVE_ASSERT_SIZEOF(FootSwitch, 0xF4);
 

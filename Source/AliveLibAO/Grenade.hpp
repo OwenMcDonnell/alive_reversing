@@ -52,7 +52,7 @@ public:
     PathLine* field_114_pCollisionLine;
     s16 field_118;
     s16 field_11A_padding;
-    BaseGameObject* field_11C;
+    s32 field_11C;
     FP field_120_xpos;
     FP field_124_ypos;
 };

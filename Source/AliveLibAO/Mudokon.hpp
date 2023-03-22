@@ -355,7 +355,7 @@ public:
     s32 field_1A4_code_converted;
     s16 field_1A8_code_length;
     u16 field_1AA_ring_timeout;
-    BirdPortal* field_1AC_pBirdPortal;
+    s32 field_1AC_pBirdPortal;
     s16 field_1B0;
     s16 field_1B2_rescue_switch_id;
     s16 field_1B4_idle_time;

@@ -64,7 +64,7 @@ public:
     s32 field_E4_tlvInfo;
     s16 field_E8_bIsButtonOn;
     s16 field_EA_padding;
-    GrenadeMachineNozzle* field_EC_pNozzle;
+    s32 field_EC_pNozzle;
 };
 ALIVE_ASSERT_SIZEOF(BoomMachine, 0xF0);
 

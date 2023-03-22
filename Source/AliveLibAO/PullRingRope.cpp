@@ -7,6 +7,7 @@
 #include "BaseAliveGameObject.hpp"
 #include "Rope.hpp"
 #include "Events.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -78,18 +79,18 @@ PullRingRope* PullRingRope::ctor_4546B0(Path_PullRingRope* pTlv, s32 tlvInfo)
     field_FC_on_sound = pTlv->field_20_on_sound;
     field_FE_off_sound = pTlv->field_22_off_sound;
 
-    field_F4_pPuller = nullptr;
+    field_F4_pPuller = -1;
 
-    field_F8_pRope = ao_new<Rope>();
-    if (field_F8_pRope)
+    auto pRopeMem = ao_new<Rope>();
+    if (pRopeMem)
     {
-        field_F8_pRope->ctor_458520(
+        pRopeMem->ctor_458520(
             FP_GetExponent(field_A8_xpos + FP_FromInteger((lvl_x_off + 1))),
             FP_GetExponent(field_AC_ypos) - pTlv->field_1C_rope_length,
             FP_GetExponent(field_AC_ypos + (FP_FromInteger(field_C8_yOffset))),
             field_BC_sprite_scale);
 
-        field_F8_pRope->field_C_refCount++;
+        field_F8_pRope = pRopeMem->field_8_object_id;
     }
     return this;
 }
@@ -101,7 +102,8 @@ Bool32 PullRingRope::vIsNotBeingPulled_454D60()
 
 void PullRingRope::VScreenChanged_454D70()
 {
-    if (!field_F4_pPuller)
+    auto pPuller = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_F4_pPuller));
+    if (!pPuller)
     {
         field_6_flags.Set(BaseGameObject::eDead_Bit3);
     }
@@ -132,15 +134,10 @@ BaseGameObject* PullRingRope::dtor_454910()
     SetVTable(this, 0x4BC058);
     gMap_507BA8.TLV_Reset_446870(field_E8_tlv_info, -1, 0, 0);
 
-    if (field_F4_pPuller)
+    auto pRope = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_F8_pRope));
+    if (pRope)
     {
-        field_F4_pPuller->field_C_refCount--;
-    }
-
-    if (field_F8_pRope)
-    {
-        field_F8_pRope->field_6_flags.Set(Options::eDead_Bit3);
-        field_F8_pRope->field_C_refCount--;
+        pRope->field_6_flags.Set(Options::eDead_Bit3);
     }
 
     return dtor_417D10();
@@ -158,8 +155,7 @@ s16 PullRingRope::Pull_454CB0(BaseAliveGameObject* pFrom)
         return 0;
     }
 
-    field_F4_pPuller = pFrom;
-    field_F4_pPuller->field_C_refCount++;
+    field_F4_pPuller = pFrom->field_8_object_id;
 
     field_EC_state = States::eBeingPulled_1;
     field_B8_vely = FP_FromInteger(2);
@@ -193,12 +189,12 @@ void PullRingRope::VUpdate_4549A0()
         field_6_flags.Set(BaseGameObject::eDead_Bit3);
     }
 
-    if (field_F4_pPuller)
+    auto pPuller = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_F4_pPuller));
+    if (pPuller)
     {
-        if (field_F4_pPuller->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        if (pPuller->field_6_flags.Get(BaseGameObject::eDead_Bit3))
         {
-            field_F4_pPuller->field_C_refCount--;
-            field_F4_pPuller = nullptr;
+            field_F4_pPuller = -1;
         }
     }
 
@@ -211,7 +207,7 @@ void PullRingRope::VUpdate_4549A0()
             }
 
             field_AC_ypos += field_B8_vely;
-            field_F4_pPuller->field_AC_ypos += field_B8_vely;
+            pPuller->field_AC_ypos += field_B8_vely;
             field_E4_stay_in_state_ticks--;
 
             if (field_E4_stay_in_state_ticks == 0)
@@ -286,8 +282,7 @@ void PullRingRope::VUpdate_4549A0()
         case States::eTriggerEvent_2:
             field_B8_vely = FP_FromInteger(4);
             field_EC_state = States::eReturnToIdle_3;
-            field_F4_pPuller->field_C_refCount--;
-            field_F4_pPuller = nullptr;
+            field_F4_pPuller = -1;
 
             field_E4_stay_in_state_ticks = 3;
 
@@ -328,7 +323,8 @@ void PullRingRope::VUpdate_4549A0()
             break;
     }
 
-    field_F8_pRope->field_AC_ypos = FP_NoFractional(FP_FromInteger(field_C8_yOffset - 16) + field_AC_ypos);
+    auto pRope = static_cast<Rope*>(sObjectIds_5C1B70.Find_449CF0(field_F8_pRope));
+    pRope->field_AC_ypos = FP_NoFractional(FP_FromInteger(field_C8_yOffset - 16) + field_AC_ypos);
 }
 
 } // namespace AO

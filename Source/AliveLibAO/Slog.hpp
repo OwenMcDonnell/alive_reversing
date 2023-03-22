@@ -137,7 +137,7 @@ public:
     // Inlined
     void DelayedResponse(s16 responseIdx);
 
-    BaseAliveGameObject* field_10C_pTarget;
+    s32 field_10C_pTarget;
     s16 field_110;
     s16 field_112;
     s16 field_114_brain_idx;
@@ -159,7 +159,7 @@ public:
     s32 field_140;
     s32 field_144;
     s32 field_148;
-    BaseAliveGameObject* field_14C_pSlig;
+    s32 field_14C_pSlig;
     s16 field_150_waiting_counter;
     s16 field_152_response_index;
     s16 field_154_response_part;
@@ -172,7 +172,7 @@ public:
     s32 field_164_timer;
     s16 field_168_anger_switch_id;
     s16 field_16A;
-    BaseAliveGameObject* field_16C_pUnknown;
+    s32 field_16C_pUnknown;
     s16 field_170;
     s16 field_172;
     s16 field_174;

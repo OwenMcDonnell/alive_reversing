@@ -6,6 +6,7 @@
 #include "stdlib.hpp"
 #include "SwitchStates.hpp"
 #include "Abe.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -33,7 +34,7 @@ BeeNest* BeeNest::ctor_480E20(Path_BeeNest* pTlv, s32 tlvInfo)
 
     field_30_speed = FP_FromRaw(pTlv->field_1E_speed << 8);
 
-    field_34_pBeeSwarm = nullptr;
+    field_34_pBeeSwarm = -1;
 
     field_2E_state = BeeNestStates::eWaitForTrigger_0;
 
@@ -55,10 +56,7 @@ BeeNest* BeeNest::ctor_480E20(Path_BeeNest* pTlv, s32 tlvInfo)
 BaseGameObject* BeeNest::dtor_4810C0()
 {
     SetVTable(this, 0x4BCEE8);
-    if (field_34_pBeeSwarm)
-    {
-        field_34_pBeeSwarm->field_C_refCount--;
-    }
+
     return dtor_487DF0();
 }
 
@@ -84,13 +82,13 @@ void BeeNest::VScreenChanged()
 
 void BeeNest::VScreenChanged_481040()
 {
-    if (gMap_507BA8.field_0_current_level != gMap_507BA8.field_A_level || gMap_507BA8.field_2_current_path != gMap_507BA8.field_C_path || !field_34_pBeeSwarm)
+    auto pBeeSwarm = static_cast<BeeSwarm*>(sObjectIds_5C1B70.Find_449CF0(field_34_pBeeSwarm));
+    if (gMap_507BA8.field_0_current_level != gMap_507BA8.field_A_level || gMap_507BA8.field_2_current_path != gMap_507BA8.field_C_path || !pBeeSwarm)
     {
         gMap_507BA8.TLV_Reset_446870(field_1C_tlvInfo, -1, 0, 0);
-        if (field_34_pBeeSwarm)
+        if (pBeeSwarm)
         {
-            field_34_pBeeSwarm->field_C_refCount--;
-            field_34_pBeeSwarm = nullptr;
+            field_34_pBeeSwarm = -1;
         }
         field_6_flags.Set(BaseGameObject::eDead_Bit3);
     }
@@ -103,34 +101,34 @@ void BeeNest::VUpdate()
 
 void BeeNest::VUpdate_480F30()
 {
+    auto pBeeSwarm = static_cast<BeeSwarm*>(sObjectIds_5C1B70.Find_449CF0(field_34_pBeeSwarm));
     switch (field_2E_state)
     {
         case BeeNestStates::eWaitForTrigger_0:
             if (SwitchStates_Get(field_28_switch_id))
             {
-                field_34_pBeeSwarm = ao_new<BeeSwarm>();
-                if (field_34_pBeeSwarm)
+                auto pBeeSwarmMem = ao_new<BeeSwarm>();
+                if (pBeeSwarmMem)
                 {
-                    field_34_pBeeSwarm->ctor_47FC60(
+                    pBeeSwarmMem->ctor_47FC60(
                         field_10_bee_x,
                         field_14_bee_y,
                         field_30_speed,
                         field_2A_swarm_size,
                         field_2C_chase_ticks);
 
-                    field_34_pBeeSwarm->field_C_refCount++;
-                    field_34_pBeeSwarm->Chase_47FEB0(sActiveHero_507678);
+                    pBeeSwarmMem->Chase_47FEB0(sActiveHero_507678);
+                    field_34_pBeeSwarm = pBeeSwarmMem->field_8_object_id;
                     field_2E_state = BeeNestStates::eResetIfDead_1;
                 }
             }
             break;
 
         case BeeNestStates::eResetIfDead_1:
-            if (field_34_pBeeSwarm->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+            if (pBeeSwarm->field_6_flags.Get(BaseGameObject::eDead_Bit3))
             {
                 field_2E_state = BeeNestStates::eWaitForTrigger_0;
-                field_34_pBeeSwarm->field_C_refCount--;
-                field_34_pBeeSwarm = nullptr;
+                field_34_pBeeSwarm = -1;
                 SwitchStates_Set(field_28_switch_id, 0);
             }
             break;

@@ -104,7 +104,7 @@ public:
     s16 field_272_path;
     RingTypes field_274_ring_type;
     s16 field_276_padding;
-    BaseAliveGameObject* field_278_pTarget_obj;
+    s32 field_278_pTarget_obj;
 };
 ALIVE_ASSERT_SIZEOF(AbilityRing, 0x27C);
 

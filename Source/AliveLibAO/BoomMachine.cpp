@@ -9,6 +9,7 @@
 #include "ThrowableArray.hpp"
 #include "Game.hpp"
 #include "Grenade.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -118,20 +119,21 @@ void BoomMachine::VHandleButton()
 
 void BoomMachine::VHandleButton_41E6F0()
 {
+    auto pNozzle = static_cast<GrenadeMachineNozzle*>(sObjectIds_5C1B70.Find_449CF0(field_EC_pNozzle));
     if (VIsButtonOn_41E840())
     {
-        if (field_EC_pNozzle->field_E4_state == BoomMachineStates::eInactive_0)
+        if (pNozzle->field_E4_state == BoomMachineStates::eInactive_0)
         {
-            field_EC_pNozzle->field_E4_state = BoomMachineStates::eDropGrenadeAnimation_2;
-            field_EC_pNozzle->field_E8_timer = gnFrameCount_507670 + 10;
+            pNozzle->field_E4_state = BoomMachineStates::eDropGrenadeAnimation_2;
+            pNozzle->field_E8_timer = gnFrameCount_507670 + 10;
         }
     }
     else
     {
-        if (field_EC_pNozzle->field_E4_state == BoomMachineStates::eInactive_0)
+        if (pNozzle->field_E4_state == BoomMachineStates::eInactive_0)
         {
-            field_EC_pNozzle->field_E4_state = BoomMachineStates::eAlreadyUsed_1;
-            field_EC_pNozzle->field_E8_timer = gnFrameCount_507670 + 10;
+            pNozzle->field_E4_state = BoomMachineStates::eAlreadyUsed_1;
+            pNozzle->field_E8_timer = gnFrameCount_507670 + 10;
         }
     }
 }
@@ -187,10 +189,10 @@ BaseGameObject* BoomMachine::dtor_41E670()
 {
     SetVTable(this, 0x4BB008);
 
-    if (field_EC_pNozzle)
+    auto pNozzle = static_cast<GrenadeMachineNozzle*>(sObjectIds_5C1B70.Find_449CF0(field_EC_pNozzle));
+    if (pNozzle)
     {
-        field_EC_pNozzle->field_C_refCount--;
-        field_EC_pNozzle->field_6_flags.Set(Options::eDead_Bit3);
+        pNozzle->field_6_flags.Set(Options::eDead_Bit3);
     }
 
     gMap_507BA8.TLV_Reset_446870(field_E4_tlvInfo, -1, 0, 0);
@@ -252,8 +254,7 @@ BoomMachine* BoomMachine::ctor_41E420(Path_BoomMachine* pTlv, s32 tlvInfo)
 
     pNozzle->field_10_anim.field_4_flags.Set(AnimFlags::eBit5_FlipX, pTlv->field_1A_nozzle_side == Path_BoomMachine::NozzleSide::eLeft_1);
 
-    pNozzle->field_C_refCount++;
-    field_EC_pNozzle = pNozzle;
+    field_EC_pNozzle = pNozzle->field_8_object_id;
 
     if (gpThrowableArray_50E26C && gpThrowableArray_50E26C->field_10_count)
     {

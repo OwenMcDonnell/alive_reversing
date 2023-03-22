@@ -75,8 +75,8 @@ public:
     s16 field_EE_switch_id;
     SwitchOp field_F0_action;
     s16 field_F2_pad;
-    BaseAliveGameObject* field_F4_pPuller;
-    Rope* field_F8_pRope;
+    s32 field_F4_pPuller;
+    s32 field_F8_pRope;
     PullRingSwitchSound field_FC_on_sound;
     PullRingSwitchSound field_FE_off_sound;
     PullRingSoundDirection field_100_sound_direction;

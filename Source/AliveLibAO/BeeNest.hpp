@@ -58,7 +58,7 @@ public:
     u16 field_2C_chase_ticks;
     BeeNestStates field_2E_state;
     FP field_30_speed;
-    BeeSwarm* field_34_pBeeSwarm;
+    s32 field_34_pBeeSwarm;
 };
 ALIVE_ASSERT_SIZEOF(BeeNest, 0x38);
 

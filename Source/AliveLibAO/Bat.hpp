@@ -57,7 +57,7 @@ public:
     FP field_100_velx;
     FP field_104_target_xpos;
     FP field_108_target_ypos;
-    BaseAliveGameObject* field_10C;
+    s32 field_10C;
 };
 ALIVE_ASSERT_SIZEOF(Bat, 0x110);
 

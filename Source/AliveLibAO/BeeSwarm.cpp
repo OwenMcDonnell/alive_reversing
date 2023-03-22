@@ -15,6 +15,7 @@
 #include "Sfx.hpp"
 #include "Collisions.hpp"
 #include <algorithm>
+#include "ObjectIds.hpp"
 
 #undef max
 #undef min
@@ -76,7 +77,7 @@ BeeSwarm* BeeSwarm::ctor_47FC60(FP xpos, FP ypos, FP speed, s16 numBees, s32 cha
     field_A8_xpos = xpos;
     field_D6C_ypos = ypos;
     field_D80_state = BeeSwarmStates::eIdle_0;
-    field_D98_pChaseTarget = 0;
+    field_D98_pChaseTarget = -1;
     field_DA4_update_chase_timer = 0;
     field_D9C_alive_timer = 0;
     field_DA0_do_damage_or_pain_sound_timer = 0;
@@ -103,11 +104,6 @@ BaseGameObject* BeeSwarm::dtor_47FDF0()
     if (gMap_507BA8.field_0_current_level != LevelIds::eForestTemple_4 && gMap_507BA8.field_0_current_level != LevelIds::eDesertTemple_9)
     {
         ResourceManager::FreeResource_455550(ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Animation, AOResourceID::kElmWaspAOResID_204, 0, 0));
-    }
-
-    if (field_D98_pChaseTarget)
-    {
-        field_D98_pChaseTarget->field_C_refCount--;
     }
 
     return dtor_417D10();
@@ -141,20 +137,20 @@ void BeeSwarm::VScreenChange_480D40()
         field_6_flags.Set(Options::eDead_Bit3);
     }
 
-    if (field_D98_pChaseTarget)
+    auto pChaseTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_D98_pChaseTarget));
+    if (pChaseTarget)
     {
-        if (field_D98_pChaseTarget->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+        if (pChaseTarget->field_6_flags.Get(BaseGameObject::eDead_Bit3))
         {
             field_D80_state = BeeSwarmStates::eFlyAwayAndDie_3;
             field_D74_chase_target_y -= FP_FromInteger(240);
             field_D9C_alive_timer = gnFrameCount_507670 + 120;
             gBeesNearAbe_5076AC = 0;
-            field_D98_pChaseTarget->field_C_refCount--;
-            field_D98_pChaseTarget = nullptr;
+            field_D98_pChaseTarget = -1;
         }
     }
 
-    if (!sActiveHero_507678 || (field_D98_pChaseTarget == sActiveHero_507678 && sActiveHero_507678->field_FC_current_motion == eAbeMotions::Motion_156_DoorEnter_42D370))
+    if (!sActiveHero_507678 || (pChaseTarget == sActiveHero_507678 && sActiveHero_507678->field_FC_current_motion == eAbeMotions::Motion_156_DoorEnter_42D370))
     {
         field_6_flags.Set(Options::eDead_Bit3);
     }
@@ -167,22 +163,15 @@ void BeeSwarm::FollowLine_47FF10(PathLine* pLine, FP target_x, FP target_y, FP s
     field_D80_state = BeeSwarmStates::eFollowPathLines_2;
     field_D70_chase_target_x = target_x;
     field_D74_chase_target_y = target_y;
-    field_D98_pChaseTarget = nullptr;
+    field_D98_pChaseTarget = -1;
 }
 
 void BeeSwarm::Chase_47FEB0(BaseAliveGameObject* pChaseTarget)
 {
-    if (field_D98_pChaseTarget)
-    {
-        field_D98_pChaseTarget->field_C_refCount--;
-    }
-
     field_D80_state = BeeSwarmStates::eAttackChase_1;
 
-    field_D98_pChaseTarget = pChaseTarget;
+    field_D98_pChaseTarget = pChaseTarget->field_8_object_id;
     field_DA4_update_chase_timer = 0;
-
-    pChaseTarget->field_C_refCount++;
 
     field_D70_chase_target_x = pChaseTarget->field_A8_xpos;
     field_D74_chase_target_y = pChaseTarget->field_AC_ypos;
@@ -197,6 +186,8 @@ void BeeSwarm::VUpdate()
 
 void BeeSwarm::VUpdate_47FF50()
 {
+    auto pChaseTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_D98_pChaseTarget));
+
     if (sNumCamSwappers_507668 != 0)
     {
         return;
@@ -210,7 +201,7 @@ void BeeSwarm::VUpdate_47FF50()
     }
 
     // Chase target has died
-    if (field_D98_pChaseTarget && field_D98_pChaseTarget->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+    if (pChaseTarget && pChaseTarget->field_6_flags.Get(BaseGameObject::eDead_Bit3))
     {
         ToFlyAwayAndDie();
 
@@ -250,7 +241,7 @@ void BeeSwarm::VUpdate_47FF50()
             else
             {
                 // Move far on X bees closer to target
-                const s32 toTargetXDelta = FP_GetExponent(field_D98_pChaseTarget->field_A8_xpos - field_D70_chase_target_x);
+                const s32 toTargetXDelta = FP_GetExponent(pChaseTarget->field_A8_xpos - field_D70_chase_target_x);
                 if (abs(toTargetXDelta) > 368)
                 {
                     for (s32 i = 0; i < field_D66_bee_count; i++)
@@ -261,7 +252,7 @@ void BeeSwarm::VUpdate_47FF50()
                 }
 
                 // Move far on  Y bees closer to target
-                const s32 toTargetYDelta = FP_GetExponent(field_D98_pChaseTarget->field_AC_ypos - field_D74_chase_target_y);
+                const s32 toTargetYDelta = FP_GetExponent(pChaseTarget->field_AC_ypos - field_D74_chase_target_y);
                 if (abs(toTargetYDelta) > 200)
                 {
                     for (s32 i = 0; i < field_D66_bee_count; i++)
@@ -273,7 +264,7 @@ void BeeSwarm::VUpdate_47FF50()
 
                 // Update target x/y to the mid of the target rect
                 PSX_RECT targetRect = {};
-                field_D98_pChaseTarget->VGetBoundingRect(&targetRect, 1);
+                pChaseTarget->VGetBoundingRect(&targetRect, 1);
                 field_D74_chase_target_y = FP_FromInteger((targetRect.h + targetRect.y) / 2);
                 field_D70_chase_target_x = FP_FromInteger((targetRect.w + targetRect.x) / 2);
 
@@ -283,7 +274,7 @@ void BeeSwarm::VUpdate_47FF50()
                         FP_GetExponent(field_D70_chase_target_x),
                         FP_GetExponent(field_D74_chase_target_y))
                         < 60
-                    && field_D98_pChaseTarget == sActiveHero_507678)
+                    && pChaseTarget == sActiveHero_507678)
                 {
                     gBeesNearAbe_5076AC = TRUE;
                 }
@@ -389,7 +380,7 @@ void BeeSwarm::VUpdate_47FF50()
                     break;
                 }
 
-                if (pObjIter != field_D98_pChaseTarget)
+                if (pObjIter != pChaseTarget)
                 {
                     if (pObjIter->field_EC) // can be chased
                     {
@@ -402,15 +393,8 @@ void BeeSwarm::VUpdate_47FF50()
 
                             const auto oldChaseTimer = field_D9C_alive_timer;
 
-                            // De-ref old target
-                            if (field_D98_pChaseTarget)
-                            {
-                                field_D98_pChaseTarget->field_C_refCount--;
-                            }
-
                             // Set new target
-                            field_D98_pChaseTarget = pObjIter;
-                            field_D98_pChaseTarget->field_C_refCount++;
+                            field_D98_pChaseTarget = pObjIter->field_8_object_id;
 
                             field_D80_state = BeeSwarmStates::eAttackChase_1;
                             field_D70_chase_target_x = pObjIter->field_A8_xpos;
@@ -495,9 +479,10 @@ void BeeSwarm::VUpdate_47FF50()
         }
 
         FP xMove = {};
-        if (field_D98_pChaseTarget)
+        auto pNewChaseTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_D98_pChaseTarget));
+        if (pNewChaseTarget)
         {
-            if (FP_Abs(distToTargetX) > FP_FromInteger(20) || field_D98_pChaseTarget->field_B4_velx != FP_FromInteger(0))
+            if (FP_Abs(distToTargetX) > FP_FromInteger(20) || pNewChaseTarget->field_B4_velx != FP_FromInteger(0))
             {
                 if (distToTargetX <= FP_FromInteger(0))
                 {
@@ -583,10 +568,10 @@ void BeeSwarm::ToFlyAwayAndDie()
 
     gBeesNearAbe_5076AC = FALSE;
 
-    if (field_D98_pChaseTarget)
+    auto pChaseTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_D98_pChaseTarget));
+    if (pChaseTarget)
     {
-        field_D98_pChaseTarget->field_C_refCount--;
-        field_D98_pChaseTarget = nullptr;
+        field_D98_pChaseTarget = -1;
     }
 }
 

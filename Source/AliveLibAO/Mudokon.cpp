@@ -371,7 +371,7 @@ Mudokon* Mudokon::ctor_43EED0(Path_TLV* pTlv, s32 tlvInfo)
         field_A8_xpos += FP_FromInteger(8);
     }
 
-    field_1AC_pBirdPortal = nullptr;
+    field_1AC_pBirdPortal = -1;
     field_194_pLiftPoint = nullptr;
 
     field_D0_pShadow = ao_new<Shadow>();
@@ -836,17 +836,17 @@ s16 Mudokon::DoSmashDamage()
 
 void Mudokon::KillBirdPortal()
 {
-    if (field_1AC_pBirdPortal)
+    auto pPortal = static_cast<BirdPortal*>(sObjectIds_5C1B70.Find_449CF0(field_1AC_pBirdPortal));
+    if (pPortal)
     {
         sMudRunningToPortalCount_507B94--;
         if (sMudRunningToPortalCount_507B94 == 0)
         {
-            field_1AC_pBirdPortal->VKillPortalClipper();
-            field_1AC_pBirdPortal->VGiveShrukull(1);
+            pPortal->VKillPortalClipper();
+            pPortal->VGiveShrukull(1);
         }
 
-        field_1AC_pBirdPortal->field_C_refCount--;
-        field_1AC_pBirdPortal = nullptr;
+        field_1AC_pBirdPortal = -1;
     }
 }
 
@@ -1121,28 +1121,29 @@ void Mudokon::MoveOnLine_43C7E0()
 
 s16 Mudokon::FindBirdPortal_440250()
 {
-    if (field_1AC_pBirdPortal)
+    auto pPortal = static_cast<BirdPortal*>(sObjectIds_5C1B70.Find_449CF0(field_1AC_pBirdPortal));
+    if (pPortal)
     {
         return 0;
     }
 
-    field_1AC_pBirdPortal = static_cast<BirdPortal*>(Event_Get_417250(kEvent_18));
-    if (!field_1AC_pBirdPortal)
+    pPortal = static_cast<BirdPortal*>(Event_Get_417250(kEvent_18));
+    if (!pPortal)
     {
         return 0;
     }
+    field_1AC_pBirdPortal = pPortal->field_8_object_id;
 
-    if (FP_Abs(field_1AC_pBirdPortal->field_18_xpos - field_A8_xpos) < FP_FromInteger(gPsxDisplay_504C78.field_0_width) && FP_Abs(field_1AC_pBirdPortal->field_28_ypos - field_AC_ypos) < FP_FromInteger(10))
+    if (FP_Abs(pPortal->field_18_xpos - field_A8_xpos) < FP_FromInteger(gPsxDisplay_504C78.field_0_width) && FP_Abs(pPortal->field_28_ypos - field_AC_ypos) < FP_FromInteger(10))
     {
-        if (field_1AC_pBirdPortal->field_10_portal_type == PortalType::eWorker_1 || field_1AC_pBirdPortal->field_10_portal_type == PortalType::eShrykull_2)
+        if (pPortal->field_10_portal_type == PortalType::eWorker_1 || pPortal->field_10_portal_type == PortalType::eShrykull_2)
         {
             sActiveHero_507678->ChangeChantState_430510(1);
-            field_1AC_pBirdPortal->field_C_refCount++;
             sMudRunningToPortalCount_507B94++;
             return 1;
         }
     }
-    field_1AC_pBirdPortal = nullptr;
+    field_1AC_pBirdPortal = -1;
     return 0;
 }
 
@@ -2306,7 +2307,8 @@ void Mudokon::Motion_44_RunJumpMid_43E960()
     PSX_RECT bRect = {};
     VGetBoundingRect(&bRect, 1);
 
-    if ((field_B4_velx > FP_FromInteger(0) && (FP_FromInteger(bRect.x) > field_1AC_pBirdPortal->field_18_xpos)) || ((field_B4_velx < FP_FromInteger(0) && FP_FromInteger(bRect.w) < field_1AC_pBirdPortal->field_18_xpos)))
+    auto pPortal = static_cast<BirdPortal*>(sObjectIds_5C1B70.Find_449CF0(field_1AC_pBirdPortal));
+    if ((field_B4_velx > FP_FromInteger(0) && (FP_FromInteger(bRect.x) > pPortal->field_18_xpos)) || ((field_B4_velx < FP_FromInteger(0) && FP_FromInteger(bRect.w) < pPortal->field_18_xpos)))
     {
         field_144_flags.Clear(Flags_144::e144_Bit2);
         field_144_flags.Clear(Flags_144::e144_Bit6_bPersist);
@@ -2326,9 +2328,9 @@ void Mudokon::Motion_44_RunJumpMid_43E960()
 
         sRescuedMudokons_5076C0++;
 
-        if (field_1AC_pBirdPortal)
+        if (pPortal)
         {
-            field_1AC_pBirdPortal->VMudSaved();
+            pPortal->VMudSaved();
         }
 
         if (field_1B2_rescue_switch_id)
@@ -4288,17 +4290,12 @@ s16 Mudokon::Brain_Escape_12_440FD0()
         return field_1BA_brain_sub_state;
     }
 
-    BirdPortal* pPortal = field_1AC_pBirdPortal;
+    auto pPortal = static_cast<BirdPortal*>(sObjectIds_5C1B70.Find_449CF0(field_1AC_pBirdPortal));
     if (!pPortal || pPortal->field_6_flags.Get(BaseGameObject::eDead_Bit3))
     {
         sMudRunningToPortalCount_507B94--;
-        if (pPortal)
-        {
-            pPortal->field_C_refCount--;
-        }
-
         field_144_flags.Set(Flags_144::e144_Bit6_bPersist);
-        field_1AC_pBirdPortal = nullptr;
+        field_1AC_pBirdPortal = -1;
         field_FE_next_motion = eMudMotions::Motion_0_Idle_43CA70;
         field_1B8_brain_idx = 10;
         return 6;
@@ -4355,7 +4352,7 @@ s16 Mudokon::Brain_Escape_12_440FD0()
 
             if (field_FC_current_motion == eMudMotions::Motion_29_RunLoop_43DB10)
             {
-                if (!FacingTarget_43D6A0(field_1AC_pBirdPortal))
+                if (!FacingTarget_43D6A0(pPortal))
                 {
                     field_FE_next_motion = eMudMotions::Motion_33_RunSlideTurn_43DF80;
                 }

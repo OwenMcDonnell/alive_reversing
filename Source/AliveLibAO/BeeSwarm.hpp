@@ -85,7 +85,7 @@ public:
     FP field_D90_rect_w;
     FP field_D94_rect_h;
 
-    BaseAliveGameObject* field_D98_pChaseTarget;
+    s32 field_D98_pChaseTarget;
     s32 field_D9C_alive_timer;
     s32 field_DA0_do_damage_or_pain_sound_timer;
     s32 field_DA4_update_chase_timer;

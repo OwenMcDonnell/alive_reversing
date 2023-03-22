@@ -832,7 +832,8 @@ s16 BaseAliveGameObject::IsBeeSwarmChasingMe_4022B0()
 
         if (pObj->field_4_typeId == Types::eBeeSwarm_95)
         {
-            if (static_cast<BeeSwarm*>(pObj)->field_D98_pChaseTarget == this)
+            auto pChaseTarget = sObjectIds_5C1B70.Find_449CF0(static_cast<BeeSwarm*>(pObj)->field_D98_pChaseTarget);
+            if (pChaseTarget == this)
             {
                 return 1;
             }
