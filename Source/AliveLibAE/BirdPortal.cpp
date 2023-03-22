@@ -206,6 +206,7 @@ void BirdPortal::vUpdate_498280()
                     if (pDove)
                     {
                         pDove->field_6_flags.Set(BaseGameObject::eDead_Bit3);
+                        id = -1;
                     }
                 }
                 field_28_state = PortalStates::CreateTerminators_4;
@@ -1032,12 +1033,13 @@ void BirdPortal::dtor_4980A0()
     {
         if (field_68_doves_exist)
         {
-            for (auto doveId : field_44_dove_ids)
+            for (auto& doveId : field_44_dove_ids)
             {
                 BaseGameObject* pDove = sObjectIds_5C1B70.Find_449CF0(doveId);
                 if (pDove)
                 {
                     pDove->field_6_flags.Set(BaseGameObject::eDead_Bit3);
+                    doveId = -1;
                 }
             }
         }

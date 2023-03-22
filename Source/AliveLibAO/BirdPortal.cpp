@@ -166,18 +166,15 @@ BaseGameObject* BirdPortal::dtor_452230()
         field_48_pScreenClipper2->field_6_flags.Set(Options::eDead_Bit3);
     }
 
-    BaseGameObject* pDoves = sObjectIds_5C1B70.Find_449CF0(field_4C_pDovesArray[0]);
-    if (pDoves)
+    if (field_68_doves_exist)
     {
-        if (field_68_doves_exist)
+        for (auto& doveId : field_4C_pDovesArray)
         {
-            for (const auto& doveId : field_4C_pDovesArray)
+            BaseGameObject* pDove = sObjectIds_5C1B70.Find_449CF0(doveId);
+            if (pDove)
             {
-                BaseGameObject* pDove = sObjectIds_5C1B70.Find_449CF0(doveId);
-                if (pDove)
-                {
-                    pDove->field_6_flags.Set(Options::eDead_Bit3);
-                }
+                pDove->field_6_flags.Set(Options::eDead_Bit3);
+                doveId = -1;
             }
         }
     }
@@ -478,12 +475,13 @@ void BirdPortal::VUpdate_4523D0()
             Event_Broadcast_417220(kEvent_18, this);
             if (static_cast<s32>(gnFrameCount_507670) > field_30_timer)
             {
-                for (const auto& id : field_4C_pDovesArray)
+                for (auto& id : field_4C_pDovesArray)
                 {
                     BaseGameObject* pDove = sObjectIds_5C1B70.Find_449CF0(id);
                     if (pDove)
                     {
                         pDove->field_6_flags.Set(Options::eDead_Bit3);
+                        id = -1;
                     }
                 }
 

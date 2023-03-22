@@ -307,7 +307,7 @@ void Grenade::VUpdate_41F240()
         case States::eWaitForExplodeEnd_6:
         {
             auto pExplosion = sObjectIds_5C1B70.Find_449CF0(field_11C);
-            if (pExplosion->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+            if (!pExplosion || pExplosion->field_6_flags.Get(BaseGameObject::eDead_Bit3))
             {
                 field_110_state = States::eExploded_7;
                 field_11C = -1;

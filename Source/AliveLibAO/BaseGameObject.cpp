@@ -62,6 +62,9 @@ BaseGameObject* BaseGameObject::dtor_487DF0()
 {
     SetVTable(this, 0x4BD488); // vTable_BaseGameObject_4BD488
     Event_Cancel_For_Obj_417350(this);
+
+    sObjectIds_5C1B70.Remove_449C60(field_8_object_id);
+
     return this;
 }
 

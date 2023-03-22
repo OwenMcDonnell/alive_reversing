@@ -2647,7 +2647,7 @@ s16 Scrab::Brain_ChasingEnemy_45CC90()
     }
 
     auto pTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_120_pTarget));
-    if (pTarget->field_6_flags.Get(BaseGameObject::eDead_Bit3)
+    if (!pTarget || pTarget->field_6_flags.Get(BaseGameObject::eDead_Bit3)
         || (field_13C_spotting_timer <= static_cast<s32>(gnFrameCount_507670)
             && !CanSeeAbe_45C100(pTarget)
             && pTarget->field_100_health > FP_FromInteger(0)
