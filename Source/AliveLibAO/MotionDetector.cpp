@@ -14,6 +14,7 @@
 #include "ScreenManager.hpp"
 #include "PsxDisplay.hpp"
 #include "Sys_common.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -82,7 +83,7 @@ MotionDetector* MotionDetector::ctor_437A50(Path_MotionDetector* pTlv, s32 tlvIn
 
             pMotionDetectors->field_BC_sprite_scale = field_BC_sprite_scale;
             pMotionDetectors->field_C8_yOffset = 0;
-            field_108_pLaser = pMotionDetectors;
+            field_108_pLaser = pMotionDetectors->field_8_object_id;
         }
     }
     else if (pTlv->field_20_initial_move_direction == Path_MotionDetector::InitialMoveDirection::eLeft_1)
@@ -103,7 +104,7 @@ MotionDetector* MotionDetector::ctor_437A50(Path_MotionDetector* pTlv, s32 tlvIn
             pMotionDetectors->field_AC_ypos = field_104_bottom_right_y;
             pMotionDetectors->field_BC_sprite_scale = field_BC_sprite_scale;
             pMotionDetectors->field_C8_yOffset = 0;
-            field_108_pLaser = pMotionDetectors;
+            field_108_pLaser = pMotionDetectors->field_8_object_id;
         }
     }
     else
@@ -111,11 +112,11 @@ MotionDetector* MotionDetector::ctor_437A50(Path_MotionDetector* pTlv, s32 tlvIn
         ALIVE_FATAL("couldn't find start move direction for motion detector");
     }
 
-    field_108_pLaser->field_C_refCount++;
 
     field_F0_disable_switch_id = pTlv->field_24_disable_switch_id;
 
-    field_108_pLaser->field_10_anim.field_4_flags.Set(AnimFlags::eBit3_Render, SwitchStates_Get(field_F0_disable_switch_id) == 0);
+    auto pLaser = static_cast<MotionDetectorLaser*>(sObjectIds_5C1B70.Find_449CF0(field_108_pLaser));
+    pLaser->field_10_anim.field_4_flags.Set(AnimFlags::eBit3_Render, SwitchStates_Get(field_F0_disable_switch_id) == 0);
 
     field_10_anim.field_4_flags.Set(AnimFlags::eBit3_Render, pTlv->field_22_draw_flare == Choice_short::eYes_1);
 
@@ -144,10 +145,10 @@ BaseGameObject* MotionDetector::dtor_437D70()
         gMap_507BA8.TLV_Reset_446870(field_E4_tlvInfo, -1, 0, 1);
     }
 
-    if (field_108_pLaser)
+    auto pLaser = static_cast<MotionDetectorLaser*>(sObjectIds_5C1B70.Find_449CF0(field_108_pLaser));
+    if (pLaser)
     {
-        field_108_pLaser->field_C_refCount--;
-        field_108_pLaser->field_6_flags.Set(Options::eDead_Bit3);
+        pLaser->field_6_flags.Set(Options::eDead_Bit3);
     }
 
     return dtor_417D10();
@@ -187,6 +188,7 @@ void MotionDetector::VUpdate()
 
 void MotionDetector::VUpdate_437E90()
 {
+    auto pLaser = static_cast<MotionDetectorLaser*>(sObjectIds_5C1B70.Find_449CF0(field_108_pLaser));
     if (Event_Get_417250(kEventDeathReset_4))
     {
         field_6_flags.Set(Options::eDead_Bit3);
@@ -196,14 +198,14 @@ void MotionDetector::VUpdate_437E90()
     {
         if (SwitchStates_Get(field_F0_disable_switch_id))
         {
-            field_108_pLaser->field_10_anim.field_4_flags.Clear(AnimFlags::eBit3_Render);
+            pLaser->field_10_anim.field_4_flags.Clear(AnimFlags::eBit3_Render);
         }
         else
         {
-            field_108_pLaser->field_10_anim.field_4_flags.Set(AnimFlags::eBit3_Render);
+            pLaser->field_10_anim.field_4_flags.Set(AnimFlags::eBit3_Render);
 
             PSX_RECT laserRect = {};
-            field_108_pLaser->VGetBoundingRect(&laserRect, 1);
+            pLaser->VGetBoundingRect(&laserRect, 1);
 
             field_160_bObjectInLaser = FALSE;
 
@@ -273,7 +275,7 @@ void MotionDetector::VUpdate_437E90()
             switch (field_E8_state)
             {
                 case States::eMoveRight_0:
-                    if (field_108_pLaser->field_A8_xpos >= field_100_bottom_right_x)
+                    if (pLaser->field_A8_xpos >= field_100_bottom_right_x)
                     {
                         field_E8_state = States::eWaitThenMoveLeft_1;
                         field_EC_timer = gnFrameCount_507670 + 15;
@@ -281,7 +283,7 @@ void MotionDetector::VUpdate_437E90()
                     }
                     else
                     {
-                        field_108_pLaser->field_A8_xpos += field_15C_speed;
+                        pLaser->field_A8_xpos += field_15C_speed;
                     }
                     break;
 
@@ -293,7 +295,7 @@ void MotionDetector::VUpdate_437E90()
                     break;
 
                 case States::eMoveLeft_2:
-                    if (field_108_pLaser->field_A8_xpos <= field_F8_top_left_x)
+                    if (pLaser->field_A8_xpos <= field_F8_top_left_x)
                     {
                         field_E8_state = States::eWaitThenMoveRight_3;
                         field_EC_timer = gnFrameCount_507670 + 15;
@@ -301,7 +303,7 @@ void MotionDetector::VUpdate_437E90()
                     }
                     else
                     {
-                        field_108_pLaser->field_A8_xpos -= field_15C_speed;
+                        pLaser->field_A8_xpos -= field_15C_speed;
                     }
                     break;
 
@@ -333,18 +335,20 @@ void MotionDetector::VRender_438250(PrimHeader** ppOt)
 
     if (!SwitchStates_Get(field_F0_disable_switch_id))
     {
+        auto pLaser = static_cast<MotionDetectorLaser*>(sObjectIds_5C1B70.Find_449CF0(field_108_pLaser));
+
         const s16 screen_top = FP_GetExponent(pScreenManager_4FF7C8->field_10_pCamPos->field_4_y - FP_FromInteger(pScreenManager_4FF7C8->field_16_ypos));
 
         const s16 screen_left = FP_GetExponent(pScreenManager_4FF7C8->field_10_pCamPos->field_0_x - FP_FromInteger(pScreenManager_4FF7C8->field_14_xpos));
 
         PSX_RECT bLaserRect = {};
-        field_108_pLaser->VGetBoundingRect(&bLaserRect, 1);
+        pLaser->VGetBoundingRect(&bLaserRect, 1);
 
         const s16 x0 = static_cast<s16>(PsxToPCX(FP_GetExponent(field_A8_xpos) - screen_left, 11));
         const s16 y0 = FP_GetExponent(field_AC_ypos) - screen_top;
-        const s16 y1 = FP_GetExponent(field_108_pLaser->field_AC_ypos) - screen_top;
+        const s16 y1 = FP_GetExponent(pLaser->field_AC_ypos) - screen_top;
         const s16 y2 = y1 + bLaserRect.y - bLaserRect.h;
-        const s16 x1 = static_cast<s16>(PsxToPCX(FP_GetExponent(field_108_pLaser->field_A8_xpos) - screen_left, 11));
+        const s16 x1 = static_cast<s16>(PsxToPCX(FP_GetExponent(pLaser->field_A8_xpos) - screen_left, 11));
 
         Poly_F3* pPrim = &field_10C_prims[gPsxDisplay_504C78.field_A_buffer_index];
         PolyF3_Init(pPrim);

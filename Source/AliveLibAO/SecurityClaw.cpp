@@ -18,6 +18,7 @@
 #include "Alarm.hpp"
 #include "ScreenShake.hpp"
 #include "PossessionFlicker.hpp"
+#include "ObjectIds.hpp"
 
 namespace AO {
 
@@ -120,7 +121,6 @@ SecurityClaw* SecurityClaw::ctor_418A70(Path_SecurityClaw* pTlv, s32 tlvInfo)
     }
 
     field_6_flags.Set(Options::eUpdateDuringCamSwap_Bit10);
-    field_13C_pArray = nullptr;
     field_128_sound_channels = 0;
 
     return this;
@@ -145,21 +145,17 @@ BaseGameObject* SecurityClaw::dtor_418CE0()
         field_130_pClaw = nullptr;
     }
 
-    if (field_13C_pArray)
+    auto pLaser = static_cast<MotionDetector*>(sObjectIds_5C1B70.Find_449CF0(field_13C_pArray[0]));
+    if (pLaser)
     {
-        for (s32 i = 0; i < field_13C_pArray->Size(); i++)
+        for (const auto& id : field_13C_pArray)
         {
-            auto pObjIter = field_13C_pArray->ItemAt(i);
-
-            pObjIter->SetDontComeBack_437E00(field_12C_pDetector);
-            pObjIter->field_C_refCount--;
-            pObjIter->field_6_flags.Set(Options::eDead_Bit3);
-        }
-
-        if (field_13C_pArray)
-        {
-            field_13C_pArray->dtor_404440();
-            ao_delete_free_447540(field_13C_pArray);
+            auto pObjIter = static_cast<MotionDetector*>(sObjectIds_5C1B70.Find_449CF0(id));
+            if (pObjIter)
+            {
+                pObjIter->SetDontComeBack_437E00(field_12C_pDetector);
+                pObjIter->field_6_flags.Set(Options::eDead_Bit3);
+            }
         }
     }
 
@@ -312,18 +308,16 @@ void SecurityClaw::VUpdate_418DE0()
     field_130_pClaw->field_A8_xpos = field_A8_xpos;
     field_130_pClaw->field_AC_ypos = field_AC_ypos;
 
-    if (field_13C_pArray)
+    if (sObjectIds_5C1B70.Find_449CF0(field_13C_pArray[0]))
     {
-        for (s32 i = 0; i < field_13C_pArray->Size(); i++)
+        for (const auto& id : field_13C_pArray)
         {
-            MotionDetector* pObj = field_13C_pArray->ItemAt(i);
-            if (!pObj)
+            MotionDetector* pObj = static_cast<MotionDetector*>(sObjectIds_5C1B70.Find_449CF0(id));
+            if (pObj)
             {
-                break;
+                pObj->field_A8_xpos = field_A8_xpos - FP_FromInteger(1);
+                pObj->field_AC_ypos = field_AC_ypos - FP_FromInteger(11);
             }
-
-            pObj->field_A8_xpos = field_A8_xpos - FP_FromInteger(1);
-            pObj->field_AC_ypos = field_AC_ypos - FP_FromInteger(11);
         }
     }
 
@@ -341,21 +335,23 @@ void SecurityClaw::VUpdate_418DE0()
                 if (pObjIter->field_4_typeId == Types::eMotionDetector_59)
                 {
                     auto pDetector = static_cast<MotionDetector*>(pObjIter);
-                    if (!field_13C_pArray)
+                    if (!sObjectIds_5C1B70.Find_449CF0(field_13C_pArray[0]))
                     {
                         const AnimRecord& rec = AO::AnimRec(AnimId::Security_Claw_Upper_NoRotation);
                         field_10_anim.Set_Animation_Data_402A40(rec.mFrameTableOffset, nullptr);
-                        field_13C_pArray = ao_new<DynamicArrayT<MotionDetector>>();
-                        if (field_13C_pArray)
-                        {
-                            field_13C_pArray->ctor_4043E0(10);
-                        }
                     }
 
                     pDetector->field_A8_xpos = field_A8_xpos - FP_FromInteger(1);
                     pDetector->field_AC_ypos = field_AC_ypos - FP_FromInteger(11);
-                    pDetector->field_C_refCount++;
-                    field_13C_pArray->Push_Back(pDetector);
+
+                    for (s32 idx = 0; idx < ALIVE_COUNTOF(field_13C_pArray); idx++)
+                    {
+                        if (field_13C_pArray[idx] == -1)
+                        {
+                            field_13C_pArray[idx] = pDetector->field_8_object_id;
+                            break;
+                        }
+                    }
                 }
             }
             field_110_state = SecurityClawStates::eIdle_1;

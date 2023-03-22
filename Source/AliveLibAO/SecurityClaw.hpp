@@ -81,7 +81,7 @@ public:
     Claw* field_130_pClaw;
     PSX_Point field_134;
     PSX_Point field_138;
-    DynamicArrayT<MotionDetector>* field_13C_pArray;
+    s32 field_13C_pArray[10] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 };
 ALIVE_ASSERT_SIZEOF(SecurityClaw, 0x140);
 

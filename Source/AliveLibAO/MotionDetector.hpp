@@ -88,7 +88,7 @@ public:
     FP field_FC_top_left_y;
     FP field_100_bottom_right_x;
     FP field_104_bottom_right_y;
-    MotionDetectorLaser* field_108_pLaser;
+    s32 field_108_pLaser;
     Poly_F3 field_10C_prims[2];
     Prim_SetTPage field_13C_tPage[2];
     FP field_15C_speed;

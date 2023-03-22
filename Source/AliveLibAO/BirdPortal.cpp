@@ -166,26 +166,19 @@ BaseGameObject* BirdPortal::dtor_452230()
         field_48_pScreenClipper2->field_6_flags.Set(Options::eDead_Bit3);
     }
 
-    if (field_4C_pDovesArray)
+    BaseGameObject* pDoves = sObjectIds_5C1B70.Find_449CF0(field_4C_pDovesArray[0]);
+    if (pDoves)
     {
-        for (s32 i = 0; i < field_4C_pDovesArray->Size(); i++)
+        if (field_68_doves_exist)
         {
-            Dove* pObj = field_4C_pDovesArray->ItemAt(i);
-            if (!pObj)
+            for (const auto& doveId : field_4C_pDovesArray)
             {
-                break;
+                BaseGameObject* pDove = sObjectIds_5C1B70.Find_449CF0(doveId);
+                if (pDove)
+                {
+                    pDove->field_6_flags.Set(Options::eDead_Bit3);
+                }
             }
-
-            pObj->field_C_refCount--;
-            pObj->field_6_flags.Set(Options::eDead_Bit3);
-        }
-
-        field_4C_pDovesArray->field_4_used_size = 0;
-
-        if (field_4C_pDovesArray)
-        {
-            field_4C_pDovesArray->dtor_404440();
-            ao_delete_free_447540(field_4C_pDovesArray);
         }
     }
 
@@ -244,7 +237,7 @@ BirdPortal* BirdPortal::ctor_4520A0(Path_BirdPortal* pTlv, s32 tlvInfo)
 
     field_2C_tlvInfo = tlvInfo;
 
-
+    field_68_doves_exist = 0;
     field_50_dest_level = pTlv->field_1A_dest_level;
     field_12_side = pTlv->field_18_side;
     field_54_dest_camera = pTlv->field_1E_dest_camera;
@@ -270,7 +263,6 @@ BirdPortal* BirdPortal::ctor_4520A0(Path_BirdPortal* pTlv, s32 tlvInfo)
     field_40_pTerminator2 = nullptr;
     field_44_pScreenClipper1 = nullptr;
     field_48_pScreenClipper2 = nullptr;
-    field_4C_pDovesArray = nullptr;
     field_60_pOrbWhirlWind = nullptr;
     field_5C_pThrowableTotalIndicator = -1;
 
@@ -323,8 +315,10 @@ void BirdPortal::CreateDovesAndShrykullNumber()
                 field_18_xpos,
                 field_1C_ypos,
                 field_34_scale);
-            pDove->field_C_refCount++;
         }
+        field_4C_pDovesArray[i] = pDove->field_8_object_id;
+
+        field_68_doves_exist = 1;
 
         if (field_10_portal_type == PortalType::eAbe_0)
         {
@@ -336,7 +330,6 @@ void BirdPortal::CreateDovesAndShrykullNumber()
         }
 
         pDove->field_BC_sprite_scale = field_34_scale;
-        field_4C_pDovesArray->Push_Back(pDove);
     }
 
     if (field_10_portal_type == PortalType::eShrykull_2)
@@ -408,12 +401,6 @@ void BirdPortal::VUpdate_4523D0()
     switch (field_14_state)
     {
         case PortalStates::CreatePortal_0:
-            field_4C_pDovesArray = ao_new<DynamicArrayT<Dove>>();
-            if (field_4C_pDovesArray)
-            {
-                field_4C_pDovesArray->ctor_4043E0(6);
-            }
-
             CreateDovesAndShrykullNumber();
             field_14_state = PortalStates::IdlePortal_1;
             break;
@@ -431,25 +418,16 @@ void BirdPortal::VUpdate_4523D0()
             {
                 if (IsScaredAway_4532E0() || Event_Get_417250(kEvent_2) || (Event_Get_417250(kEventAbeOhm_8) && pTarget))
                 {
-                    for (s32 i = 0; i < field_4C_pDovesArray->Size(); i++)
+                    for (const auto& id : field_4C_pDovesArray)
                     {
-                        Dove* pDove = field_4C_pDovesArray->ItemAt(i);
-                        if (!pDove)
+                        Dove* pDove = static_cast<Dove*>(sObjectIds_5C1B70.Find_449CF0(id));
+                        if (pDove)
                         {
-                            break;
+                            pDove->FlyAway_40F8F0(1);
                         }
-                        pDove->field_C_refCount--;
-                        pDove->FlyAway_40F8F0(1);
                     }
 
-                    field_4C_pDovesArray->field_4_used_size = 0;
-                    if (field_4C_pDovesArray)
-                    {
-                        field_4C_pDovesArray->dtor_404440();
-                        ao_delete_free_447540(field_4C_pDovesArray);
-                    }
-
-                    field_4C_pDovesArray = nullptr;
+                    field_68_doves_exist = 0;
 
                     if (pTotalIndicator)
                     {
@@ -469,14 +447,13 @@ void BirdPortal::VUpdate_4523D0()
                     field_5C_pThrowableTotalIndicator = -1;
                 }
 
-                for (s32 i = 0; i < field_4C_pDovesArray->Size(); i++)
+                for (const auto& id : field_4C_pDovesArray)
                 {
-                    Dove* pDove = field_4C_pDovesArray->ItemAt(i);
-                    if (!pDove)
+                    auto pDove = static_cast<Dove*>(sObjectIds_5C1B70.Find_449CF0(id));
+                    if (pDove)
                     {
-                        break;
+                        pDove->AsJoin_40F250(field_18_xpos, field_1C_ypos + (field_34_scale * FP_FromInteger(20)));
                     }
-                    pDove->AsJoin_40F250(field_18_xpos, field_1C_ypos + (field_34_scale * FP_FromInteger(20)));
                 }
 
                 field_30_timer = gnFrameCount_507670 + 15;
@@ -501,26 +478,15 @@ void BirdPortal::VUpdate_4523D0()
             Event_Broadcast_417220(kEvent_18, this);
             if (static_cast<s32>(gnFrameCount_507670) > field_30_timer)
             {
-                for (s32 i = 0; i < field_4C_pDovesArray->Size(); i++)
+                for (const auto& id : field_4C_pDovesArray)
                 {
-                    Dove* pDove = field_4C_pDovesArray->ItemAt(i);
-                    if (!pDove)
+                    BaseGameObject* pDove = sObjectIds_5C1B70.Find_449CF0(id);
+                    if (pDove)
                     {
-                        break;
+                        pDove->field_6_flags.Set(Options::eDead_Bit3);
                     }
-
-                    pDove->field_C_refCount--;
-                    pDove->field_6_flags.Set(Options::eDead_Bit3);
                 }
 
-                field_4C_pDovesArray->field_4_used_size = 0;
-                if (field_4C_pDovesArray)
-                {
-                    field_4C_pDovesArray->dtor_404440();
-                    ao_delete_free_447540(field_4C_pDovesArray);
-                }
-
-                field_4C_pDovesArray = nullptr;
                 field_14_state = PortalStates::CreateTerminators_4;
             }
             break;

@@ -149,7 +149,7 @@ public:
     BirdPortalTerminator* field_40_pTerminator2;
     ScreenClipper* field_44_pScreenClipper1;
     ScreenClipper* field_48_pScreenClipper2;
-    DynamicArrayT<Dove>* field_4C_pDovesArray;
+    s32 field_4C_pDovesArray[6];
     LevelIds field_50_dest_level;
     s16 field_52_dest_path;
     s16 field_54_dest_camera;
@@ -161,6 +161,7 @@ public:
     LevelIds field_64_level;
     s16 field_66_path;
     s32 field_68_sfx_ret;
+    s16 field_68_doves_exist;
 };
 ALIVE_ASSERT_SIZEOF(BirdPortal, 0x6C);
 
