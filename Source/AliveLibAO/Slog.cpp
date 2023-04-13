@@ -920,8 +920,8 @@ void Slog::VScreenChanged()
 
 void Slog::VScreenChanged_473480()
 {
-    if (gMap_507BA8.field_0_current_level != gMap_507BA8.field_A_level
-        || gMap_507BA8.field_2_current_path != gMap_507BA8.field_C_path)
+    if ((gMap_507BA8.field_0_current_level != gMap_507BA8.field_A_level
+        || gMap_507BA8.field_2_current_path != gMap_507BA8.field_C_path) && !mChasedByBees)
     {
         field_6_flags.Set(BaseGameObject::eDead_Bit3);
 

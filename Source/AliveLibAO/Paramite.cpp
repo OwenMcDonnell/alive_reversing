@@ -444,8 +444,8 @@ void Paramite::VScreenChanged()
 
 void Paramite::VScreenChanged_44B2C0()
 {
-    if (gMap_507BA8.field_2_current_path != gMap_507BA8.field_C_path
-        || gMap_507BA8.field_0_current_level != gMap_507BA8.field_A_level)
+    if ((gMap_507BA8.field_2_current_path != gMap_507BA8.field_C_path
+        || gMap_507BA8.field_0_current_level != gMap_507BA8.field_A_level) && !mChasedByBees)
     {
         field_6_flags.Set(BaseGameObject::eDead_Bit3);
     }
@@ -2323,7 +2323,7 @@ s16 Paramite::Brain_5_SpottedMeat_449CD0()
     }
 
     auto pMeat = static_cast<Meat*>(sObjectIds_5C1B70.Find_449CF0(field_148_pMeat));
-    if (pMeat->VIsFalling() || pMeat->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+    if (!pMeat || pMeat->VIsFalling() || pMeat->field_6_flags.Get(BaseGameObject::eDead_Bit3))
     {
         Sound_44DBB0(ParamiteSpeak::DetectedMeat_7);
         SetBrain(&Paramite::Brain_0_Patrol_447A10);

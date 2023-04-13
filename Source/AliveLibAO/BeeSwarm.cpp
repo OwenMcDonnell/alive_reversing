@@ -106,6 +106,12 @@ BaseGameObject* BeeSwarm::dtor_47FDF0()
         ResourceManager::FreeResource_455550(ResourceManager::GetLoadedResource_4554F0(ResourceManager::Resource_Animation, AOResourceID::kElmWaspAOResID_204, 0, 0));
     }
 
+    auto pChaseTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_D98_pChaseTarget));
+    if (pChaseTarget)
+    {
+        pChaseTarget->mChasedByBees = false;
+    }
+
     return dtor_417D10();
 }
 
@@ -147,6 +153,7 @@ void BeeSwarm::VScreenChange_480D40()
             field_D9C_alive_timer = gnFrameCount_507670 + 120;
             gBeesNearAbe_5076AC = 0;
             field_D98_pChaseTarget = -1;
+            pChaseTarget->mChasedByBees = false;
         }
     }
 
@@ -168,6 +175,14 @@ void BeeSwarm::FollowLine_47FF10(PathLine* pLine, FP target_x, FP target_y, FP s
 
 void BeeSwarm::Chase_47FEB0(BaseAliveGameObject* pChaseTarget)
 {
+    auto pOldChaseTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_D98_pChaseTarget));
+    if (pOldChaseTarget)
+    {
+        pOldChaseTarget->mChasedByBees = false;
+    }
+
+    pChaseTarget->mChasedByBees = true;
+
     field_D80_state = BeeSwarmStates::eAttackChase_1;
 
     field_D98_pChaseTarget = pChaseTarget->field_8_object_id;
@@ -187,6 +202,16 @@ void BeeSwarm::VUpdate()
 void BeeSwarm::VUpdate_47FF50()
 {
     auto pChaseTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_D98_pChaseTarget));
+
+    // TODO: hack fix - one day i'll figure out why the paramite sometimes gets deleted
+    // before calling ToFlyAwayAndDie() below when the chase target has died after the
+    // ref count removal.
+    if (field_D98_pChaseTarget != -1 && !pChaseTarget)
+    {
+        LOG_WARNING("hack fixing bee swarm crash");
+        ToFlyAwayAndDie();
+        //__debugbreak();
+    }
 
     if (sNumCamSwappers_507668 != 0)
     {
@@ -390,11 +415,21 @@ void BeeSwarm::VUpdate_47FF50()
                         if (FP_FromInteger(objRect.x) <= field_D90_rect_w && FP_FromInteger(objRect.w) >= field_D88_rect_x && FP_FromInteger(objRect.h) >= field_D8C_rect_y && FP_FromInteger(objRect.y) <= field_D94_rect_h)
                         {
                             LOG_INFO("Got new target");
-
                             const auto oldChaseTimer = field_D9C_alive_timer;
 
                             // Set new target
+                            if (pObjIter->field_8_object_id == -1)
+                            {
+                                LOG_ERROR("trying to set object id -1 in bees");
+                                __debugbreak();
+                            }
                             field_D98_pChaseTarget = pObjIter->field_8_object_id;
+
+                            if (pChaseTarget)
+                            {
+                                pChaseTarget->mChasedByBees = false;
+                            }
+                            pObjIter->mChasedByBees = true;
 
                             field_D80_state = BeeSwarmStates::eAttackChase_1;
                             field_D70_chase_target_x = pObjIter->field_A8_xpos;
@@ -571,6 +606,7 @@ void BeeSwarm::ToFlyAwayAndDie()
     auto pChaseTarget = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_D98_pChaseTarget));
     if (pChaseTarget)
     {
+        pChaseTarget->mChasedByBees = false;
         field_D98_pChaseTarget = -1;
     }
 }

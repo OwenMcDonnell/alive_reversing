@@ -125,7 +125,7 @@ void BeeNest::VUpdate_480F30()
             break;
 
         case BeeNestStates::eResetIfDead_1:
-            if (pBeeSwarm->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+            if (!pBeeSwarm || pBeeSwarm->field_6_flags.Get(BaseGameObject::eDead_Bit3))
             {
                 field_2E_state = BeeNestStates::eWaitForTrigger_0;
                 field_34_pBeeSwarm = -1;

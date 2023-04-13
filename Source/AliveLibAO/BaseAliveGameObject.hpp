@@ -123,6 +123,7 @@ public:
     s16 field_106_shot;
     s16 field_108_bMotionChanged;
     BitField16<Flags_10A> field_10A_flags;
+    bool mChasedByBees = false;
 };
 ALIVE_ASSERT_SIZEOF(BaseAliveGameObject, 0x10C);
 

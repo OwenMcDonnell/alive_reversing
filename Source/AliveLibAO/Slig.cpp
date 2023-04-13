@@ -483,7 +483,7 @@ void Slig::VScreenChanged()
 void Slig::VScreenChanged_465480()
 {
     if (gMap_507BA8.field_0_current_level != gMap_507BA8.field_A_level
-        || (gMap_507BA8.field_2_current_path != gMap_507BA8.field_C_path && this != sControlledCharacter_50767C))
+        || (gMap_507BA8.field_2_current_path != gMap_507BA8.field_C_path && this != sControlledCharacter_50767C) && !mChasedByBees)
     {
         field_6_flags.Set(BaseGameObject::eDead_Bit3);
     }
