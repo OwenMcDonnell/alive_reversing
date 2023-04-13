@@ -16,7 +16,7 @@ void PossessionFlicker::VUpdate()
 void PossessionFlicker::VScreenChanged_41AA40()
 {
     auto pObj = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_10_pObj));
-    if (pObj->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+    if (!pObj)
     {
         field_10_pObj = -1;
         field_6_flags.Set(Options::eDead_Bit3);
@@ -86,7 +86,7 @@ void PossessionFlicker::VUpdate_41A9B0()
 {
     bool bFlicker = false;
     auto pObj = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_10_pObj));
-    if (pObj->field_6_flags.Get(BaseGameObject::eDead_Bit3))
+    if (!pObj)
     {
         field_10_pObj = -1;
         field_6_flags.Set(BaseGameObject::eDead_Bit3);

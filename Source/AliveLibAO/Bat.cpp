@@ -294,7 +294,7 @@ void Bat::VUpdate_404950()
         case BatStates::eAttackTarget_4:
         {
             auto pUnknown = static_cast<BaseAliveGameObject*>(sObjectIds_5C1B70.Find_449CF0(field_10C));
-            if (pUnknown->field_6_flags.Get(BaseGameObject::eDead_Bit3) || Event_Get_417250(kEventDeathReset_4) || Event_Get_417250(kEvent_9))
+            if (!pUnknown || pUnknown->field_6_flags.Get(BaseGameObject::eDead_Bit3) || Event_Get_417250(kEventDeathReset_4) || Event_Get_417250(kEvent_9))
             {
                 field_6_flags.Set(Options::eDead_Bit3);
                 return;

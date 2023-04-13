@@ -51,7 +51,7 @@ endforeach()
 
 if(MSVC)
     add_compile_options(/bigobj)
-    add_compile_options(/fsanitize=address)
+    #add_compile_options(/fsanitize=address)
 endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
