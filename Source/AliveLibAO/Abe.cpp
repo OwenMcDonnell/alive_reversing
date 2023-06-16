@@ -782,8 +782,21 @@ Abe::~Abe()
 const u32 sAbe_xVel_table_4BB118[8] = {262144, 262144, 0, 4294705152, 4294705152, 4294705152, 0, 262144};
 const u32 sAbe_yVel_table_4BB138[8] = {0, 4294705152, 4294705152, 4294705152, 0, 262144, 262144, 262144};
 
+void Abe::LoadLatestAutoSave()
+{
+    if (mLatestAutoSaveName.empty() || !SaveGame::LoadFromFile(mLatestAutoSaveName.c_str()))
+    {
+        // error
+    }
+}
+
 void Abe::VUpdate()
 {
+    //if (Input().IsAnyReleased(InputCommands::eSneak))
+    //{
+    //    LoadLatestAutoSave();
+    //}
+
     if (gAbeInvulnerableCheat)
     {
         mHealth = FP_FromInteger(1);
@@ -2493,7 +2506,16 @@ void Abe::VOnTlvCollision(relive::Path_TLV* pTlv)
                     gRestartRuptureFarmsSavedMuds = sRescuedMudokons;
                 }
 
+                char_type camNameBuffer[48] = {};
+                Path_Format_CameraName(camNameBuffer, gMap.mCurrentLevel, gMap.mCurrentPath, gMap.mCurrentCamera);
+                camNameBuffer[8] = 0;
+
+                char_type saveName[100] = "autosave ";
+                strcat(saveName, camNameBuffer);
                 SaveGame::SaveToMemory(&gSaveBuffer);
+                SaveGame::SaveToFile(saveName);
+
+                mLatestAutoSaveName.assign(saveName);
 
                 const FP camXPos = FP_NoFractional(gScreenManager->CamXPos());
 

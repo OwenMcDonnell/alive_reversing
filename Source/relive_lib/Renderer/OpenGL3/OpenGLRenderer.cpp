@@ -13,6 +13,8 @@
 #include "GLShaderProgram.hpp"
 #include "GLTexture2D.hpp"
 #include "OpenGLRenderer.hpp"
+#include "../../../AliveLibAO/PathData.hpp"
+#include "../../../AliveLibAO/Abe.hpp"
 
 #define GL_TO_IMGUI_TEX(v) *reinterpret_cast<ImTextureID*>(&v)
 
@@ -174,6 +176,38 @@ void OpenGLRenderer::StartFrame()
     GetDestinationPsxFramebuffer().BindAsTarget();
 }
 
+static void display_info()
+{
+    s32 total_seconds = sGnFrame / 30;
+    s32 hours = total_seconds / 3600;
+    s32 remainder = total_seconds % 3600;
+    s32 minutes = remainder / 60;
+    s32 seconds = remainder % 60;
+
+    char_type buffer[1024];
+    sprintf(buffer, "%02d:%02d:%02d", hours, minutes, seconds);
+
+    char_type cameraNameBuffer[48] = {};
+    AO::Path_Format_CameraName(
+        cameraNameBuffer,
+        AO::gMap.mCurrentLevel,
+        AO::gMap.mCurrentPath,
+        AO::gMap.mCurrentCamera);
+    cameraNameBuffer[8] = 0;
+
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::Begin("Game Runtime", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Text("Game Runtime: %s ", buffer);
+    ImGui::Text("Cam: %s", cameraNameBuffer);
+
+    if (AO::sActiveHero)
+    {
+        ImGui::Text("Last Auto Save: %s", AO::sActiveHero->mLatestAutoSaveName.c_str());
+    }
+
+    ImGui::End();
+}
+
 void OpenGLRenderer::EndFrame()
 {
     mBatcher.EndFrame();
@@ -207,6 +241,8 @@ void OpenGLRenderer::EndFrame()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(mWindow);
     ImGui::NewFrame();
+
+    display_info();
 
     if (gDDCheat_FlyingEnabled || AO::gDDCheat_FlyingEnabled || GetGameAutoPlayer().IsPlaying())
     {

@@ -323,6 +323,7 @@ public:
     virtual bool VTakeDamage(BaseGameObject* pFrom) override;
 
 
+    void LoadLatestAutoSave();
     bool CheckForPortalAndRunJump();
     void FreeElumRes();
     void ToDeathDropFall();
@@ -586,6 +587,7 @@ public:
     bool mElumUnmountBegin = false;
     SaveData* field_2AC_pSaveData = nullptr;
     bool mRidingElum = false;
+    std::string mLatestAutoSaveName;
 };
 
 extern Abe* sActiveHero;

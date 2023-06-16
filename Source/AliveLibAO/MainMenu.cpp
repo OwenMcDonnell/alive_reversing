@@ -210,7 +210,7 @@ struct SaveName final
     char_type field_0_mName[32];
 };
 
-SaveName sSaveNames_9F1DD8[128] = {}; // Got more than 128 saves? Hard luck mate
+SaveName sSaveNames_9F1DD8[2048] = {}; // Got more than 128 saves? Hard luck mate
 
 static s16 sDemoPlay = 0;
 u8 gJoyResId = 0;
@@ -1431,7 +1431,7 @@ void Menu::To_Load_Update()
             sSaveIdx = 0;
             IO_EnumerateDirectory("*.sav", [](const char_type* fileName, u32 /*lastWriteTime*/)
                                   {
-                                      if (sSaveIdx < 128) // TODO: Array len
+                                      if (sSaveIdx < ALIVE_COUNTOF(sSaveNames_9F1DD8))
                                       {
                                           size_t saveNameLen = strlen(fileName) - 4;
 
