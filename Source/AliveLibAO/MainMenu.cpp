@@ -2951,11 +2951,16 @@ void Menu::LoadSave_Update()
         sActiveHero = relive_new Abe();
     }
 
-    if (!SaveGame::LoadFromFile(sSaveNames_9F1DD8[mSelectedButtonIndex.raw].field_0_mName))
+    const char_type* selectedSaveName = sSaveNames_9F1DD8[mSelectedButtonIndex.raw].field_0_mName;
+    if (!SaveGame::LoadFromFile(selectedSaveName))
     {
         mFnUpdate = &Menu::SaveLoadFailed_Update;
         mFnRender = &Menu::SaveLoadFailed_Render;
         sActiveHero->SetDead(true);
+    }
+    else
+    {
+        sActiveHero->mLatestAutoSaveName.assign(selectedSaveName);
     }
 }
 
