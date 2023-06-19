@@ -60,6 +60,7 @@
 #include "../relive_lib/Psx.hpp"
 #include "Path.hpp"
 #include "../relive_lib/data_conversion/PathTlvsAO.hpp"
+#include "AirExplosion.hpp"
 
 namespace AO {
 
@@ -790,12 +791,21 @@ void Abe::LoadLatestAutoSave()
     }
 }
 
+
+void ExplodeAbe()
+{
+    if (sActiveHero)
+    {
+        relive_new AirExplosion(sActiveHero->mXPos, sActiveHero->mYPos, sActiveHero->GetSpriteScale());
+    }
+}
+
 void Abe::VUpdate()
 {
-    //if (Input().IsAnyReleased(InputCommands::eSneak))
-    //{
-    //    LoadLatestAutoSave();
-    //}
+    if (Input().IsAnyReleased(InputCommands::eSneak))
+    {
+        ExplodeAbe();
+    }
 
     if (gAbeInvulnerableCheat)
     {
