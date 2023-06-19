@@ -442,7 +442,7 @@ void AbilityRing::VGetSaveState(SerializedObjectData& pSaveBuffer)
 {
     AbilityRingSaveState data = {};
 
-    data.mRingObjectType = ReliveTypes::eAbilityRing;
+    data.mType = ReliveTypes::eAbilityRing;
     data.mRingXPos = mRingXPos;
     data.mRingYPos = mRingYPos;
     data.mRingType = mRingType;
@@ -467,6 +467,7 @@ void AbilityRing::VGetSaveState(SerializedObjectData& pSaveBuffer)
     if (mRingTargetObjId == Guid{})
     {
         pSaveBuffer.Write(data);
+        return;
     }
 
     BaseGameObject* pTargetObj = sObjectIds.Find_Impl(mRingTargetObjId);

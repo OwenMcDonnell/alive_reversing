@@ -158,6 +158,7 @@ bool DataConversionUI::ConversionRequired()
     DataConversion dataConversion;
     if (mGameType == GameType::eAe)
     {
+        //return true;
         return dataConversion.DataVersionAE() != DataConversion::kVersion;
     }
     else
