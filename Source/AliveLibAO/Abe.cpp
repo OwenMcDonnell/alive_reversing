@@ -802,10 +802,10 @@ void ExplodeAbe()
 
 void Abe::VUpdate()
 {
-    if (Input().IsAnyReleased(InputCommands::eSneak))
-    {
-        ExplodeAbe();
-    }
+    //if (Input().IsAnyReleased(InputCommands::eSneak))
+    //{
+    //    ExplodeAbe();
+    //}
 
     if (gAbeInvulnerableCheat)
     {
