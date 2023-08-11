@@ -73,6 +73,9 @@
 #include "RockSack.hpp"
 #include "MeatSack.hpp"
 
+#include "StringHashCollection.hpp"
+#include <functional>
+
 namespace AO {
 
 static constexpr AnimId kAbeGibs[3] = {
@@ -94,6 +97,85 @@ static constexpr AnimId kSligGibs[3] = {
     AnimId::Slig_Arm_Gib,
     AnimId::Slig_Body_Gib};
 
+class ReliveTypes2 final : public StringHashCollection
+{
+public:
+    static inline const StringHash eHoist{"hoist"};
+
+    // TODO: all the others
+
+    ReliveTypes2()
+    {
+        Add(eHoist);
+
+         // TODO: all the others
+    }
+};
+
+class Factory final
+{
+public:
+    void Factory_Hoist(relive::Path_TLV* pTlv, Map* /*pMap*/, const Guid& tlvId, LoadMode loadMode)
+    {
+        if (loadMode == LoadMode::LoadResourceFromList_1 || loadMode == LoadMode::LoadResource_2)
+        {
+            switch (gMap.mCurrentLevel)
+            {
+                case EReliveLevelIds::eRuptureFarms:
+                case EReliveLevelIds::eRuptureFarmsReturn:
+                    ResourceManagerWrapper::PendAnimation(AnimId::RuptureFarms_HoistRock1);
+                    ResourceManagerWrapper::PendAnimation(AnimId::RuptureFarms_HoistRock2);
+                    ResourceManagerWrapper::PendAnimation(AnimId::RuptureFarms_HoistRock3);
+                    break;
+
+                default:
+                    ResourceManagerWrapper::PendAnimation(AnimId::AO_HoistRock1);
+                    ResourceManagerWrapper::PendAnimation(AnimId::AO_HoistRock2);
+                    ResourceManagerWrapper::PendAnimation(AnimId::AO_HoistRock3);
+                    break;
+            }
+        }
+        else
+        {
+            auto pHoistTlv = static_cast<relive::Path_Hoist*>(pTlv);
+            if (pHoistTlv->mHoistType == relive::Path_Hoist::Type::eOffScreen)
+            {
+                relive_new HoistRocksEffect(pHoistTlv, tlvId);
+                // OG issue, no reset on failure ??
+            }
+            else
+            {
+                Path::TLV_Reset(tlvId, -1, 0, 0);
+            }
+        }
+    }
+    
+    // TODO: All the others
+
+    using TFactoryFunction = decltype(&Factory::Factory_Hoist);
+
+    Factory()
+    {
+        mMap[ReliveTypes2::eHoist] = &Factory::Factory_Hoist;
+        // TODO: All the others
+    }
+
+    /*
+    void ConstructTLVObject(relive::Path_TLV* pTlv, Map* pMap, const Guid& tlvInfo, LoadMode loadMode)
+    {
+        auto it = mMap.find(pTlv->mTlvType);
+        if (it != std::end(mMap))
+        {
+            (*this->it->second)(pTlv, pMap, tlvInfo, loadMode);
+        }
+    }
+    */
+
+private:
+    std::map<StringHash, TFactoryFunction> mMap;
+};
+
+// TODO: Remove cos its part of Factory now
 static void Factory_Hoist(relive::Path_TLV* pTlv, Map* /*pMap*/, const Guid& tlvId, LoadMode loadMode)
 {
     if (loadMode == LoadMode::LoadResourceFromList_1 || loadMode == LoadMode::LoadResource_2)

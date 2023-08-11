@@ -43,3 +43,6 @@
 [submodule "3rdParty/libmodplug"]
 	path = 3rdParty/libmodplug
 	url = https://github.com/AliveTeam/libmodplug.git
+[submodule "3rdParty/constexpr-md5-cpp"]
+	path = 3rdParty/constexpr-md5-cpp
+	url = https://github.com/Wodann/constexpr-md5-cpp.git
