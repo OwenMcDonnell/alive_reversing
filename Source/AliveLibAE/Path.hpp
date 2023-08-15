@@ -218,7 +218,7 @@ public:
     void Init(const PathData* pPathData, EReliveLevelIds level, s16 path, s16 cameraId, BinaryPath* ppPathRes);
 
 
-    void Loader_4DB800(s16 xpos, s16 ypos, LoadMode loadMode, ReliveTypes typeToLoad);
+    void Loader_4DB800(s16 xpos, s16 ypos, LoadMode loadMode, const StringHash& reliveTypeToLoad);
 
     relive::Path_TLV* Get_First_TLV_For_Offsetted_Camera(s16 cam_x_idx, s16 cam_y_idx);
     static relive::Path_TLV* Next_TLV(relive::Path_TLV* pTlv);
@@ -237,14 +237,14 @@ public:
         return reinterpret_cast<relive::Path_TLV*>(pNext);
     }
 
-    relive::Path_TLV* TLV_First_Of_Type_In_Camera(ReliveTypes objectType, s16 camX);
-    relive::Path_TLV* TLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, ReliveTypes objectType);
+    relive::Path_TLV* TLV_First_Of_Type_In_Camera(const StringHash& reliveType, s16 camX);
+    relive::Path_TLV* TLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, const StringHash& reliveType);
     relive::Path_TLV* TlvGetAt(relive::Path_TLV* pTlv, FP xpos, FP ypos, FP w, FP h);
     relive::Path_TLV* TLV_From_Offset_Lvl_Cam(const Guid& tlvId);
 
     Guid TLVInfo_From_TLVPtr(relive::Path_TLV* pTlv);
 
-    static relive::Path_TLV* TLV_Next_Of_Type(relive::Path_TLV* pTlv, ReliveTypes type);
+    static relive::Path_TLV* TLV_Next_Of_Type(relive::Path_TLV* pTlv, const StringHash& reliveType);
     static void TLV_Reset(const Guid& tlvId, s16 hiFlags, s8 bSetCreated, s8 bSetDestroyed);
     static void Start_Sounds_For_Objects_In_Camera(CameraPos direction, s16 cam_x_idx, s16 cam_y_idx);
 

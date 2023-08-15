@@ -226,7 +226,7 @@ private:
     s16 CanThrowGrenade();
     void ToLaunchingGrenade();
     void HandlePlayerControls();
-    ReliveTypes FindLeftOrRightBound(FP xOrY, FP wOrH);
+    StringHash FindLeftOrRightBound(FP xOrY, FP wOrH);
     s16 CanHearAbe();
     void ToSpottedEnemy();
     void ToAbeDead();
@@ -280,8 +280,8 @@ private:
     bool mPersistant = false;
     bool mUnknown1 = false;
     bool mUnknown2 = false;
-    ReliveTypes field_180_bound2 = ReliveTypes::eNone;
-    ReliveTypes field_182_bound1 = ReliveTypes::eNone;
+    StringHash field_180_bound2 = ReliveTypes::eNone;
+    StringHash field_182_bound1 = ReliveTypes::eNone;
     FP field_184_xSpeed = {};
     FP field_188_ySpeed = {};
     FP field_18C = {};

@@ -2487,7 +2487,7 @@ s16 FlyingSlig::sub_437C70(PathLine* pLine)
     return 1;
 }
 
-ReliveTypes FlyingSlig::FindLeftOrRightBound(FP xOrY, FP wOrH)
+StringHash FlyingSlig::FindLeftOrRightBound(FP xOrY, FP wOrH)
 {
     const FP kGridSize = ScaleToGridSize(GetSpriteScale());
 
@@ -2497,7 +2497,7 @@ ReliveTypes FlyingSlig::FindLeftOrRightBound(FP xOrY, FP wOrH)
     const FP bottom = wOrH + kGridSize;
 
     // TODO: Check left is really Abs'd.
-    ReliveTypes found_type = ReliveTypes::eNone;
+    StringHash found_type = ReliveTypes::eNone;
 
     if (gPathInfo->TLV_Get_At(FP_GetExponent(FP_Abs(left)), FP_GetExponent(top), FP_GetExponent(right), FP_GetExponent(bottom), ReliveTypes::eSligBoundLeft))
     {

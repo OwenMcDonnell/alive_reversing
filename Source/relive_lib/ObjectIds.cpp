@@ -51,12 +51,12 @@ BaseGameObject* ObjectIds::Find_Impl(TObjectId_KeyType idToFind)
     return nullptr;
 }
 
-BaseGameObject* ObjectIds::Find(TObjectId_KeyType idToFind, ReliveTypes type)
+BaseGameObject* ObjectIds::Find(TObjectId_KeyType idToFind, const StringHash& reliveType)
 {
     BaseGameObject* pItem = Find_Impl(idToFind);
-    if (pItem && pItem->Type() != type)
+    if (pItem && pItem->Type() != reliveType)
     {
-        ALIVE_FATAL("Expected type %d for object with id %s but got %d", static_cast<s32>(type), idToFind.ToString().c_str(), static_cast<s32>(pItem->Type()));
+        ALIVE_FATAL("Expected type %s for object with id %s but got %s", reliveType.String(), idToFind.ToString().c_str(), pItem->Type().String());
     }
     return pItem;
 }

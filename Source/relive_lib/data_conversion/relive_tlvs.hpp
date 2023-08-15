@@ -80,7 +80,7 @@ public:
     s16 mBottomRightX = 0;
     s16 mBottomRightY = 0;
     s8 mTlvSpecificMeaning = 0; // TODO: remove me and add to the actual tlv's instead
-    ReliveTypes mTlvType = {};
+    StringHash mTlvType = {};
     BitField8<TlvFlags> mTlvFlags = {};
     s32 mLength = 0;
     Guid mId;
@@ -1541,7 +1541,7 @@ struct Path_GasCountDown final : public Path_TLV
 {
     Path_GasCountDown()
     {
-        mTlvType = ReliveTypes::eGasCountDown;
+        mTlvType = ReliveTypes::eGasCountdown;
         mAttribute = QuiksaveAttribute::eClearTlvFlags_1;
     }
     s16 mStartTimerSwitchId = 0;

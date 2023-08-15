@@ -49,12 +49,12 @@ void Path::Init(const PathData* pPathData, EReliveLevelIds level, s16 path, s16 
     mCamsOnY = (mPathData->field_6_bBottom - mPathData->field_2_bRight) / mPathData->field_C_grid_height;
 }
 
-void Path::Loader_4DB800(s16 xpos, s16 ypos, LoadMode loadMode, ReliveTypes typeToLoad)
+void Path::Loader_4DB800(s16 xpos, s16 ypos, LoadMode loadMode, const StringHash& reliveTypeToLoad)
 {
     relive::Path_TLV* pPathTLV = mBinaryPath->TlvsForCamera(xpos, ypos);
     while (pPathTLV)
     {
-        if (typeToLoad == ReliveTypes::eNone || typeToLoad == pPathTLV->mTlvType)
+        if (reliveTypeToLoad == ReliveTypes::eNone || reliveTypeToLoad == pPathTLV->mTlvType)
         {
             if (loadMode != LoadMode::ConstructObject_0 || !(pPathTLV->mTlvFlags.Get(relive::TlvFlags::eBit1_Created) || pPathTLV->mTlvFlags.Get(relive::TlvFlags::eBit2_Destroyed)))
             {
@@ -98,7 +98,7 @@ relive::Path_TLV* Path::Next_TLV(relive::Path_TLV* pTlv)
     return Next_TLV_Impl(pTlv);
 }
 
-relive::Path_TLV* Path::TLV_First_Of_Type_In_Camera(ReliveTypes objectType, s16 camX)
+relive::Path_TLV* Path::TLV_First_Of_Type_In_Camera(const StringHash& reliveType, s16 camX)
 {
     relive::Path_TLV* pTlv = Get_First_TLV_For_Offsetted_Camera(camX, 0);
     if (!pTlv)
@@ -106,7 +106,7 @@ relive::Path_TLV* Path::TLV_First_Of_Type_In_Camera(ReliveTypes objectType, s16 
         return nullptr;
     }
 
-    while (pTlv->mTlvType != objectType)
+    while (pTlv->mTlvType != reliveType)
     {
         pTlv = Next_TLV(pTlv);
         if (!pTlv)
@@ -117,7 +117,7 @@ relive::Path_TLV* Path::TLV_First_Of_Type_In_Camera(ReliveTypes objectType, s16 
     return pTlv;
 }
 
-relive::Path_TLV* Path::TLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, ReliveTypes objectType)
+relive::Path_TLV* Path::TLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, const StringHash& reliveType)
 {
     // TODO: Can be refactored to use min/max
     s16 right = 0;
@@ -161,7 +161,7 @@ relive::Path_TLV* Path::TLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, Re
 
     while (pTlvIter)
     {
-        if (pTlvIter->mTlvType == objectType
+        if (pTlvIter->mTlvType == reliveType
             && right <= pTlvIter->mBottomRightX
             && left >= pTlvIter->mTopLeftX
             && bottom >= pTlvIter->mTopLeftY
@@ -255,7 +255,7 @@ Guid Path::TLVInfo_From_TLVPtr(relive::Path_TLV* pTlv)
     return pTlv->mId;
 }
 
-relive::Path_TLV* Path::TLV_Next_Of_Type(relive::Path_TLV* pTlv, ReliveTypes type)
+relive::Path_TLV* Path::TLV_Next_Of_Type(relive::Path_TLV* pTlv, const StringHash& reliveType)
 {
     pTlv = Path::Next_TLV(pTlv);
     if (!pTlv)
@@ -263,7 +263,7 @@ relive::Path_TLV* Path::TLV_Next_Of_Type(relive::Path_TLV* pTlv, ReliveTypes typ
         return nullptr;
     }
 
-    while (pTlv->mTlvType != type)
+    while (pTlv->mTlvType != reliveType)
     {
         pTlv = Path::Next_TLV(pTlv);
         if (!pTlv)

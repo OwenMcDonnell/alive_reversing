@@ -61,7 +61,7 @@ bool Player::ValidateObjectStates()
             {
                 break;
             }
-            LOG_INFO("object at %d with type %d", i, (s32)pObj->Type());
+            LOG_INFO("object at %d with type %s", i, pObj->Type().String());
         }
         LOG_ERROR("Got %d objects but expected %d on gnframe %d", gBaseGameObjects->Size(), objCount, sGnFrame);
     }
@@ -73,7 +73,7 @@ bool Player::ValidateObjectStates()
         s16 objType = 0;
         mFile.Read(objType);
 
-        ReliveTypes reliveObjType = BaseGameObject::FromAE(static_cast<AETypes>(objType));
+        StringHash reliveObjType = BaseGameObject::FromAE(static_cast<AETypes>(objType));
 
         BaseGameObject* pObj = gBaseGameObjects->ItemAt(i);
 
@@ -119,8 +119,8 @@ bool Player::ValidateObjectStates()
             s16 objType = 0;
             mFile.Read(objType);
 
-            ReliveTypes reliveObjType = BaseGameObject::FromAE(static_cast<AETypes>(objType));
-            LOG_INFO("First extra object type is %d", static_cast<u32>(reliveObjType));
+            StringHash reliveObjType = BaseGameObject::FromAE(static_cast<AETypes>(objType));
+            LOG_INFO("First extra object type is %s", reliveObjType.String());
         }
         return false;
     }

@@ -3,12 +3,12 @@
 #include "data_conversion/guid.hpp"
 
 class BaseGameObject;
+class StringHash;
 
 using TObjectId_KeyType = Guid;
 
 
 class BaseGameObject;
-enum class ReliveTypes : s16;
 
 class ObjectIds final
 {
@@ -22,7 +22,7 @@ public:
     BaseGameObject* Find_Impl(TObjectId_KeyType idToFind);
 
 public:
-    BaseGameObject* Find(TObjectId_KeyType idToFind, ReliveTypes type);
+    BaseGameObject* Find(TObjectId_KeyType idToFind, const StringHash& reliveType);
 
 private:
     std::map<TObjectId_KeyType, BaseGameObject*> mMap;

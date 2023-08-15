@@ -1321,7 +1321,7 @@ CameraPos Map::Rect_Location_Relative_To_Active_Camera(const PSX_RECT* pRect, s1
     return CameraPos::eCamLeft_3;
 }
 
-relive::Path_TLV* Map::VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, ReliveTypes typeToFind)
+relive::Path_TLV* Map::VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, const StringHash& reliveTypeToFind)
 {
     s32 right = 0;
     s32 left = 0;
@@ -1375,7 +1375,7 @@ relive::Path_TLV* Map::VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, Re
            || left < pTlvIter->mTopLeftX
            || bottom < pTlvIter->mTopLeftY
            || top > pTlvIter->mBottomRightY
-           || pTlvIter->mTlvType != typeToFind)
+           || pTlvIter->mTlvType != reliveTypeToFind)
     {
         if (pTlvIter->mTlvFlags.Get(relive::eBit3_End_TLV_List))
         {
@@ -1485,7 +1485,7 @@ void Map::ResetPathObjects(u16 pathNum)
     }
 }
 
-relive::Path_TLV* Map::TLV_First_Of_Type_In_Camera(ReliveTypes type, s32 camX)
+relive::Path_TLV* Map::TLV_First_Of_Type_In_Camera(const StringHash& reliveType, s32 camX)
 {
     relive::Path_TLV* pTlvIter = Get_First_TLV_For_Offsetted_Camera(static_cast<s16>(camX), 0);
     if (!pTlvIter)
@@ -1493,7 +1493,7 @@ relive::Path_TLV* Map::TLV_First_Of_Type_In_Camera(ReliveTypes type, s32 camX)
         return nullptr;
     }
 
-    while (pTlvIter->mTlvType != type)
+    while (pTlvIter->mTlvType != reliveType)
     {
         pTlvIter = Path_TLV::Next_446460(pTlvIter);
         if (!pTlvIter)
@@ -1632,7 +1632,7 @@ void Map::ClearPathResourceBlocks()
 }
 
 
-void Map::Loader(s16 camX, s16 camY, LoadMode loadMode, ReliveTypes typeToLoad)
+void Map::Loader(s16 camX, s16 camY, LoadMode loadMode, const StringHash& reliveTypeToLoad)
 {
     // Get TLVs for this cam
     BinaryPath* pPathRes = GetPathResourceBlockPtr(mCurrentPath);
@@ -1645,7 +1645,7 @@ void Map::Loader(s16 camX, s16 camY, LoadMode loadMode, ReliveTypes typeToLoad)
     s32 tlvOffset = 0;
     while (1)
     {
-        if (typeToLoad == ReliveTypes::eNone || typeToLoad == pPathTLV->mTlvType)
+        if (reliveTypeToLoad == ReliveTypes::eNone || reliveTypeToLoad == pPathTLV->mTlvType)
         {
             if (loadMode != LoadMode::ConstructObject_0 || !(pPathTLV->mTlvFlags.Get(relive::TlvFlags::eBit1_Created) || pPathTLV->mTlvFlags.Get(relive::TlvFlags::eBit2_Destroyed)))
             {
@@ -1751,7 +1751,7 @@ relive::Path_TLV* Path_TLV::Next_446460(relive::Path_TLV* pTlv)
     return Next(pTlv);
 }
 
-relive::Path_TLV* Path_TLV::TLV_Next_Of_Type_446500(relive::Path_TLV* pTlv, ReliveTypes type)
+relive::Path_TLV* Path_TLV::TLV_Next_Of_Type_446500(relive::Path_TLV* pTlv, const StringHash& reliveType)
 {
     pTlv = Path_TLV::Next_446460(pTlv);
     if (!pTlv)
@@ -1759,7 +1759,7 @@ relive::Path_TLV* Path_TLV::TLV_Next_Of_Type_446500(relive::Path_TLV* pTlv, Reli
         return nullptr;
     }
 
-    while (pTlv->mTlvType != type)
+    while (pTlv->mTlvType != reliveType)
     {
         pTlv = Path_TLV::Next_446460(pTlv);
         if (!pTlv)

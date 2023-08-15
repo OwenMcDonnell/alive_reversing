@@ -176,7 +176,7 @@ struct Path_TLV
         return reinterpret_cast<relive::Path_TLV*>(pNext);
     }
 
-    static relive::Path_TLV* TLV_Next_Of_Type_446500(relive::Path_TLV* pTlv, ReliveTypes type);
+    static relive::Path_TLV* TLV_Next_Of_Type_446500(relive::Path_TLV* pTlv, const StringHash& reliveType);
 
     // Some strange self terminate check that is inlined everywhere
     void RangeCheck()

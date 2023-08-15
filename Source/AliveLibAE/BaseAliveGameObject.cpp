@@ -321,7 +321,7 @@ bool BaseAliveGameObject::Check_IsOnEndOfLine(s16 direction, s16 distance)
         == 0;
 }
 
-BaseAliveGameObject* BaseAliveGameObject::GetStackedSlapTarget(const Guid& idToFind, ReliveTypes typeToFind, FP xpos, FP ypos)
+BaseAliveGameObject* BaseAliveGameObject::GetStackedSlapTarget(const Guid& idToFind, const StringHash& reliveTypeToFind, FP xpos, FP ypos)
 {
     const s16 xposD = FP_GetExponent(xpos);
     const s16 yposD = FP_GetExponent(ypos);
@@ -335,7 +335,7 @@ BaseAliveGameObject* BaseAliveGameObject::GetStackedSlapTarget(const Guid& idToF
             break;
         }
 
-        if (pObj->Type() == typeToFind && pObj != this)
+        if (pObj->Type() == reliveTypeToFind && pObj != this)
         {
             if (pObj->mBaseGameObjectId == idToFind)
             {
@@ -480,7 +480,7 @@ bool BaseAliveGameObject::InAirCollision(PathLine** ppLine, FP* hitX, FP* hitY, 
         GetScale() == Scale::Fg ? kFgWalls : kBgWalls);
 }
 
-BaseGameObject* BaseAliveGameObject::FindObjectOfType(ReliveTypes typeToFind, FP xpos, FP ypos)
+BaseGameObject* BaseAliveGameObject::FindObjectOfType(const StringHash& reliveTypeToFind, FP xpos, FP ypos)
 {
     const s32 xposI = FP_GetExponent(xpos);
     const s32 yposI = FP_GetExponent(ypos);
@@ -493,7 +493,7 @@ BaseGameObject* BaseAliveGameObject::FindObjectOfType(ReliveTypes typeToFind, FP
             break;
         }
 
-        if (pObj->Type() == typeToFind && pObj != this)
+        if (pObj->Type() == reliveTypeToFind && pObj != this)
         {
             auto pCasted = static_cast<BaseAnimatedWithPhysicsGameObject*>(pObj);
             if (pCasted->GetScale() == GetScale())

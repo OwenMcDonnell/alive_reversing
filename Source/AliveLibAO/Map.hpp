@@ -3,7 +3,6 @@
 #include "../relive_lib/MapWrapper.hpp"
 #include "../relive_lib/FixedPoint.hpp"
 
-enum class ReliveTypes : s16;
 class CamResource;
 struct PSX_Point;
 class BinaryPath;
@@ -14,6 +13,7 @@ namespace relive
 }
 
 class Camera;
+class StringHash;
 
 extern const CameraSwapEffects kPathChangeEffectToInternalScreenChangeEffect[10];
 
@@ -70,7 +70,7 @@ public:
 
     void GoTo_Camera();
 
-    void Loader(s16 camX, s16 camY, LoadMode loadMode, ReliveTypes typeToLoad);
+    void Loader(s16 camX, s16 camY, LoadMode loadMode, const StringHash& reliveTypeToLoad);
 
     void RemoveObjectsWithPurpleLight(s16 bMakeInvisible);
 
@@ -93,9 +93,9 @@ public:
 
     void Load_Path_Items(Camera* pCamera, LoadMode loadMode);
 
-    relive::Path_TLV* TLV_First_Of_Type_In_Camera(ReliveTypes type, s32 camX);
+    relive::Path_TLV* TLV_First_Of_Type_In_Camera(const StringHash& reliveType, s32 camX);
 
-    relive::Path_TLV* VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, ReliveTypes typeToFind) override;
+    relive::Path_TLV* VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, const StringHash& reliveTypeToFind) override;
 
     relive::Path_TLV* TLV_Get_At(relive::Path_TLV* pTlv, FP xpos, FP ypos, FP width, FP height);
 

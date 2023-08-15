@@ -97,7 +97,7 @@ void BaseGameObject::VGetSaveState(SerializedObjectData&)
     // Not used in AO yet so needs a default impl
 }
 
-ReliveTypes BaseGameObject::FromAO(AO::AOTypes aoType)
+StringHash BaseGameObject::FromAO(AO::AOTypes aoType)
 {
     switch (aoType)
     {
@@ -126,7 +126,7 @@ ReliveTypes BaseGameObject::FromAO(AO::AOTypes aoType)
         case AO::AOTypes::eZapSpark_15:
             return ReliveTypes::eZapSpark;
         case AO::AOTypes::eGasClock_16:
-            return ReliveTypes::eGasCountDown;
+            return ReliveTypes::eGasCountdown;
         case AO::AOTypes::eParticleBurst_19:
             return ReliveTypes::eParticleBurst;
         case AO::AOTypes::eDoor_21:
@@ -284,11 +284,11 @@ ReliveTypes BaseGameObject::FromAO(AO::AOTypes aoType)
     }
 }
 
-AO::AOTypes BaseGameObject::ToAO(ReliveTypes reliveType)
+AO::AOTypes BaseGameObject::ToAO(StringHash reliveType)
 {
-    switch (reliveType)
+    switch (reliveType.Value())
     {
-        case ReliveTypes::eNone:
+        case ReliveTypes::eNone.Value():
             return AO::AOTypes::eNone_0;
         case ReliveTypes::eAlarm:
             return AO::AOTypes::eAlarm_1;
@@ -471,7 +471,7 @@ AO::AOTypes BaseGameObject::ToAO(ReliveTypes reliveType)
     }
 }
 
-ReliveTypes BaseGameObject::FromAE(AETypes aeType)
+StringHash BaseGameObject::FromAE(AETypes aeType)
 {
     switch (aeType)
     {
@@ -506,7 +506,7 @@ ReliveTypes BaseGameObject::FromAE(AETypes aeType)
         case AETypes::eZapSpark_22:
             return ReliveTypes::eZapSpark;
         case AETypes::eGasClock_23:
-            return ReliveTypes::eGasCountDown;
+            return ReliveTypes::eGasCountdown;
         case AETypes::eMetal_24:
             return ReliveTypes::eMetal;
         case AETypes::eMinesAlarm_25:
@@ -694,9 +694,9 @@ ReliveTypes BaseGameObject::FromAE(AETypes aeType)
     }
 }
 
-AETypes BaseGameObject::ToAE(ReliveTypes reliveType)
+AETypes BaseGameObject::ToAE(StringHash reliveType)
 {
-    switch (reliveType)
+    switch (reliveType.Value())
     {
         case ReliveTypes::eNone:
             return AETypes::eNone_0;
@@ -919,12 +919,12 @@ AETypes BaseGameObject::ToAE(ReliveTypes reliveType)
     }
 }
 
-void BaseGameObject::SetType(ReliveTypes type)
+void BaseGameObject::SetType(StringHash type)
 {
     mBaseGameObjectTypeId = type;
 }
 
-ReliveTypes BaseGameObject::Type() const
+StringHash BaseGameObject::Type() const
 {
     return mBaseGameObjectTypeId;
 }

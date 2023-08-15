@@ -57,6 +57,7 @@ namespace relive {
 }
 
 class IBaseAliveGameObject;
+class StringHash;
 
 class MapWrapper
 {
@@ -73,8 +74,6 @@ public:
 class Guid;
 struct PSX_RECT;
 class Camera;
-
-enum class ReliveTypes : s16;
 
 enum class MapDirections : s16
 {
@@ -150,7 +149,7 @@ public:
 
     Camera* GetCamera(CameraPos pos);
 
-    virtual relive::Path_TLV* VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, ReliveTypes objectType) = 0;
+    virtual relive::Path_TLV* VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, const StringHash& reliveType) = 0;
 
 public:
     MapDirections mMapDirection = MapDirections::eMapLeft_0;

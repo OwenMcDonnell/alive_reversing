@@ -4,10 +4,10 @@
 
 struct SaveStateBase
 {
-    SaveStateBase(ReliveTypes type, u32 size)
+    SaveStateBase(StringHash type, u32 size)
         : mType(type)
         , mSize(size)
     { }
-    ReliveTypes mType;
+    StringHash mType;
     u32 mSize = 0;
 };

@@ -1147,9 +1147,9 @@ void Map::LoadResource(const char_type* /*pFileName*/, s32 /*type*/, s32 /*resou
     }
 }
 
-relive::Path_TLV* Map::VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, ReliveTypes typeToFind)
+relive::Path_TLV* Map::VTLV_Get_At(s16 xpos, s16 ypos, s16 width, s16 height, const StringHash& reliveTypeToFind)
 {
-    return gPathInfo->TLV_Get_At(xpos, ypos, width, height, typeToFind);
+    return gPathInfo->TLV_Get_At(xpos, ypos, width, height, reliveTypeToFind);
 }
 
 Map gMap = {};

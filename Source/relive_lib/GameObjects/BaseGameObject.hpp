@@ -31,16 +31,16 @@ public:
 
     virtual void VGetSaveState(SerializedObjectData& /*pSaveBuffer*/);
 
-    static ReliveTypes FromAO(AO::AOTypes aoType);
-    static AO::AOTypes ToAO(ReliveTypes reliveType);
+    static StringHash FromAO(AO::AOTypes aoType);
+    static AO::AOTypes ToAO(StringHash reliveType);
 
-    static ReliveTypes FromAE(AETypes aeType);
+    static StringHash FromAE(AETypes aeType);
 
-    static AETypes ToAE(ReliveTypes reliveType);
+    static AETypes ToAE(StringHash reliveType);
 
-    void SetType(ReliveTypes type);
+    void SetType(StringHash type);
 
-    ReliveTypes Type() const;
+    StringHash Type() const;
 
 protected:
     static Guid RefreshId(const Guid& objectId);
@@ -99,7 +99,7 @@ public:
     s8 mBaseGameObjectRefCount = 0; // AO
 
 private:
-    ReliveTypes mBaseGameObjectTypeId = ReliveTypes::eNone;
+    StringHash mBaseGameObjectTypeId = ReliveTypes::eNone;
     s32 mBaseGameObjectUpdateDelay = 0;
 
     bool mListAddFailed = false;

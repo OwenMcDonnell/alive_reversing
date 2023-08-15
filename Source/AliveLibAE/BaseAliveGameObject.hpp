@@ -34,9 +34,10 @@ protected:
     bool Check_IsOnEndOfLine(s16 direction, s16 distance);
     bool WallHit(FP offY, FP offX);
     bool InAirCollision(PathLine** ppPathLine, FP* hitX, FP* hitY, FP velY);
-    BaseGameObject* FindObjectOfType(ReliveTypes typeToFind, FP xpos, FP ypos);
+    BaseGameObject* FindObjectOfType(const StringHash& reliveTypeToFind, FP xpos, FP ypos);
 
-    BaseAliveGameObject* GetStackedSlapTarget(const Guid& idToFind, ReliveTypes typeToFind, FP xpos, FP ypos);
+    BaseAliveGameObject* GetStackedSlapTarget(const Guid& idToFind, const StringHash& reliveTypeToFind, FP xpos, FP ypos);
+
 public:
     s16 BaseAliveGameObjectCollisionLineType = 0; // AE only, quick save data
 };
