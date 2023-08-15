@@ -525,15 +525,15 @@ bool CrawlingSlig::VTakeDamage(BaseGameObject* pFrom)
 {
     if (!BrainIs(ICrawlingSligBrain::EBrainTypes::Transformed))
     {
-        switch (pFrom->Type())
+        switch (pFrom->Type().Value())
         {
-            case ReliveTypes::eBullet:
-            case ReliveTypes::eDrill:
-            case ReliveTypes::eGroundExplosion:
-            case ReliveTypes::eRockSpawner:
-            case ReliveTypes::eMeatSaw:
-            case ReliveTypes::eMineCar:
-            case ReliveTypes::eAirExplosion:
+            case ReliveTypes::eBullet.Value():
+            case ReliveTypes::eDrill.Value():
+            case ReliveTypes::eGroundExplosion.Value():
+            case ReliveTypes::eRockSpawner.Value():
+            case ReliveTypes::eMeatSaw.Value():
+            case ReliveTypes::eMineCar.Value():
+            case ReliveTypes::eAirExplosion.Value():
                 if (!BrainIs(ICrawlingSligBrain::EBrainTypes::GetKilled))
                 {
                     SetBrain(ICrawlingSligBrain::EBrainTypes::GetKilled);
@@ -542,11 +542,11 @@ bool CrawlingSlig::VTakeDamage(BaseGameObject* pFrom)
                 }
                 return true;
 
-            case ReliveTypes::eElectricWall:
+            case ReliveTypes::eElectricWall.Value():
                 Slig_GameSpeak_SFX(SligSpeak::eHelp_10, 0, 0, this);
                 return true;
 
-            case ReliveTypes::eSlig:
+            case ReliveTypes::eSlig.Value():
             {
                 // Take a BEATING
                 mMultiUseTimer = MakeTimer(20);
@@ -578,7 +578,7 @@ bool CrawlingSlig::VTakeDamage(BaseGameObject* pFrom)
             }
                 return false;
 
-            case ReliveTypes::eSlog:
+            case ReliveTypes::eSlog.Value():
                 if (!BrainIs(ICrawlingSligBrain::EBrainTypes::GetKilled))
                 {
                     SetBrain(ICrawlingSligBrain::EBrainTypes::GetKilled);
@@ -593,7 +593,7 @@ bool CrawlingSlig::VTakeDamage(BaseGameObject* pFrom)
                 }
                 return false;
 
-            case ReliveTypes::eElectrocute:
+            case ReliveTypes::eElectrocute.Value():
                 if (!BrainIs(ICrawlingSligBrain::EBrainTypes::GetKilled))
                 {
                     GetAnimation().SetRender(false);

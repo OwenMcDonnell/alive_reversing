@@ -795,7 +795,6 @@ endif()
 target_include_directories(relive_lib PUBLIC
     $<BUILD_INTERFACE:
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../3rdParty/constexpr-md5-cpp/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../../3rdParty
     ${CMAKE_CURRENT_SOURCE_DIR}/../../3rdParty/aom
     ${CMAKE_CURRENT_SOURCE_DIR}/../../3rdParty/aom/third_party/libwebm

@@ -1,11 +1,18 @@
 #pragma once
 
 #include <array>
+#include "constexpr-md5-cpp\include\md5.h"
 
 class StringHash final
 {
 public:
-    explicit constexpr StringHash(const char* s);
+    StringHash() = default;
+
+    explicit constexpr StringHash(const char* s)
+        : mOriginalString(s)
+    {
+        mHash = md5::compute(mOriginalString);
+    }
 
     bool operator==(const StringHash& rhs) const;
     bool operator!=(const StringHash& rhs) const;
