@@ -110,7 +110,7 @@ struct GlukkonSaveState final : public SaveStateBase
     s32 mGettingShotTimer;
     Guid mFadeId;
     s16 mCanBePossessed;
-    ReliveTypes mCurrentType; // defaults to none until the glukkon gets spawned
+    StringHash mCurrentType; // defaults to none until the glukkon gets spawned
 };
 
 class Glukkon final : public BaseAliveGameObject

@@ -209,8 +209,8 @@ bool Paramite::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eAirExplosion.Value():
         {
             relive_new Gibs(
                 GibType::Slog_2,
@@ -226,10 +226,10 @@ bool Paramite::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return false;
 
-        case ReliveTypes::eBeeSwarm:
+        case ReliveTypes::eBeeSwarm.Value():
             mHealth -= FP_FromDouble(0.2);
             if (mHealth > FP_FromInteger(0))
             {

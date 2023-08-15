@@ -1595,8 +1595,8 @@ void Abe::PickUpThrowabe_Or_PressBomb(FP fpX, s32 fpY, s16 bStandToCrouch)
 
         switch (pSlapableOrCollectable->Type())
         {
-            case ReliveTypes::eTimedMine:
-            case ReliveTypes::eUXB:
+            case ReliveTypes::eTimedMine.Value():
+            case ReliveTypes::eUXB.Value():
                 mCurrentMotion = eAbeMotions::Motion_127_SlapBomb;
                 if (bStandToCrouch)
                 {
@@ -1606,9 +1606,9 @@ void Abe::PickUpThrowabe_Or_PressBomb(FP fpX, s32 fpY, s16 bStandToCrouch)
                 tryToSlapOrCollect = true;
                 break;
 
-            case ReliveTypes::eGrenade:
-            case ReliveTypes::eMeat:
-            case ReliveTypes::eRock:
+            case ReliveTypes::eGrenade.Value():
+            case ReliveTypes::eMeat.Value():
+            case ReliveTypes::eRock.Value():
                 mCurrentMotion = eAbeMotions::Motion_149_PickupItem;
                 field_19C_throwable_count += static_cast<s8>(static_cast<BaseThrowable*>(field_15C_pThrowable)->VGetCount());
 
@@ -1626,7 +1626,7 @@ void Abe::PickUpThrowabe_Or_PressBomb(FP fpX, s32 fpY, s16 bStandToCrouch)
                 tryToSlapOrCollect = true;
                 break;
 
-            case ReliveTypes::eMine:
+            case ReliveTypes::eMine.Value():
                 field_15C_pThrowable->mBaseGameObjectRefCount--;
                 field_15C_pThrowable = nullptr;
                 tryToSlapOrCollect = true;
@@ -2386,11 +2386,11 @@ s16 Abe::HandleDoAction()
     {
         switch (pTlv->mTlvType)
         {
-            case ReliveTypes::eWellLocal:
+            case ReliveTypes::eWellLocal.Value():
                 BaseAliveGameObjectPathTLV = pTlv;
                 return eAbeMotions::Motion_77_WellBegin;
 
-            case ReliveTypes::eLever:
+            case ReliveTypes::eLever.Value():
                 if (FP_FromInteger(FP_GetExponent(mXPos) - pTlv->mTopLeftX) < ScaleToGridSize(GetSpriteScale()))
                 {
                     // Wrong dir
@@ -2435,11 +2435,11 @@ s16 Abe::HandleDoAction()
                 }
                 break;
 
-            case ReliveTypes::eWellExpress:
+            case ReliveTypes::eWellExpress.Value():
                 BaseAliveGameObjectPathTLV = pTlv;
                 return eAbeMotions::Motion_80_430EF0;
 
-            case ReliveTypes::eBoomMachine:
+            case ReliveTypes::eBoomMachine.Value():
             {
                 auto pBoomMachine = static_cast<BoomMachine*>(FindObjectOfType(
                     ReliveTypes::eBoomMachine,
@@ -2521,7 +2521,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eBat:
+        case ReliveTypes::eBat.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 mHealth -= FP_FromInteger(1);
@@ -2557,7 +2557,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eGasCountDown:
+        case ReliveTypes::eGasCountDown.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 if (mCurrentMotion == eAbeMotions::Motion_64_LedgeAscend
@@ -2591,12 +2591,12 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Mudokon_SFX(MudSounds::eOops_16, 0, 0, this);
             break;
 
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eAirExplosion.Value():
             if (GetAnimation().GetRender())
             {
                 if (mHealth > FP_FromInteger(0))
@@ -2622,8 +2622,8 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eSecurityClaw:
-        case ReliveTypes::eSecurityOrb:
+        case ReliveTypes::eSecurityClaw.Value():
+        case ReliveTypes::eSecurityOrb.Value():
             field_130_say = 5;
             field_134_auto_say_timer = MakeTimer(27);
             // The zap makes Abe drop his stuff everywhere
@@ -2641,7 +2641,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             field_19C_throwable_count = 0;
             break;
 
-        case ReliveTypes::eRockSpawner:
+        case ReliveTypes::eRockSpawner.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 mbMotionChanged = true;
@@ -2664,7 +2664,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eMeatSaw:
+        case ReliveTypes::eMeatSaw.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 mbMotionChanged = true;
@@ -2692,9 +2692,9 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eParamite:
-        case ReliveTypes::eScrab:
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eParamite.Value():
+        case ReliveTypes::eScrab.Value():
+        case ReliveTypes::eSlog.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 auto pAliveObj = static_cast<BaseAliveGameObject*>(pFrom);
@@ -2778,10 +2778,10 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return false;
 
-        case ReliveTypes::eRollingBall:
+        case ReliveTypes::eRollingBall.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 mbMotionChanged = true;
@@ -2831,10 +2831,10 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eUnknown:
+        case ReliveTypes::eUnknown.Value():
             break;
 
-        case ReliveTypes::eZBall:
+        case ReliveTypes::eZBall.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 mbGotShot = true;
@@ -2852,7 +2852,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eBeeSwarm:
+        case ReliveTypes::eBeeSwarm.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 mHealth -= FP_FromDouble(0.15);
@@ -2899,12 +2899,12 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             GetAnimation().SetRender(false);
             ToDieFinal();
             break;
 
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
             // NOTE: This was in the default case! The type may not be bullet in there which would corrupt memory or crash
             BulletDamage(static_cast<Bullet*>(pFrom));
             if (!mbGotShot)
@@ -3145,7 +3145,7 @@ void Abe::Motion_0_Idle()
         {
             switch (pTlv->mTlvType)
             {
-                case ReliveTypes::eDoor:
+                case ReliveTypes::eDoor.Value():
                 {
                     if (NearDoorIsOpen() && !GetElectrocuted())
                     {
@@ -3162,7 +3162,7 @@ void Abe::Motion_0_Idle()
                     }
                     return;
                 }
-                case ReliveTypes::eWellLocal:
+                case ReliveTypes::eWellLocal.Value():
                 {
                     auto well = static_cast<relive::Path_WellLocal*>(pTlv);
                     if ((well->mScale != relive::reliveScale::eFull || GetSpriteScale() != FP_FromInteger(1)) &&
@@ -3175,7 +3175,7 @@ void Abe::Motion_0_Idle()
                     mCurrentMotion = eAbeMotions::Motion_77_WellBegin;
                     return;
                 }
-                case ReliveTypes::eWellExpress:
+                case ReliveTypes::eWellExpress.Value():
                 {
                     auto well = static_cast<relive::Path_WellExpress*>(pTlv);
                     if ((well->mScale != relive::reliveScale::eFull || GetSpriteScale() != FP_FromInteger(1)) &&
@@ -3188,17 +3188,17 @@ void Abe::Motion_0_Idle()
                     mCurrentMotion = eAbeMotions::Motion_80_430EF0;
                     return;
                 }
-                case ReliveTypes::eMovieHandStone:
-                case ReliveTypes::eBellSongStone:
-                case ReliveTypes::eDemoPlaybackStone:
-                case ReliveTypes::eHandStone:
+                case ReliveTypes::eMovieHandStone.Value():
+                case ReliveTypes::eBellSongStone.Value():
+                case ReliveTypes::eDemoPlaybackStone.Value():
+                case ReliveTypes::eHandStone.Value():
                 {
                     BaseAliveGameObjectPathTLV = pTlv;
                     mCurrentMotion = eAbeMotions::Motion_88_HandstoneBegin;
                     field_110_state.stone = StoneStates::eHandstoneStart_0;
                     return;
                 }
-                case ReliveTypes::eBoomMachine:
+                case ReliveTypes::eBoomMachine.Value():
                 {
                     auto pMachineButton = static_cast<BoomMachine*>(FindObjectOfType(
                         ReliveTypes::eBoomMachine,
@@ -7195,23 +7195,23 @@ void Abe::Motion_88_HandstoneBegin()
                     mHandStoneType = BaseAliveGameObjectPathTLV->mTlvType;
                     switch (mHandStoneType)
                     {
-                        case ReliveTypes::eMovieHandStone:
+                        case ReliveTypes::eMovieHandStone.Value():
                         {
                             mMovieStone = static_cast<relive::Path_MovieStone*>(BaseAliveGameObjectPathTLV);
                             break;
                         }
-                        case ReliveTypes::eBellSongStone:
+                        case ReliveTypes::eBellSongStone.Value():
                         {
                             mBellsongStone = static_cast<relive::Path_BellsongStone*>(BaseAliveGameObjectPathTLV);
                             break;
                         }
-                        case ReliveTypes::eDemoPlaybackStone:
+                        case ReliveTypes::eDemoPlaybackStone.Value():
                         {
                             ALIVE_FATAL("never expected eDemoPlaybackStone to be used");
                             //field_174_pathStone.demoId = ptlv->field_18_data.demoId;
                             break;
                         }
-                        case ReliveTypes::eHandStone:
+                        case ReliveTypes::eHandStone.Value():
                         {
                             mHandStone = static_cast<relive::Path_HandStone*>(BaseAliveGameObjectPathTLV);
                             break;
@@ -7234,7 +7234,7 @@ void Abe::Motion_88_HandstoneBegin()
             {
                 switch (mHandStoneType)
                 {
-                    case ReliveTypes::eMovieHandStone:
+                    case ReliveTypes::eMovieHandStone.Value():
                     {
                         auto pFmvInfo = Path_Get_FMV_Record(
                             gMap.mCurrentLevel,
@@ -7245,7 +7245,7 @@ void Abe::Motion_88_HandstoneBegin()
                         field_110_state.stone = StoneStates::eHandstoneMovieDone_2;
                         break;
                     }
-                    case ReliveTypes::eBellSongStone:
+                    case ReliveTypes::eBellSongStone.Value():
                     {
                         sBellSong = relive_new BellSong(
                             mBellsongStone->mType,
@@ -7255,7 +7255,7 @@ void Abe::Motion_88_HandstoneBegin()
                         field_110_state.stone = StoneStates::eBellSongDone_4;
                         break;
                     }
-                    case ReliveTypes::eDemoPlaybackStone:
+                    case ReliveTypes::eDemoPlaybackStone.Value():
                         ALIVE_FATAL("never expected eDemoPlaybackStone to be used");
                         /*field_164_pCircularFade->SetDead(true);
                         field_164_pCircularFade = nullptr;
@@ -7267,7 +7267,7 @@ void Abe::Motion_88_HandstoneBegin()
                             relive_new DemoPlayback(gpDemoPlaybackRes_50772C, 1);
                         }
                         break;*/
-                    case ReliveTypes::eHandStone:
+                    case ReliveTypes::eHandStone.Value():
                     {
                         GetAnimation().SetRender(false);
                         field_110_state.stone = StoneStates::eWaitForInput_6;

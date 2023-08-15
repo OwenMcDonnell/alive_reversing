@@ -6378,7 +6378,7 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
         {
             if (mHealth <= FP_FromInteger(0) && sControlledCharacter != this)
             {
@@ -6480,9 +6480,9 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eDrill:
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eDrill.Value():
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eAirExplosion.Value():
         {
             if (!GetAnimation().GetRender())
             {
@@ -6502,11 +6502,11 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Slig_GameSpeak_SFX(SligSpeak::eHelp_10, 0, field_11E_pitch_min, this);
             return true;
 
-        case ReliveTypes::eAbe:
+        case ReliveTypes::eAbe.Value():
         {
             if (mHealth <= FP_FromInteger(0))
             {
@@ -6542,10 +6542,10 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return true;
 
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eSlog.Value():
         {
             if (mHealth <= FP_FromInteger(0) && (GetCurrentMotion() == eSligMotions::Motion_34_Knockback || GetCurrentMotion() == eSligMotions::Motion_44_Smash))
             {
@@ -6586,7 +6586,7 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             if (mHealth <= FP_FromInteger(0))
             {
                 return true;

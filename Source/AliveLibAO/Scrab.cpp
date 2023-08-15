@@ -261,7 +261,7 @@ bool Scrab::VTakeDamage(BaseGameObject* pFrom)
     {
         switch (pFrom->Type())
         {
-            case ReliveTypes::eBat:
+            case ReliveTypes::eBat.Value():
                 if (BrainIs(&Scrab::Brain_BatDeath))
                 {
                     return true;
@@ -273,8 +273,8 @@ bool Scrab::VTakeDamage(BaseGameObject* pFrom)
                 mBrainSubState = Brain_BatDeath::eStartHowling_0;
                 return true;
 
-            case ReliveTypes::eBullet:
-            case ReliveTypes::eRollingBall:
+            case ReliveTypes::eBullet.Value():
+            case ReliveTypes::eRollingBall.Value():
                 mHealth = FP_FromInteger(0);
                 SetBrain(&Scrab::Brain_Death);
                 field_118_timer = MakeTimer(90);
@@ -282,8 +282,8 @@ bool Scrab::VTakeDamage(BaseGameObject* pFrom)
                 vUpdateAnim();
                 break;
 
-            case ReliveTypes::eGroundExplosion:
-            case ReliveTypes::eAirExplosion:
+            case ReliveTypes::eGroundExplosion.Value():
+            case ReliveTypes::eAirExplosion.Value():
             {
                 relive_new Gibs(
                     GibType::Slog_2,
@@ -297,7 +297,7 @@ bool Scrab::VTakeDamage(BaseGameObject* pFrom)
                 return true;
             }
 
-            case ReliveTypes::eAbilityRing:
+            case ReliveTypes::eAbilityRing.Value():
                 return false;
 
             default:

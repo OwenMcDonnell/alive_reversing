@@ -293,7 +293,7 @@ struct AbeSaveState final : public SaveStateBase
     u32 mInvisibilityTimer;
     u16 mInvisibilityDuration;
     s8 mHandStoneCamIdx;
-    ReliveTypes mHandStoneType;
+    StringHash mHandStoneType;
     u16 mFmvId;
     u16 mHandStoneCam1;
     u16 mHandStoneCam2;

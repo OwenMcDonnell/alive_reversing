@@ -25,7 +25,7 @@ public:
     virtual void VToDead();
     virtual void VOnPickUpOrSlapped() override;
 
-    using FnTypeMatcher = AddPointer_t<bool(ReliveTypes type)>;
+    using FnTypeMatcher = AddPointer_t<bool(StringHash reliveType)>;
     void BaseAddToPlatform(FnTypeMatcher cb);
 
 protected:

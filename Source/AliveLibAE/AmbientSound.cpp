@@ -92,7 +92,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
 
     switch (pTlv->mTlvType)
     {
-        case ReliveTypes::eSlig:
+        case ReliveTypes::eSlig.Value():
         {
             auto pSligTlv = static_cast<relive::Path_Slig*>(pTlv);
             if (pSligTlv->mData.mStartState == relive::Path_Slig_Data::StartState::Patrol)
@@ -112,7 +112,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
             break;
         }
 
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eSlog.Value():
         {
             if (static_cast<relive::Path_Slog*>(pTlv)->mAsleep == relive::reliveChoice::eYes)
             {
@@ -131,21 +131,21 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
             break;
         }
 
-        case ReliveTypes::eParamite:
+        case ReliveTypes::eParamite.Value():
             if (!pAmbianceTbl->mArray[5].mScopedSeq)
             {
                 pAmbianceTbl->mArray[5].mScopedSeq = relive_new ScopedSeq(5, direction);
             }
             break;
 
-        case ReliveTypes::eScrab:
+        case ReliveTypes::eScrab.Value():
             if (!pAmbianceTbl->mArray[6].mScopedSeq)
             {
                 pAmbianceTbl->mArray[6].mScopedSeq = relive_new ScopedSeq(6, direction);
             }
             break;
 
-        case ReliveTypes::eFleech:
+        case ReliveTypes::eFleech.Value():
         {
             auto pFleechTlv = static_cast<relive::Path_Fleech*>(pTlv);
             if ((pFleechTlv->mAsleep == relive::reliveChoice::eYes || pFleechTlv->mHanging == relive::reliveChoice::eYes))

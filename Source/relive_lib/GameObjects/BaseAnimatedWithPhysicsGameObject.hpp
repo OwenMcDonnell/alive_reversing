@@ -46,7 +46,7 @@ public:
     virtual bool VIsObj_GettingNear_On_X(BaseAnimatedWithPhysicsGameObject* pObj);
     virtual bool VIsFacingMe(BaseAnimatedWithPhysicsGameObject* pOther);
     virtual bool VOnSameYLevel(BaseAnimatedWithPhysicsGameObject* pOther);
-    virtual void VStackOnObjectsOfType(ReliveTypes typeToFind);
+    virtual void VStackOnObjectsOfType(const StringHash& reliveTypeToFind);
     virtual void VOnPickUpOrSlapped();
     virtual void VOnThrowableHit(BaseGameObject* pFrom);
 

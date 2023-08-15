@@ -3728,7 +3728,7 @@ bool Scrab::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eFleech:
+        case ReliveTypes::eFleech.Value():
             mHealth = mHealth - FP_FromDouble(0.13);
             if (mHealth < FP_FromInteger(0))
             {
@@ -3760,12 +3760,12 @@ bool Scrab::VTakeDamage(BaseGameObject* pFrom)
             }
             return false;
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return false;
 
-        case ReliveTypes::eBullet:
-        //case ReliveTypes::eNeverSet:
-        case ReliveTypes::eScrab:
+        case ReliveTypes::eBullet.Value():
+        //case ReliveTypes::eNeverSet.Value():
+        case ReliveTypes::eScrab.Value():
             break;
 
         default:

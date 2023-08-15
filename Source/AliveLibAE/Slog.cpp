@@ -3131,12 +3131,12 @@ IBaseAliveGameObject* Slog::FindTarget(s16 bKillSligs, s16 bLookingUp)
         {
             switch (pObj->Type())
             {
-                case ReliveTypes::eCrawlingSlig:
-                case ReliveTypes::eFlyingSlig:
-                case ReliveTypes::eGlukkon:
-                case ReliveTypes::eAbe:
-                case ReliveTypes::eMudokon:
-                case ReliveTypes::eSlig:
+                case ReliveTypes::eCrawlingSlig.Value():
+                case ReliveTypes::eFlyingSlig.Value():
+                case ReliveTypes::eGlukkon.Value():
+                case ReliveTypes::eAbe.Value():
+                case ReliveTypes::eMudokon.Value():
+                case ReliveTypes::eSlig.Value():
                     if (bKillSligs || (!bKillSligs && (pObj->Type() == ReliveTypes::eAbe || pObj->Type() == ReliveTypes::eCrawlingSlig || pObj->Type() == ReliveTypes::eFlyingSlig || pObj->Type() == ReliveTypes::eGlukkon || (pObj->Type() == ReliveTypes::eMudokon && static_cast<Mudokon*>(pObj)->mBrainState == Mud_Brain_State::Brain_4_ListeningToAbe))))
                     {
                         const PSX_RECT objRect = pObj->VGetBoundingRect();
@@ -3224,7 +3224,7 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
         {
             auto pBullet = static_cast<Bullet*>(pFrom);
             switch (pBullet->mBulletType)
@@ -3276,9 +3276,9 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
             break;
         }
 
-        case ReliveTypes::eDrill:
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eDrill.Value():
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eAirExplosion.Value():
         {
             Sfx(SlogSound::DeathWhine_9);
             mHealth = FP_FromInteger(0);
@@ -3295,12 +3295,12 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
             break;
         }
 
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Sfx(SlogSound::DeathWhine_9);
             break;
 
-        case ReliveTypes::eRockSpawner:
-        case ReliveTypes::eMineCar:
+        case ReliveTypes::eRockSpawner.Value():
+        case ReliveTypes::eMineCar.Value():
             Sfx(SlogSound::DeathWhine_9);
             mHealth = FP_FromInteger(0);
             mBrainState = eSlogBrains::Brain_3_Death;
@@ -3310,7 +3310,7 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
             GetAnimation().SetAnimate(true);
             break;
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             if (!mHitByAbilityRing)
             {
                 mHitByAbilityRing = true;
@@ -3318,7 +3318,7 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             mHealth = FP_FromInteger(0);
             mBrainState = eSlogBrains::Brain_3_Death;
             SetDead(true);

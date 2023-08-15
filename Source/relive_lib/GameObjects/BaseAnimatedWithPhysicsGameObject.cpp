@@ -300,7 +300,7 @@ bool BaseAnimatedWithPhysicsGameObject::VOnSameYLevel(BaseAnimatedWithPhysicsGam
     return false;
 }
 
-void BaseAnimatedWithPhysicsGameObject::VStackOnObjectsOfType(ReliveTypes typeToFind)
+void BaseAnimatedWithPhysicsGameObject::VStackOnObjectsOfType(const StringHash& reliveTypeToFind)
 {
     static const s16 offsets[6] = {
         0, 3, -3, 6, -6, 2};
@@ -314,7 +314,7 @@ void BaseAnimatedWithPhysicsGameObject::VStackOnObjectsOfType(ReliveTypes typeTo
             break;
         }
 
-        if (pObj->Type() == typeToFind && pObj != this)
+        if (pObj->Type() == reliveTypeToFind && pObj != this)
         {
             array_idx++;
             if (array_idx >= ALIVE_COUNTOF(offsets))

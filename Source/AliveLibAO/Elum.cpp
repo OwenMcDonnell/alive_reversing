@@ -143,11 +143,11 @@ void Elum::VOnTlvCollision(relive::Path_TLV* pTlv)
 
 bool Elum::VTakeDamage(BaseGameObject* pFrom)
 {
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
-        case ReliveTypes::eBullet:
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eBullet.Value():
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eAirExplosion.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 Elum_SFX(ElumSounds::eExploding_7, 0);
@@ -182,10 +182,10 @@ bool Elum::VTakeDamage(BaseGameObject* pFrom)
             }
             return true;
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return false;
 
-        case ReliveTypes::eBeeSwarm:
+        case ReliveTypes::eBeeSwarm.Value():
             if (sControlledCharacter != this)
             {
                 mStrugglingWithBees = true;

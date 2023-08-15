@@ -133,11 +133,11 @@ void ElectricWall::VUpdate()
             switch (pObj->Type())
             {
                 // Can't zap this
-                case ReliveTypes::eBone:
-                case ReliveTypes::eRockSpawner:
-                case ReliveTypes::eGrenade:
-                case ReliveTypes::eMeat:
-                case ReliveTypes::eRock:
+                case ReliveTypes::eBone.Value():
+                case ReliveTypes::eRockSpawner.Value():
+                case ReliveTypes::eGrenade.Value():
+                case ReliveTypes::eMeat.Value():
+                case ReliveTypes::eRock.Value():
                     break;
 
                 default:

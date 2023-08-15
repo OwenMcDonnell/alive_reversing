@@ -111,8 +111,8 @@ void Meat::VScreenChanged()
 void Meat::AddToPlatform()
 {
     // TODO: OG bug - why doesn't meat check for trap doors ??
-    BaseAddToPlatform([](ReliveTypes type)
-                      { return type == ReliveTypes::eLiftPoint; });
+    BaseAddToPlatform([](StringHash reliveType)
+                      { return reliveType == ReliveTypes::eLiftPoint; });
 }
 
 bool Meat::VIsFalling()

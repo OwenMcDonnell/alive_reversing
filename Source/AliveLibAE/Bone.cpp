@@ -113,8 +113,8 @@ Bone::~Bone()
 
 void Bone::AddToPlatform()
 {
-    BaseAddToPlatform([](ReliveTypes type)
-                      { return type == ReliveTypes::eLiftPoint || type == ReliveTypes::eTrapDoor; });
+    BaseAddToPlatform([](StringHash reliveType)
+                      { return reliveType == ReliveTypes::eLiftPoint || reliveType == ReliveTypes::eTrapDoor; });
 }
 
 void Bone::VThrow(FP velX, FP velY)

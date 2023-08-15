@@ -76,15 +76,15 @@ bool Shrykull::CanElectrocute(BaseGameObject* pObj)
 {
     switch (pObj->Type())
     {
-        case ReliveTypes::eCrawlingSlig:
-        case ReliveTypes::eFlyingSlig:
-        case ReliveTypes::eGlukkon:
-        case ReliveTypes::eRingOrLiftMud:
-        case ReliveTypes::eParamite:
-        case ReliveTypes::eMudokon:
-        case ReliveTypes::eScrab:
-        case ReliveTypes::eSlig:
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eCrawlingSlig.Value():
+        case ReliveTypes::eFlyingSlig.Value():
+        case ReliveTypes::eGlukkon.Value():
+        case ReliveTypes::eRingOrLiftMud.Value():
+        case ReliveTypes::eParamite.Value():
+        case ReliveTypes::eMudokon.Value():
+        case ReliveTypes::eScrab.Value():
+        case ReliveTypes::eSlig.Value():
+        case ReliveTypes::eSlog.Value():
             return true;
         default:
             return false;

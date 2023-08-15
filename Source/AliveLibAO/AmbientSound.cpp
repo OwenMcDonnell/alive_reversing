@@ -69,7 +69,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
     {
         switch (pTlv->mTlvType)
         {
-            case ReliveTypes::eSlig:
+            case ReliveTypes::eSlig.Value():
                 if (static_cast<relive::Path_Slig*>(pTlv)->mData.mStartState == relive::Path_Slig_Data::StartState::Patrol)
                 {
                     if (!pAmbianceTbl[1].mScopedSeq)
@@ -88,7 +88,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
                 }
                 break;
 
-            case ReliveTypes::eSlog:
+            case ReliveTypes::eSlog.Value():
                 if (static_cast<relive::Path_Slog*>(pTlv)->mAsleep == relive::reliveChoice::eYes)
                 {
                     if (!pAmbianceTbl[3].mScopedSeq)
@@ -107,7 +107,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
                 }
                 break;
 
-            case ReliveTypes::eParamite:
+            case ReliveTypes::eParamite.Value():
                 if (!pAmbianceTbl[4].mScopedSeq)
                 {
                     pAmbianceTbl[4].mScopedSeq = relive_new ScopedSeq(4, direction);
@@ -115,7 +115,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
                 }
                 break;
 
-            case ReliveTypes::eScrab:
+            case ReliveTypes::eScrab.Value():
                 if (!pAmbianceTbl[5].mScopedSeq)
                 {
                     pAmbianceTbl[5].mScopedSeq = relive_new ScopedSeq(5, direction);
@@ -123,7 +123,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
                 }
                 break;
 
-            case ReliveTypes::eMeatSaw:
+            case ReliveTypes::eMeatSaw.Value():
                 if (!pAmbianceTbl[6].mScopedSeq)
                 {
                     pAmbianceTbl[6].mScopedSeq = relive_new ScopedSeq(6, direction);

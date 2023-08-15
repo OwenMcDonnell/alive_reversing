@@ -828,9 +828,9 @@ void FlyingSlig::Movement()
 
 bool FlyingSlig::VTakeDamage(BaseGameObject* pFrom)
 {
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
         {
             if (static_cast<Bullet*>(pFrom)->mBulletType == BulletType::eZBullet_3)
             {
@@ -865,12 +865,12 @@ bool FlyingSlig::VTakeDamage(BaseGameObject* pFrom)
             // Not in Z-Cover, fall through and be shot
             [[fallthrough]];
         }
-        case ReliveTypes::eDrill:
-        case ReliveTypes::eRockSpawner:
-        case ReliveTypes::eAbe:
-        case ReliveTypes::eMeatSaw:
-        case ReliveTypes::eMineCar:
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eDrill.Value():
+        case ReliveTypes::eRockSpawner.Value():
+        case ReliveTypes::eAbe.Value():
+        case ReliveTypes::eMeatSaw.Value():
+        case ReliveTypes::eMineCar.Value():
+        case ReliveTypes::eSlog.Value():
         {
             if (BrainIs(&FlyingSlig::Brain_1_Death))
             {
@@ -885,19 +885,19 @@ bool FlyingSlig::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Slig_GameSpeak_SFX(SligSpeak::eHelp_10, 0, field_15C_voice_pitch_min, this);
             break;
 
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eAirExplosion.Value():
             if (!BrainIs(&FlyingSlig::Brain_1_Death))
             {
                 BlowUp();
             }
             break;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             if (!BrainIs(&FlyingSlig::Brain_1_Death))
             {
                 GetAnimation().SetRender(false);

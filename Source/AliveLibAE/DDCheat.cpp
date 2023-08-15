@@ -250,13 +250,13 @@ void DDCheat::VUpdate()
         {
             switch (sControlledCharacter->Type())
             {
-                case ReliveTypes::eSlig:
+                case ReliveTypes::eSlig.Value():
                     sControlledCharacter->mCurrentMotion = 7;
                     break;
-                case ReliveTypes::eAbe:
+                case ReliveTypes::eAbe.Value():
                     sControlledCharacter->mCurrentMotion = eAbeMotions::Motion_3_Fall_459B60;
                     break;
-                case ReliveTypes::eScrab:
+                case ReliveTypes::eScrab.Value():
                     sControlledCharacter->mCurrentMotion = 8;
                     break;
                 default:

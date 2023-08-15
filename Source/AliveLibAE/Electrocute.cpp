@@ -131,10 +131,10 @@ Electrocute::Electrocute(IBaseAliveGameObject* pTargetObj, bool bExtraOverwriter
 
     switch (pTargetObj->Type())
     {
-        case ReliveTypes::eFlyingSlig:
-        case ReliveTypes::eGlukkon:
-        case ReliveTypes::eAbe:
-        case ReliveTypes::eSlig:
+        case ReliveTypes::eFlyingSlig.Value():
+        case ReliveTypes::eGlukkon.Value():
+        case ReliveTypes::eAbe.Value():
+        case ReliveTypes::eSlig.Value():
             mPalData = *pTargetObj->GetAnimation().mAnimRes.mPngPtr->mPal;
             /*
             field_40_pPalData = relive_new u16[pTargetObj->mAnim.mPalDepth];

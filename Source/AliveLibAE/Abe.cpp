@@ -1596,7 +1596,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eGasCountDown:
+        case ReliveTypes::eGasCountDown.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 if (ForceDownIfHoisting_44BA30())
@@ -1622,7 +1622,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eDrill:
+        case ReliveTypes::eDrill.Value():
         {
             if (mHealth <= FP_FromInteger(0))
             {
@@ -1655,13 +1655,13 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
         }
         break;
 
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Mudokon_SFX(MudSounds::eOops_14, 0, 0, this);
             break;
 
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eMineCar:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eMineCar.Value():
+        case ReliveTypes::eAirExplosion.Value():
             if (GetAnimation().GetRender())
             {
                 if (mHealth > FP_FromInteger(0))
@@ -1687,8 +1687,8 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eSecurityClaw:
-        case ReliveTypes::eSecurityOrb:
+        case ReliveTypes::eSecurityClaw.Value():
+        case ReliveTypes::eSecurityOrb.Value():
             mSay = MudSounds::eAnger_5;
             mAutoSayTimer = MakeTimer(27);
             if (mCurrentMotion != eAbeMotions::Motion_123_LiftGrabIdle && mCurrentMotion != eAbeMotions::Motion_124_LiftUseUp && mCurrentMotion != eAbeMotions::Motion_125_LiftUseDown)
@@ -1717,7 +1717,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             mBaseThrowableCount = 0;
             break;
 
-        case ReliveTypes::eRockSpawner:
+        case ReliveTypes::eRockSpawner.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 mbMotionChanged = true;
@@ -1732,7 +1732,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eFleech:
+        case ReliveTypes::eFleech.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 auto pAliveObj = static_cast<BaseAliveGameObject*>(pFrom);
@@ -1800,7 +1800,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eGreeter:
+        case ReliveTypes::eGreeter.Value():
             if (mHealth <= FP_FromInteger(0))
             {
                 break;
@@ -1819,9 +1819,9 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             return true;
 
-        case ReliveTypes::eParamite:
-        case ReliveTypes::eScrab:
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eParamite.Value():
+        case ReliveTypes::eScrab.Value():
+        case ReliveTypes::eSlog.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 auto pAliveObj = static_cast<BaseAliveGameObject*>(pFrom);
@@ -1881,10 +1881,10 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return false;
 
-        case ReliveTypes::eMudokon:
+        case ReliveTypes::eMudokon.Value():
             if (mHealth > FP_FromInteger(0) && mCurrentMotion != eAbeMotions::Motion_71_Knockback_455090)
             {
                 mHealth -= FP_FromDouble(0.07);
@@ -1902,7 +1902,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eSlamDoor:
+        case ReliveTypes::eSlamDoor.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 ToKnockback_44E700(1, 1);
@@ -1911,7 +1911,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             GetAnimation().SetRender(false);
             ToDieFinal_458910();
             break;
@@ -2024,11 +2024,11 @@ IBaseAliveGameObject* Abe::FindObjectToPossess_44B7B0()
             switch (pObj->Type())
             {
                     // Third priority
-                case ReliveTypes::eCrawlingSlig:
-                case ReliveTypes::eFlyingSlig:
-                case ReliveTypes::eParamite:
-                case ReliveTypes::eScrab:
-                case ReliveTypes::eSlig:
+                case ReliveTypes::eCrawlingSlig.Value():
+                case ReliveTypes::eFlyingSlig.Value():
+                case ReliveTypes::eParamite.Value():
+                case ReliveTypes::eScrab.Value():
+                case ReliveTypes::eSlig.Value():
                     if (pObj->Is_In_Current_Camera() == CameraPos::eCamCurrent_0 && pObj->mHealth > FP_FromInteger(0))
                     {
                         const s16 distance = static_cast<s16>(Math_Distance(
@@ -2061,12 +2061,12 @@ IBaseAliveGameObject* Abe::FindObjectToPossess_44B7B0()
                     break;
 
                     // First priority
-                case ReliveTypes::eEvilFart:
+                case ReliveTypes::eEvilFart.Value():
                     pInRangeFart = pObj;
                     break;
 
                     // Second priority
-                case ReliveTypes::eGlukkon:
+                case ReliveTypes::eGlukkon.Value():
                     if (pObj->Is_In_Current_Camera() == CameraPos::eCamCurrent_0)
                     {
                         pInRangeGlukkon = pObj;
@@ -2383,7 +2383,7 @@ void Abe::Motion_0_Idle_44EEB0()
         {
             switch (pTlv->mTlvType)
             {
-                case ReliveTypes::eDoor:
+                case ReliveTypes::eDoor.Value():
                     if (NearDoorIsOpen_44EE10() && !GetElectrocuted())
                     {
                         BaseAliveGameObjectPathTLV = pTlv;
@@ -2401,7 +2401,7 @@ void Abe::Motion_0_Idle_44EEB0()
                     }
                     return;
 
-                case ReliveTypes::eWellLocal:
+                case ReliveTypes::eWellLocal.Value():
                 {
                     if (GetTeleporting())
                     {
@@ -2420,7 +2420,7 @@ void Abe::Motion_0_Idle_44EEB0()
                 }
                     return;
 
-                case ReliveTypes::eWellExpress:
+                case ReliveTypes::eWellExpress.Value():
                 {
                     if (GetTeleporting())
                     {
@@ -2439,14 +2439,14 @@ void Abe::Motion_0_Idle_44EEB0()
                 }
                     return;
 
-                case ReliveTypes::eMovieHandStone:
-                case ReliveTypes::eHandStone:
+                case ReliveTypes::eMovieHandStone.Value():
+                case ReliveTypes::eHandStone.Value():
                     BaseAliveGameObjectPathTLV = pTlv;
                     mCurrentMotion = eAbeMotions::Motion_86_HandstoneBegin;
                     field_120_state.stone = StoneStates::eHandstoneBegin_0;
                     return;
 
-                case ReliveTypes::eBoomMachine:
+                case ReliveTypes::eBoomMachine.Value():
                 {
                     auto pMachineButton = static_cast<BoomMachine*>(FindObjectOfType(
                         ReliveTypes::eBoomMachine,
@@ -2464,7 +2464,7 @@ void Abe::Motion_0_Idle_44EEB0()
                 }
                 break;
 
-                case ReliveTypes::eWorkWheel:
+                case ReliveTypes::eWorkWheel.Value():
                 {
                     bool bCanUseWheel = true;
                     for (s32 i = 0; i < gBaseAliveGameObjects->Size(); i++)
@@ -2513,7 +2513,7 @@ void Abe::Motion_0_Idle_44EEB0()
                 }
                 break;
 
-                case ReliveTypes::eBrewMachine:
+                case ReliveTypes::eBrewMachine.Value():
                     mCurrentMotion = eAbeMotions::Motion_89_BrewMachineBegin;
                     field_120_state.raw = 0;
                     break;
@@ -7544,8 +7544,8 @@ void Abe::PickUpThrowabe_Or_PressBomb_454090(FP fpX, s32 fpY, s32 bStandToCrouch
         bool trySlapOrCollect = false;
         switch (pSlappableOrCollectable->Type())
         {
-            case ReliveTypes::eTimedMine_or_MovingBomb:
-            case ReliveTypes::eUXB:
+            case ReliveTypes::eTimedMine_or_MovingBomb.Value():
+            case ReliveTypes::eUXB.Value():
                 mCurrentMotion = eAbeMotions::Motion_100_SlapBomb;
                 if (bStandToCrouch)
                 {
@@ -7554,10 +7554,10 @@ void Abe::PickUpThrowabe_Or_PressBomb_454090(FP fpX, s32 fpY, s32 bStandToCrouch
                 trySlapOrCollect = true;
                 break;
 
-            case ReliveTypes::eBone:
-            case ReliveTypes::eGrenade:
-            case ReliveTypes::eMeat:
-            case ReliveTypes::eRock:
+            case ReliveTypes::eBone.Value():
+            case ReliveTypes::eGrenade.Value():
+            case ReliveTypes::eMeat.Value():
+            case ReliveTypes::eRock.Value():
                 mCurrentMotion = eAbeMotions::Motion_111_PickupItem;
                 mBaseThrowableCount += static_cast<s8>(static_cast<BaseThrowable*>(pSlappableOrCollectable)->VGetCount()); // TODO: Check types are correct.
                 if (!gThrowableIndicatorExists)
@@ -7575,7 +7575,7 @@ void Abe::PickUpThrowabe_Or_PressBomb_454090(FP fpX, s32 fpY, s32 bStandToCrouch
                 trySlapOrCollect = true;
                 break;
 
-            case ReliveTypes::eMine:
+            case ReliveTypes::eMine.Value():
                 mSlappableOrPickupId = Guid{};
                 trySlapOrCollect = true;
                 break;
@@ -7774,11 +7774,11 @@ s16 Abe::HandleDoAction_455BD0()
     {
         switch (pTlv->mTlvType)
         {
-            case ReliveTypes::eWellLocal:
+            case ReliveTypes::eWellLocal.Value():
                 BaseAliveGameObjectPathTLV = pTlv;
                 return eAbeMotions::Motion_78_WellBegin_45C810;
 
-            case ReliveTypes::eLever:
+            case ReliveTypes::eLever.Value():
             {
                 FP xpos = {};
                 FP ypos = {};
@@ -7802,11 +7802,11 @@ s16 Abe::HandleDoAction_455BD0()
                 return eAbeMotions::Motion_99_LeverUse;
             }
 
-            case ReliveTypes::eWellExpress:
+            case ReliveTypes::eWellExpress.Value():
                 BaseAliveGameObjectPathTLV = pTlv;
                 return eAbeMotions::Motion_78_WellBegin_45C810;
 
-            case ReliveTypes::eBoomMachine:
+            case ReliveTypes::eBoomMachine.Value():
             {
                 auto pGrenadeMachine = static_cast<BoomMachine*>(FindObjectOfType(ReliveTypes::eBoomMachine, mXPos, mYPos - (GetSpriteScale() * FP_FromInteger(25))));
                 if (!pGrenadeMachine || !(pGrenadeMachine->VIsButtonOn()))

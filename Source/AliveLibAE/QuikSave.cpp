@@ -58,275 +58,275 @@ SaveFileRec QuikSave::gSaveFileRecords[128];
 s32 QuikSave::gSavedGameToLoadIdx;
 s32 QuikSave::gTotalSaveFilesCount;
 
-static void ConvertObjectSaveStateDataToJson(nlohmann::json& j, ReliveTypes type, const SerializedObjectData& pData)
+static void ConvertObjectSaveStateDataToJson(nlohmann::json& j, const StringHash& reliveType, const SerializedObjectData& pData)
 {
-    switch (type)
+    switch (reliveType.Value())
     {
-        case ::ReliveTypes::eSligSpawner:
+        case ::ReliveTypes::eSligSpawner.Value():
             j.push_back(*pData.ReadTmpPtr<::SligSpawnerSaveState>());
             break;
-        case ::ReliveTypes::eLiftMover:
+        case ::ReliveTypes::eLiftMover.Value():
             j.push_back(*pData.ReadTmpPtr<::LiftMoverSaveState>());
             break;
 
-        case ::ReliveTypes::eBone:
+        case ::ReliveTypes::eBone.Value():
             j.push_back(*pData.ReadTmpPtr<::BoneSaveState>());
             break;
 
-        case ::ReliveTypes::eMinesAlarm:
+        case ::ReliveTypes::eMinesAlarm.Value():
             j.push_back(*pData.ReadTmpPtr<::MinesAlarmSaveState>());
             break;
 
-        case ::ReliveTypes::eCrawlingSlig:
+        case ::ReliveTypes::eCrawlingSlig.Value():
             j.push_back(*pData.ReadTmpPtr<::CrawlingSligSaveState>());
             break;
 
-        case ::ReliveTypes::eDrill:
+        case ::ReliveTypes::eDrill.Value():
             j.push_back(*pData.ReadTmpPtr<::DrillSaveState>());
             break;
 
-        case ::ReliveTypes::eEvilFart:
+        case ::ReliveTypes::eEvilFart.Value():
             j.push_back(*pData.ReadTmpPtr<::EvilFartSaveState>());
             break;
 
-        case ::ReliveTypes::eFleech:
+        case ::ReliveTypes::eFleech.Value():
             j.push_back(*pData.ReadTmpPtr<::FleechSaveState>());
             break;
 
-        case ::ReliveTypes::eFlyingSlig:
+        case ::ReliveTypes::eFlyingSlig.Value():
             j.push_back(*pData.ReadTmpPtr<::FlyingSligSaveState>());
             break;
 
-        case ::ReliveTypes::eFlyingSligSpawner:
+        case ::ReliveTypes::eFlyingSligSpawner.Value():
             j.push_back(*pData.ReadTmpPtr<::FlyingSligSpawnerSaveState>());
             break;
 
-        case ::ReliveTypes::eGameEnderController:
+        case ::ReliveTypes::eGameEnderController.Value():
             j.push_back(*pData.ReadTmpPtr<::GameEnderControllerSaveState>());
             break;
 
-        case ::ReliveTypes::eSlapLock_OrbWhirlWind:
+        case ::ReliveTypes::eSlapLock_OrbWhirlWind.Value():
             j.push_back(*pData.ReadTmpPtr<::SlapLockWhirlWindSaveState>());
             break;
 
-        case ::ReliveTypes::eSlapLock:
+        case ::ReliveTypes::eSlapLock.Value():
             j.push_back(*pData.ReadTmpPtr<::SlapLockSaveState>());
             break;
 
-        case ::ReliveTypes::eGreeter:
+        case ::ReliveTypes::eGreeter.Value():
             j.push_back(*pData.ReadTmpPtr<::GreeterSaveState>());
             break;
 
-        case ::ReliveTypes::eGrenade:
+        case ::ReliveTypes::eGrenade.Value():
             j.push_back(*pData.ReadTmpPtr<::GrenadeSaveState>());
             break;
 
-        case ::ReliveTypes::eGlukkon:
+        case ::ReliveTypes::eGlukkon.Value():
             j.push_back(*pData.ReadTmpPtr<::GlukkonSaveState>());
             break;
 
-        case ::ReliveTypes::eAbe:
+        case ::ReliveTypes::eAbe.Value():
             j.push_back(*pData.ReadTmpPtr<::AbeSaveState>());
             break;
 
-        case ::ReliveTypes::eLiftPoint:
+        case ::ReliveTypes::eLiftPoint.Value():
             j.push_back(*pData.ReadTmpPtr<::LiftPointSaveState>());
             break;
 
-        case ::ReliveTypes::eMudokon:
-        case ::ReliveTypes::eRingOrLiftMud:
+        case ::ReliveTypes::eMudokon.Value():
+        case ::ReliveTypes::eRingOrLiftMud.Value():
             j.push_back(*pData.ReadTmpPtr<::MudokonSaveState>());
             break;
 
-        case ::ReliveTypes::eMeat:
+        case ::ReliveTypes::eMeat.Value():
             j.push_back(*pData.ReadTmpPtr<::MeatSaveState>());
             break;
 
-        case ::ReliveTypes::eMineCar:
+        case ::ReliveTypes::eMineCar.Value():
             j.push_back(*pData.ReadTmpPtr<::MineCarSaveState>());
             break;
 
-        case ::ReliveTypes::eParamite:
+        case ::ReliveTypes::eParamite.Value():
             j.push_back(*pData.ReadTmpPtr<::ParamiteSaveState>());
             break;
 
-        case ::ReliveTypes::eBirdPortal:
+        case ::ReliveTypes::eBirdPortal.Value():
             j.push_back(*pData.ReadTmpPtr<::BirdPortalSaveState>());
             break;
 
-        case ::ReliveTypes::eThrowableArray:
+        case ::ReliveTypes::eThrowableArray.Value():
             j.push_back(*pData.ReadTmpPtr<::ThrowableArraySaveState>());
             break;
 
-        case ::ReliveTypes::eAbilityRing:
+        case ::ReliveTypes::eAbilityRing.Value():
             j.push_back(*pData.ReadTmpPtr<::AbilityRingSaveState>());
             break;
 
-        case ::ReliveTypes::eRock:
+        case ::ReliveTypes::eRock.Value():
             j.push_back(*pData.ReadTmpPtr<::RockSaveState>());
             break;
 
-        case ::ReliveTypes::eScrab:
+        case ::ReliveTypes::eScrab.Value():
             j.push_back(*pData.ReadTmpPtr<::ScrabSaveState>());
             break;
 
-        case ::ReliveTypes::eScrabSpawner:
+        case ::ReliveTypes::eScrabSpawner.Value():
             j.push_back(*pData.ReadTmpPtr<::ScrabSpawnerSaveState>());
             break;
 
-        case ::ReliveTypes::eSlamDoor:
+        case ::ReliveTypes::eSlamDoor.Value():
             j.push_back(*pData.ReadTmpPtr<::SlamDoorSaveState>());
             break;
 
-        case ::ReliveTypes::eSlig:
+        case ::ReliveTypes::eSlig.Value():
             j.push_back(*pData.ReadTmpPtr<::SligSaveState>());
             break;
 
-        case ::ReliveTypes::eSlog:
+        case ::ReliveTypes::eSlog.Value():
             j.push_back(*pData.ReadTmpPtr<::SlogSaveState>());
             break;
 
-        case ::ReliveTypes::eSlurg:
+        case ::ReliveTypes::eSlurg.Value():
             j.push_back(*pData.ReadTmpPtr<::SlurgSaveState>());
             break;
 
-        case ::ReliveTypes::eTimerTrigger:
+        case ::ReliveTypes::eTimerTrigger.Value():
             j.push_back(*pData.ReadTmpPtr<::TimerTriggerSaveState>());
             break;
 
-        case ::ReliveTypes::eTrapDoor:
+        case ::ReliveTypes::eTrapDoor.Value():
             j.push_back(*pData.ReadTmpPtr<::TrapDoorSaveState>());
             break;
 
-        case ::ReliveTypes::eUXB:
+        case ::ReliveTypes::eUXB.Value():
             j.push_back(*pData.ReadTmpPtr<::UXBSaveState>());
             break;
 
-        case ::ReliveTypes::eWorkWheel:
+        case ::ReliveTypes::eWorkWheel.Value():
             j.push_back(*pData.ReadTmpPtr<::WorkWheelSaveState>());
             break;
 
         default:
-            ALIVE_FATAL("No create json save state for type %d", static_cast<s32>(type));
+            ALIVE_FATAL("No create json save state for type %s", reliveType.String());
     }
 }
 
 
-static void RestoreObjectState(ReliveTypes type, SerializedObjectData& pData)
+static void RestoreObjectState(const StringHash& reliveType, SerializedObjectData& pData)
 {
-    switch (type)
+    switch (reliveType.Value())
     {
-        case ::ReliveTypes::eSligSpawner:
+        case ::ReliveTypes::eSligSpawner.Value():
             return SligSpawner::CreateFromSaveState(pData);
             
-        case ::ReliveTypes::eLiftMover:
+        case ::ReliveTypes::eLiftMover.Value():
             return LiftMover::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eBone:
+        case ::ReliveTypes::eBone.Value():
             return Bone::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eMinesAlarm:
+        case ::ReliveTypes::eMinesAlarm.Value():
             return MinesAlarm::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eCrawlingSlig:
+        case ::ReliveTypes::eCrawlingSlig.Value():
             return CrawlingSlig::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eDrill:
+        case ::ReliveTypes::eDrill.Value():
             return Drill::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eEvilFart:
+        case ::ReliveTypes::eEvilFart.Value():
             return EvilFart::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eFleech:
+        case ::ReliveTypes::eFleech.Value():
             return Fleech::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eFlyingSlig:
+        case ::ReliveTypes::eFlyingSlig.Value():
             return FlyingSlig::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eFlyingSligSpawner:
+        case ::ReliveTypes::eFlyingSligSpawner.Value():
             return FlyingSligSpawner::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eGameEnderController:
+        case ::ReliveTypes::eGameEnderController.Value():
             return GameEnderController::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eSlapLock_OrbWhirlWind:
+        case ::ReliveTypes::eSlapLock_OrbWhirlWind.Value():
             return SlapLockWhirlWind::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eSlapLock:
+        case ::ReliveTypes::eSlapLock.Value():
             return SlapLock::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eGreeter:
+        case ::ReliveTypes::eGreeter.Value():
             return Greeter::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eGrenade:
+        case ::ReliveTypes::eGrenade.Value():
             return Grenade::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eGlukkon:
+        case ::ReliveTypes::eGlukkon.Value():
             return Glukkon::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eAbe:
+        case ::ReliveTypes::eAbe.Value():
             return Abe::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eLiftPoint:
+        case ::ReliveTypes::eLiftPoint.Value():
             return LiftPoint::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eMudokon:
-        case ::ReliveTypes::eRingOrLiftMud:
+        case ::ReliveTypes::eMudokon.Value():
+        case ::ReliveTypes::eRingOrLiftMud.Value():
             return Mudokon::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eMeat:
+        case ::ReliveTypes::eMeat.Value():
             return Meat::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eMineCar:
+        case ::ReliveTypes::eMineCar.Value():
             return MineCar::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eParamite:
+        case ::ReliveTypes::eParamite.Value():
             return Paramite::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eBirdPortal:
+        case ::ReliveTypes::eBirdPortal.Value():
             return BirdPortal::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eThrowableArray:
+        case ::ReliveTypes::eThrowableArray.Value():
             return ThrowableArray::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eAbilityRing:
+        case ::ReliveTypes::eAbilityRing.Value():
             return AbilityRing::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eRock:
+        case ::ReliveTypes::eRock.Value():
             return Rock::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eScrab:
+        case ::ReliveTypes::eScrab.Value():
             return Scrab::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eScrabSpawner:
+        case ::ReliveTypes::eScrabSpawner.Value():
             return ScrabSpawner::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eSlamDoor:
+        case ::ReliveTypes::eSlamDoor.Value():
             return SlamDoor::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eSlig:
+        case ::ReliveTypes::eSlig.Value():
             return Slig::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eSlog:
+        case ::ReliveTypes::eSlog.Value():
             return Slog::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eSlurg:
+        case ::ReliveTypes::eSlurg.Value():
             return Slurg::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eTimerTrigger:
+        case ::ReliveTypes::eTimerTrigger.Value():
             return TimerTrigger::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eTrapDoor:
+        case ::ReliveTypes::eTrapDoor.Value():
             return TrapDoor::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eUXB:
+        case ::ReliveTypes::eUXB.Value():
             return UXB::CreateFromSaveState(pData);
 
-        case ::ReliveTypes::eWorkWheel:
+        case ::ReliveTypes::eWorkWheel.Value():
             return WorkWheel::CreateFromSaveState(pData);
             
         default:
-            ALIVE_FATAL("No create save state for type %d", static_cast<s32>(type));
+            ALIVE_FATAL("No create save state for type %s", reliveType.String());
     }
 }
 

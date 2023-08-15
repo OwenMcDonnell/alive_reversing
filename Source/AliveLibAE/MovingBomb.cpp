@@ -194,9 +194,9 @@ bool MovingBomb::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eAbilityRing:
-        case ReliveTypes::eAirExplosion:
-        case ReliveTypes::eShrykull:
+        case ReliveTypes::eAbilityRing.Value():
+        case ReliveTypes::eAirExplosion.Value():
+        case ReliveTypes::eShrykull.Value():
         {
             mHealth = FP_FromInteger(0);
             relive_new AirExplosion(mXPos, mYPos, GetSpriteScale(), 0);
@@ -210,7 +210,7 @@ bool MovingBomb::VTakeDamage(BaseGameObject* pFrom)
         }
             return false;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             mState = States::eKillMovingBomb_7;
             return false;
 

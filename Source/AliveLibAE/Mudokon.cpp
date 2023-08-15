@@ -1217,7 +1217,7 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
 {
     switch (pFrom->Type())
     {
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
         {
             mbGotShot = true;
             if (mHealth <= FP_FromInteger(0))
@@ -1275,11 +1275,11 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             [[fallthrough]];
         }
 
-        case ReliveTypes::eGasCountDown:
-        case ReliveTypes::eRockSpawner:
-        case ReliveTypes::eMineCar:
-        case ReliveTypes::eParamite:
-        case ReliveTypes::eScrab:
+        case ReliveTypes::eGasCountDown.Value():
+        case ReliveTypes::eRockSpawner.Value():
+        case ReliveTypes::eMineCar.Value():
+        case ReliveTypes::eParamite.Value():
+        case ReliveTypes::eScrab.Value():
             if (mHealth <= FP_FromInteger(0))
             {
                 return false;
@@ -1303,10 +1303,10 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             SetPal(Mud_Emotion::eNormal_0);
             return true;
 
-        case ReliveTypes::eDrill:
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eMeatSaw:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eDrill.Value():
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eMeatSaw.Value():
+        case ReliveTypes::eAirExplosion.Value():
             if (mHealth <= FP_FromInteger(0) || (FindObjectOfType(ReliveTypes::eTorturedMud, mXPos, mYPos - FP_FromInteger(50)) && mBrainState == Mud_Brain_State::Brain_9_Sick))
             {
                 return true;
@@ -1337,12 +1337,12 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             EventBroadcast(kEventMudokonDied, sActiveHero);
             return true;
 
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Mudokon_SFX(MudSounds::eDeathDropScream_15, 0, 0, this);
             EventBroadcast(kEventMudokonDied, this);
             return true;
 
-        case ReliveTypes::eFleech:
+        case ReliveTypes::eFleech.Value():
             if (mHealth <= FP_FromInteger(0))
             {
                 return true;
@@ -1385,7 +1385,7 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             }
             return true;
 
-        case ReliveTypes::eAbe:
+        case ReliveTypes::eAbe.Value():
             if (sActiveHero->mCurrentMotion == eAbeMotions::Motion_62_Punch_454750)
             {
                 if (mHealth > FP_FromInteger(0))
@@ -1400,10 +1400,10 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             }
             return true;
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return false;
 
-        case ReliveTypes::eMudokon:
+        case ReliveTypes::eMudokon.Value():
             if (static_cast<Mudokon*>(pFrom)->mCurrentMotion != eMudMotions::Motion_38_Punch || mHealth <= FP_FromInteger(0))
             {
                 return true;
@@ -1412,8 +1412,8 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             TakeASlap(pFrom);
             return true;
 
-        case ReliveTypes::eShrykull:
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eShrykull.Value():
+        case ReliveTypes::eElectrocute.Value():
             if (mHealth <= FP_FromInteger(0))
             {
                 return true;
@@ -1424,7 +1424,7 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             SetDead(true);
             return true;
 
-        case ReliveTypes::eSlamDoor:
+        case ReliveTypes::eSlamDoor.Value():
             if (mHealth <= FP_FromInteger(0) || mCurrentMotion == eMudMotions::Motion_36_RunJumpMid)
             {
                 return true;
@@ -1433,7 +1433,7 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             VUpdateResBlock();
             return true;
 
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eSlog.Value():
             if (mHealth <= FP_FromInteger(0))
             {
                 return true;

@@ -196,7 +196,7 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
         {
             auto pBullet = static_cast<Bullet*>(pFrom);
 
@@ -234,9 +234,9 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eMeatSaw:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eMeatSaw.Value():
+        case ReliveTypes::eAirExplosion.Value():
         {
             Sfx(9);
             mHealth = FP_FromInteger(0);
@@ -260,7 +260,7 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             if (mHitByAbilityRing)
             {
                 return true;
@@ -269,15 +269,15 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
             Sfx(9);
             break;
 
-        case ReliveTypes::eZBall:
+        case ReliveTypes::eZBall.Value():
             return true;
 
-        case ReliveTypes::eRockSpawner:
-        case ReliveTypes::eRollingBall:
+        case ReliveTypes::eRockSpawner.Value():
+        case ReliveTypes::eRollingBall.Value():
             Slog::Sfx(9);
             [[fallthrough]];
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
         {
             mHealth = FP_FromInteger(0);
             mBrainState = 3;

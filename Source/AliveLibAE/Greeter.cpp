@@ -309,27 +309,27 @@ void Greeter::HandleRollingAlong()
                                                       mVelX + mXPos + mVelX,
                                                       mVelY + mYPos + mVelY))
     {
-        switch (pTlv->mTlvType)
+        switch (pTlv->mTlvType.Value())
         {
-            case ReliveTypes::eDeathDrop:
+            case ReliveTypes::eDeathDrop.Value():
                 BlowUp();
                 break;
 
-            case ReliveTypes::eScrabLeftBound:
+            case ReliveTypes::eScrabLeftBound.Value():
                 if (!(GetAnimation().GetFlipX()) && mBrainState == GreeterBrainStates::eBrain_0_Patrol)
                 {
                     ChangeDirection();
                 }
                 break;
 
-            case ReliveTypes::eScrabRightBound:
+            case ReliveTypes::eScrabRightBound.Value():
                 if (GetAnimation().GetFlipX() && mBrainState == GreeterBrainStates::eBrain_0_Patrol)
                 {
                     ChangeDirection();
                 }
                 break;
 
-            case ReliveTypes::eEnemyStopper:
+            case ReliveTypes::eEnemyStopper.Value():
                 if (mBrainState != GreeterBrainStates::eBrain_7_Fall)
                 {
                     ChangeDirection();
@@ -365,9 +365,9 @@ bool Greeter::VTakeDamage(BaseGameObject* pFrom)
         return false;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
         if (static_cast<Bullet*>(pFrom)->XDistance() <= FP_FromInteger(0))
         {
             GetAnimation().SetFlipX(true);
@@ -387,21 +387,21 @@ bool Greeter::VTakeDamage(BaseGameObject* pFrom)
         }
         return true;
 
-        case ReliveTypes::eDrill:
-        case ReliveTypes::eElectricWall:
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eRockSpawner:
-        case ReliveTypes::eMeatSaw:
-        case ReliveTypes::eMineCar:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eDrill.Value():
+        case ReliveTypes::eElectricWall.Value():
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eRockSpawner.Value():
+        case ReliveTypes::eMeatSaw.Value():
+        case ReliveTypes::eMineCar.Value():
+        case ReliveTypes::eAirExplosion.Value():
             BlowUp();
             return true;
 
-        case ReliveTypes::eSlamDoor:
+        case ReliveTypes::eSlamDoor.Value():
             BounceBackFromShot();
             return true;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             GetAnimation().SetRender(false);
             BlowUp();
             return true;

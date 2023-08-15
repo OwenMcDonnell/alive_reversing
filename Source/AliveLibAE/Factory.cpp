@@ -1605,90 +1605,7 @@ public:
         }
     }
 
-    using TFactoryFunction = decltype(&Factory::Factory_MainMenuController);
     using TFactoryFunction = decltype(&Factory::Factory_Hoist);
-    using TFactoryFunction = decltype(&Factory::Factory_Edge);
-    using TFactoryFunction = decltype(&Factory::Factory_Door);
-    using TFactoryFunction = decltype(&Factory::Factory_ShadowZone);
-    using TFactoryFunction = decltype(&Factory::Factory_LiftPoint);
-    using TFactoryFunction = decltype(&Factory::Factory_Well);
-    using TFactoryFunction = decltype(&Factory::Factory_Dove);
-    using TFactoryFunction = decltype(&Factory::Factory_RockSack);
-    using TFactoryFunction = decltype(&Factory::Factory_FallingItem);
-    using TFactoryFunction = decltype(&Factory::Factory_PullRingRope);
-    using TFactoryFunction = decltype(&Factory::Factory_TimedMine);
-    using TFactoryFunction = decltype(&Factory::Factory_Slig);
-    using TFactoryFunction = decltype(&Factory::Factory_Slog);
-    using TFactoryFunction = decltype(&Factory::Factory_Lever);
-    using TFactoryFunction = decltype(&Factory::Factory_SecurityOrb);
-    using TFactoryFunction = decltype(&Factory::Factory_AbeStart);
-    using TFactoryFunction = decltype(&Factory::Factory_Mine);
-    using TFactoryFunction = decltype(&Factory::Factory_UXB);
-    using TFactoryFunction = decltype(&Factory::Factory_Paramite);
-    using TFactoryFunction = decltype(&Factory::Factory_MovieHandStone);
-    using TFactoryFunction = decltype(&Factory::Factory_BirdPortal);
-    using TFactoryFunction = decltype(&Factory::Factory_TrapDoor);
-    using TFactoryFunction = decltype(&Factory::Factory_SligBoundLeft);
-    using TFactoryFunction = decltype(&Factory::Factory_FootSwitch);
-    using TFactoryFunction = decltype(&Factory::Factory_SecurityClaw);
-    using TFactoryFunction = decltype(&Factory::Factory_MotionDetector);
-    using TFactoryFunction = decltype(&Factory::Factory_SligSpawner);
-    using TFactoryFunction = decltype(&Factory::Factory_ElectricWall);
-    using TFactoryFunction = decltype(&Factory::Factory_LiftMover);
-    using TFactoryFunction = decltype(&Factory::Factory_MeatSack);
-    using TFactoryFunction = decltype(&Factory::Factory_Scrab);
-    using TFactoryFunction = decltype(&Factory::Factory_SligBoundRight);
-    using TFactoryFunction = decltype(&Factory::Factory_InvisibleSwitch);
-    using TFactoryFunction = decltype(&Factory::Factory_Mudokon);
-    using TFactoryFunction = decltype(&Factory::Factory_DoorFlame);
-    using TFactoryFunction = decltype(&Factory::Factory_MovingBomb);
-    using TFactoryFunction = decltype(&Factory::Factory_TimerTrigger);
-    using TFactoryFunction = decltype(&Factory::Factory_SecurityDoor);
-    using TFactoryFunction = decltype(&Factory::Factory_BoomMachine);
-    using TFactoryFunction = decltype(&Factory::Factory_BackgroundAnimation);
-    using TFactoryFunction = decltype(&Factory::Factory_LCDScreen);
-    using TFactoryFunction = decltype(&Factory::Factory_HandStone);
-    using TFactoryFunction = decltype(&Factory::Factory_CreditsController);
-    using TFactoryFunction = decltype(&Factory::Factory_LCDStatusBoard);
-    using TFactoryFunction = decltype(&Factory::Factory_WheelSyncer);
-    using TFactoryFunction = decltype(&Factory::Factory_MusicTrigger);
-    using TFactoryFunction = decltype(&Factory::Factory_SlogSpawner);
-    using TFactoryFunction = decltype(&Factory::Factory_GasCountdown);
-    using TFactoryFunction = decltype(&Factory::Factory_GasEmitter);
-    using TFactoryFunction = decltype(&Factory::Factory_ZzzSpawner);
-    using TFactoryFunction = decltype(&Factory::Factory_Glukkon);
-    using TFactoryFunction = decltype(&Factory::Factory_Water);
-    using TFactoryFunction = decltype(&Factory::Factory_WorkWheel);
-    using TFactoryFunction = decltype(&Factory::Factory_LaughingGas);
-    using TFactoryFunction = decltype(&Factory::Factory_FlyingSlig);
-    using TFactoryFunction = decltype(&Factory::Factory_Fleech);
-    using TFactoryFunction = decltype(&Factory::Factory_Slurg);
-    using TFactoryFunction = decltype(&Factory::Factory_SlamDoor);
-    using TFactoryFunction = decltype(&Factory::Factory_LevelLoader);
-    using TFactoryFunction = decltype(&Factory::Factory_DemoSpawnPoint);
-    using TFactoryFunction = decltype(&Factory::Factory_Teleporter);
-    using TFactoryFunction = decltype(&Factory::Factory_SlurgSpawner);
-    using TFactoryFunction = decltype(&Factory::Factory_Drill);
-    using TFactoryFunction = decltype(&Factory::Factory_ColourfulMeter);
-    using TFactoryFunction = decltype(&Factory::Factory_FlyingSligSpawner);
-    using TFactoryFunction = decltype(&Factory::Factory_MineCar);
-    using TFactoryFunction = decltype(&Factory::Factory_BoneBag);
-    using TFactoryFunction = decltype(&Factory::Factory_ExplosionSet);
-    using TFactoryFunction = decltype(&Factory::Factory_MultiSwitchController);
-    using TFactoryFunction = decltype(&Factory::Factory_StatusLight);
-    using TFactoryFunction = decltype(&Factory::Factory_SlapLock);
-    using TFactoryFunction = decltype(&Factory::Factory_ParamiteWebLine);
-    using TFactoryFunction = decltype(&Factory::Factory_Alarm);
-    using TFactoryFunction = decltype(&Factory::Factory_BrewMachine);
-    using TFactoryFunction = decltype(&Factory::Factory_ScrabSpawner);
-    using TFactoryFunction = decltype(&Factory::Factory_CrawlingSlig);
-    using TFactoryFunction = decltype(&Factory::Factory_SligGetPants);
-    using TFactoryFunction = decltype(&Factory::Factory_Greeter);
-    using TFactoryFunction = decltype(&Factory::Factory_CrawlingSligButton);
-    using TFactoryFunction = decltype(&Factory::Factory_GlukkonSwitch);
-    using TFactoryFunction = decltype(&Factory::Factory_DoorBlocker);
-    using TFactoryFunction = decltype(&Factory::Factory_TorturedMudokon);
-    using TFactoryFunction = decltype(&Factory::Factory_TrainDoor);
 
     Factory()
     {
@@ -1797,260 +1714,260 @@ public:
 {
     switch (pTlv->mTlvType)
     {
-        case ReliveTypes::eBackgroundAnimation:
+        case ReliveTypes::eBackgroundAnimation.Value():
             Factory_BackgroundAnimation(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eLiftMover:
+        case ReliveTypes::eLiftMover.Value():
             Factory_LiftMover(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eTimedMine:
+        case ReliveTypes::eTimedMine.Value():
             Factory_TimedMine(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eGasCountDown:
+        case ReliveTypes::eGasCountDown.Value():
             Factory_GasCountdown(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eDoor:
+        case ReliveTypes::eDoor.Value():
             Factory_Door(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Factory_ElectricWall(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSecurityClaw:
+        case ReliveTypes::eSecurityClaw.Value():
             Factory_SecurityClaw(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eBoomMachine:
+        case ReliveTypes::eBoomMachine.Value():
             Factory_BoomMachine(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMudokon:
+        case ReliveTypes::eMudokon.Value():
             Factory_Mudokon(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eLiftPoint:
+        case ReliveTypes::eLiftPoint.Value():
             Factory_LiftPoint(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSecurityOrb:
+        case ReliveTypes::eSecurityOrb.Value():
             Factory_SecurityOrb(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMeatSack:
+        case ReliveTypes::eMeatSack.Value():
             Factory_MeatSack(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMine:
+        case ReliveTypes::eMine.Value():
             Factory_Mine(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMotionDetector:
+        case ReliveTypes::eMotionDetector.Value():
             Factory_MotionDetector(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eParamite:
+        case ReliveTypes::eParamite.Value():
             Factory_Paramite(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eBirdPortal:
+        case ReliveTypes::eBirdPortal.Value():
             Factory_BirdPortal(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::ePullRingRope:
+        case ReliveTypes::ePullRingRope.Value():
             Factory_PullRingRope(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eRockSack:
+        case ReliveTypes::eRockSack.Value():
             Factory_RockSack(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eScrab:
+        case ReliveTypes::eScrab.Value():
             Factory_Scrab(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSlig:
+        case ReliveTypes::eSlig.Value():
             Factory_Slig(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eSlog.Value():
             Factory_Slog(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSligSpawner:
+        case ReliveTypes::eSligSpawner.Value():
             Factory_SligSpawner(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eLever:
+        case ReliveTypes::eLever.Value():
             Factory_Lever(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eTrapDoor:
+        case ReliveTypes::eTrapDoor.Value():
             Factory_TrapDoor(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eUXB:
+        case ReliveTypes::eUXB.Value():
             Factory_UXB(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMusicTrigger:
+        case ReliveTypes::eMusicTrigger.Value():
             Factory_MusicTrigger(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eWellLocal:
-        case ReliveTypes::eWellExpress:
+        case ReliveTypes::eWellLocal.Value():
+        case ReliveTypes::eWellExpress.Value():
             Factory_Well(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eZzzSpawner:
+        case ReliveTypes::eZzzSpawner.Value():
             Factory_ZzzSpawner(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eHoist:
+        case ReliveTypes::eHoist.Value():
             Factory_Hoist(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eEdge:
+        case ReliveTypes::eEdge.Value():
             Factory_Edge(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eShadowZone:
+        case ReliveTypes::eShadowZone.Value():
             Factory_ShadowZone(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eDove:
+        case ReliveTypes::eDove.Value():
             Factory_Dove(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eFallingItem:
+        case ReliveTypes::eFallingItem.Value():
             Factory_FallingItem(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eAbeStart:
+        case ReliveTypes::eAbeStart.Value():
             Factory_AbeStart(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eFootSwitch:
+        case ReliveTypes::eFootSwitch.Value():
             Factory_FootSwitch(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSligBoundRight:
+        case ReliveTypes::eSligBoundRight.Value():
             Factory_SligBoundRight(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSligBoundLeft:
+        case ReliveTypes::eSligBoundLeft.Value():
             Factory_SligBoundLeft(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eGasEmitter:
+        case ReliveTypes::eGasEmitter.Value():
             Factory_GasEmitter(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSlogSpawner:
+        case ReliveTypes::eSlogSpawner.Value():
             Factory_SlogSpawner(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eLCDStatusBoard:
+        case ReliveTypes::eLCDStatusBoard.Value():
             Factory_LCDStatusBoard(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eCreditsController:
+        case ReliveTypes::eCreditsController.Value():
             Factory_CreditsController(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eHandStone:
+        case ReliveTypes::eHandStone.Value():
             Factory_HandStone(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSecurityDoor:
+        case ReliveTypes::eSecurityDoor.Value():
             Factory_SecurityDoor(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMainMenuController:
+        case ReliveTypes::eMainMenuController.Value():
             Factory_MainMenuController(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMovingBomb:
+        case ReliveTypes::eMovingBomb.Value():
             Factory_MovingBomb(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eDoorFlame:
+        case ReliveTypes::eDoorFlame.Value():
             Factory_DoorFlame(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eInvisibleSwitch:
+        case ReliveTypes::eInvisibleSwitch.Value():
             Factory_InvisibleSwitch(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eTimerTrigger:
+        case ReliveTypes::eTimerTrigger.Value():
             Factory_TimerTrigger(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eLCDScreen:
+        case ReliveTypes::eLCDScreen.Value():
             Factory_LCDScreen(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMovieHandStone:
+        case ReliveTypes::eMovieHandStone.Value():
             Factory_MovieHandStone(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eWheelSyncer:
+        case ReliveTypes::eWheelSyncer.Value():
             Factory_WheelSyncer(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eGlukkon:
+        case ReliveTypes::eGlukkon.Value():
             Factory_Glukkon(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eWater:
+        case ReliveTypes::eWater.Value():
             Factory_Water(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eWorkWheel:
+        case ReliveTypes::eWorkWheel.Value():
             Factory_WorkWheel(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eLaughingGas:
+        case ReliveTypes::eLaughingGas.Value():
             Factory_LaughingGas(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eFlyingSlig:
+        case ReliveTypes::eFlyingSlig.Value():
             Factory_FlyingSlig(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eFleech:
+        case ReliveTypes::eFleech.Value():
             Factory_Fleech(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSlurg:
+        case ReliveTypes::eSlurg.Value():
             Factory_Slurg(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSlamDoor:
+        case ReliveTypes::eSlamDoor.Value():
             Factory_SlamDoor(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eLevelLoader:
+        case ReliveTypes::eLevelLoader.Value():
             Factory_LevelLoader(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eDemoSpawnPoint:
+        case ReliveTypes::eDemoSpawnPoint.Value():
             Factory_DemoSpawnPoint(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eTeleporter:
+        case ReliveTypes::eTeleporter.Value():
             Factory_Teleporter(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSlurgSpawner:
+        case ReliveTypes::eSlurgSpawner.Value():
             Factory_SlurgSpawner(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eDrill:
+        case ReliveTypes::eDrill.Value():
             Factory_Drill(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eColourfulMeter:
+        case ReliveTypes::eColourfulMeter.Value():
             Factory_ColourfulMeter(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eFlyingSligSpawner:
+        case ReliveTypes::eFlyingSligSpawner.Value():
             Factory_FlyingSligSpawner(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMineCar:
+        case ReliveTypes::eMineCar.Value():
             Factory_MineCar(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eBoneBag:
+        case ReliveTypes::eBoneBag.Value():
             Factory_BoneBag(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eExplosionSet:
+        case ReliveTypes::eExplosionSet.Value():
             Factory_ExplosionSet(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eMultiSwitchController:
+        case ReliveTypes::eMultiSwitchController.Value():
             Factory_MultiSwitchController(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eStatusLight:
+        case ReliveTypes::eStatusLight.Value():
             Factory_StatusLight(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSlapLock:
+        case ReliveTypes::eSlapLock.Value():
             Factory_SlapLock(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eParamiteWebLine:
+        case ReliveTypes::eParamiteWebLine.Value():
             Factory_ParamiteWebLine(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eAlarm:
+        case ReliveTypes::eAlarm.Value():
             Factory_Alarm(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eBrewMachine:
+        case ReliveTypes::eBrewMachine.Value():
             Factory_BrewMachine(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eScrabSpawner:
+        case ReliveTypes::eScrabSpawner.Value():
             Factory_ScrabSpawner(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eCrawlingSlig:
+        case ReliveTypes::eCrawlingSlig.Value():
             Factory_CrawlingSlig(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSligGetPants:
+        case ReliveTypes::eSligGetPants.Value():
             Factory_SligGetPants(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eSligGetWings:
+        case ReliveTypes::eSligGetWings.Value():
             Factory_SligGetWings(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eGreeter:
+        case ReliveTypes::eGreeter.Value():
             Factory_Greeter(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eCrawlingSligButton:
+        case ReliveTypes::eCrawlingSligButton.Value():
             Factory_CrawlingSligButton(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eGlukkonSwitch:
+        case ReliveTypes::eGlukkonSwitch.Value():
             Factory_GlukkonSwitch(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eDoorBlocker:
+        case ReliveTypes::eDoorBlocker.Value():
             Factory_DoorBlocker(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eTorturedMud:
+        case ReliveTypes::eTorturedMud.Value():
             Factory_TorturedMudokon(pTlv, pPath, tlvId, loadMode);
             break;
-        case ReliveTypes::eTrainDoor:
+        case ReliveTypes::eTrainDoor.Value():
             Factory_TrainDoor(pTlv, pPath, tlvId, loadMode);
             break;
     }

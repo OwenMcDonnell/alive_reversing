@@ -5339,9 +5339,9 @@ bool Paramite::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eDrill:
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eDrill.Value():
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eAirExplosion.Value():
         {
             EventBroadcast(kScrabOrParamiteDied, this);
             relive_new Gibs(GibType::Slog_2, mXPos, mYPos, mVelX, mVelY, GetSpriteScale(), 0);
@@ -5356,7 +5356,7 @@ bool Paramite::VTakeDamage(BaseGameObject* pFrom)
         }
             return true;
 
-        case ReliveTypes::eFleech:
+        case ReliveTypes::eFleech.Value():
         {
             mHealth -= FP_FromDouble(0.15);
             if (mHealth < FP_FromInteger(0))
@@ -5397,7 +5397,7 @@ bool Paramite::VTakeDamage(BaseGameObject* pFrom)
         }
             return false;
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return false;
 
         default:

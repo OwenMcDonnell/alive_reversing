@@ -2380,7 +2380,7 @@ s16 Glukkon::PathBlocked(FP /*a2*/, s16 checkBounds)
     }
 
     relive::Path_EnemyStopper::StopDirection direction = relive::Path_EnemyStopper::StopDirection::Left;
-    ReliveTypes boundType = ReliveTypes::eScrabLeftBound;
+    StringHash boundType = ReliveTypes::eScrabLeftBound;
     if (GetAnimation().GetFlipX())
     {
         boundType = ReliveTypes::eScrabLeftBound;
@@ -2917,9 +2917,9 @@ bool Glukkon::VTakeDamage(BaseGameObject* pFrom)
         return true;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
         {
             auto pBullet = static_cast<Bullet*>(pFrom);
             switch (pBullet->mBulletType)
@@ -3011,28 +3011,28 @@ bool Glukkon::VTakeDamage(BaseGameObject* pFrom)
         }
         break;
 
-        case ReliveTypes::eDrill:
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eMeatSaw:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eDrill.Value():
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eMeatSaw.Value():
+        case ReliveTypes::eAirExplosion.Value():
             SetBrain(&Glukkon::Brain_4_Death);
             mBrainSubState = 2;
             EventBroadcast(kEventMudokonComfort, this);
             break;
 
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Glukkon::PlaySound_GameSpeak(GlukkonSpeak::Unused_9, 0, mGamespeakPitch, this);
             return true;
 
-        case ReliveTypes::eRockSpawner:
-        case ReliveTypes::eMineCar:
+        case ReliveTypes::eRockSpawner.Value():
+        case ReliveTypes::eMineCar.Value():
             SetAnim(eGlukkonMotions::Motion_8_DeathFall, true);
             SetBrain(&Glukkon::Brain_4_Death);
             mBrainSubState = 0;
             EventBroadcast(kEventMudokonComfort, this);
             break;
 
-        case ReliveTypes::eAbe:
+        case ReliveTypes::eAbe.Value():
             if (sActiveHero->mCurrentMotion == eAbeMotions::Motion_62_Punch_454750)
             {
                 if (Math_NextRandom() <= 32u)
@@ -3050,7 +3050,7 @@ bool Glukkon::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eSlog.Value():
             if (GetCurrentMotion() != eGlukkonMotions::Motion_3_KnockBack)
             {
                 mHealth = FP_FromInteger(0);
@@ -3067,7 +3067,7 @@ bool Glukkon::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             GetAnimation().SetRender(false);
             mHealth = FP_FromInteger(0);
             SetBrain(&Glukkon::Brain_4_Death);

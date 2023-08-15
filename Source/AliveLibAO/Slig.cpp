@@ -678,7 +678,7 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
 {
     switch (pFrom->Type())
     {
-        case ReliveTypes::eBullet:
+        case ReliveTypes::eBullet.Value():
         {
             auto pBullet = static_cast<Bullet*>(pFrom);
             if (GetAnimation().GetRender())
@@ -747,13 +747,13 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             return true;
         }
 
-        case ReliveTypes::eElectricWall:
+        case ReliveTypes::eElectricWall.Value():
             Slig_GameSpeak_SFX(SligSpeak::eHelp_10, 0, mGameSpeakPitchMin, this);
             return true;
 
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eMeatSaw:
-        case ReliveTypes::eAirExplosion:
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eMeatSaw.Value():
+        case ReliveTypes::eAirExplosion.Value():
             if (GetAnimation().GetRender())
             {
                 relive_new Gibs(
@@ -776,10 +776,10 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             }
             return true;
 
-        case ReliveTypes::eAbilityRing:
+        case ReliveTypes::eAbilityRing.Value():
             return true;
 
-        case ReliveTypes::eSlog:
+        case ReliveTypes::eSlog.Value():
             if (mHealth <= FP_FromInteger(0)
                 && (mCurrentMotion == eSligMotions::Motion_35_Knockback || mCurrentMotion == eSligMotions::Motion_45_Smash))
             {
@@ -812,7 +812,7 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             }
             return true;
 
-        case ReliveTypes::eBeeSwarm:
+        case ReliveTypes::eBeeSwarm.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 mHealth -= FP_FromDouble(0.34);
@@ -827,7 +827,7 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             }
             return true;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 SetDead(true);
@@ -836,7 +836,7 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
             }
             return true;
 
-        case ReliveTypes::eBat:
+        case ReliveTypes::eBat.Value():
             break;
 
         default:

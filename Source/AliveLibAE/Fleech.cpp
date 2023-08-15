@@ -2057,13 +2057,13 @@ bool Fleech::VTakeDamage(BaseGameObject* pFrom)
     sub_42B8C0();
     ResetTarget();
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
-        case ReliveTypes::eBullet:
-        case ReliveTypes::eDrill:
-        case ReliveTypes::eGroundExplosion:
-        case ReliveTypes::eAirExplosion:
-        case ReliveTypes::eSlig:
+        case ReliveTypes::eBullet.Value():
+        case ReliveTypes::eDrill.Value():
+        case ReliveTypes::eGroundExplosion.Value():
+        case ReliveTypes::eAirExplosion.Value():
+        case ReliveTypes::eSlig.Value():
         {
             Sound(FleechSound::Scared_7);
             mHealth = FP_FromInteger(0);
@@ -2083,7 +2083,7 @@ bool Fleech::VTakeDamage(BaseGameObject* pFrom)
         break;
 
 
-        case ReliveTypes::eRockSpawner:
+        case ReliveTypes::eRockSpawner.Value():
             Sound(FleechSound::Scared_7);
             mHealth = FP_FromInteger(0);
             SetBrain(IFleechBrain::EBrainTypes::Death);
@@ -2094,11 +2094,11 @@ bool Fleech::VTakeDamage(BaseGameObject* pFrom)
             GetAnimation().SetAnimate(true);
             break;
 
-        case ReliveTypes::eParamite:
+        case ReliveTypes::eParamite.Value():
             Sound(FleechSound::Dismember_13);
             [[fallthrough]];
 
-        case ReliveTypes::eScrab:
+        case ReliveTypes::eScrab.Value():
         {
             relive_new Gibs(GibType::Fleech_10, mXPos, mYPos, mVelX, mVelY, GetSpriteScale(), 0);
 
@@ -2130,7 +2130,7 @@ bool Fleech::VTakeDamage(BaseGameObject* pFrom)
         }
         break;
 
-        case ReliveTypes::eElectrocute:
+        case ReliveTypes::eElectrocute.Value():
             SetDead(true);
             mHealth = FP_FromInteger(0);
             SetBrain(IFleechBrain::EBrainTypes::Death);

@@ -255,16 +255,16 @@ bool UXB::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eAbe:
+        case ReliveTypes::eAbe.Value():
             if (mCurrentState == UXBState::eDeactivated)
             {
                 return false;
             }
             break;
 
-        case ReliveTypes::eAbilityRing:
-        case ReliveTypes::eAirExplosion:
-        case ReliveTypes::eShrykull:
+        case ReliveTypes::eAbilityRing.Value():
+        case ReliveTypes::eAirExplosion.Value():
+        case ReliveTypes::eShrykull.Value():
             break;
 
         default:

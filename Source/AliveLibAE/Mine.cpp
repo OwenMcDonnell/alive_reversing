@@ -129,13 +129,13 @@ bool Mine::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eGreeter:
-        case ReliveTypes::eAbe:
-        case ReliveTypes::eMineCar:
-        case ReliveTypes::eAbilityRing:
-        case ReliveTypes::eAirExplosion:
-        case ReliveTypes::eMudokon:
-        case ReliveTypes::eShrykull:
+        case ReliveTypes::eGreeter.Value():
+        case ReliveTypes::eAbe.Value():
+        case ReliveTypes::eMineCar.Value():
+        case ReliveTypes::eAbilityRing.Value():
+        case ReliveTypes::eAirExplosion.Value():
+        case ReliveTypes::eMudokon.Value():
+        case ReliveTypes::eShrykull.Value():
         {
             relive_new GroundExplosion(mXPos, mYPos, GetSpriteScale());
             SetDead(true);

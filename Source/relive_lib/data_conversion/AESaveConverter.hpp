@@ -2728,7 +2728,7 @@ struct AbeSaveState final
 
     // Abe is the only one who uses the TlvTypes enum to store HandStone types
     // so there should be no need to convert more values.
-    static ::ReliveTypes From(const TlvTypes type)
+    static ::StringHash From(const TlvTypes type)
     {
         switch (type)
         {

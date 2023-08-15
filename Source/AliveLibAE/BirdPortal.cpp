@@ -534,11 +534,11 @@ s16 BirdPortal::IsScaredAway()
 
         switch (pObj->Type())
         {
-            case ReliveTypes::eAbe:
-            case ReliveTypes::eRingOrLiftMud:
-            case ReliveTypes::eParamite:
-            case ReliveTypes::eScrab:
-            case ReliveTypes::eSlig:
+            case ReliveTypes::eAbe.Value():
+            case ReliveTypes::eRingOrLiftMud.Value():
+            case ReliveTypes::eParamite.Value():
+            case ReliveTypes::eScrab.Value():
+            case ReliveTypes::eSlig.Value():
                 if (pObj->mCurrentPath != mCurrentPath)
                 {
                     continue;

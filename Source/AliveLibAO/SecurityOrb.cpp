@@ -79,8 +79,8 @@ bool SecurityOrb::VTakeDamage(BaseGameObject* pFrom)
 
     switch (pFrom->Type())
     {
-        case ReliveTypes::eAbilityRing:
-        case ReliveTypes::eShrykull:
+        case ReliveTypes::eAbilityRing.Value():
+        case ReliveTypes::eShrykull.Value():
         {
             relive_new AirExplosion(
                 mXPos,

@@ -152,17 +152,17 @@ void DDCheat::VUpdate()
                         sControlledCharacter->BaseAliveGameObjectLastLineYPos = sControlledCharacter->mYPos;
                         switch (sControlledCharacter->Type())
                         {
-                            case ReliveTypes::eElum:
+                            case ReliveTypes::eElum.Value():
                             {
                                 static_cast<Elum*>(sControlledCharacter)->SetCurrentMotion(eElumMotions::Motion_21_Land);
                                 break;
                             }
-                            case ReliveTypes::eAbe:
+                            case ReliveTypes::eAbe.Value():
                             {
                                 sControlledCharacter->mCurrentMotion = eAbeMotions::Motion_3_Fall;
                                 break;
                             }
-                            case ReliveTypes::eSlig:
+                            case ReliveTypes::eSlig.Value():
                             {
                                 sControlledCharacter->mCurrentMotion = eSligMotions::Motion_7_Falling;
                                 break;
