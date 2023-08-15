@@ -27,6 +27,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Multimedia LinguistTools R
 
 set(TS_FILES qt-editor_en_GB.ts qt-editor_German.ts)
 
+include_directories(../../../3rdParty)
 include_directories(../../../3rdParty/libmodplug/src)
 include_directories(../../../3rdParty/EasyLogging++/EasyLogging/src)
 
