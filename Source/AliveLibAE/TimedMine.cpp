@@ -149,7 +149,7 @@ bool TimedMine::VTakeDamage(BaseGameObject* pFrom)
         return false;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eAbe.Value():
         case ReliveTypes::eAbilityRing.Value():

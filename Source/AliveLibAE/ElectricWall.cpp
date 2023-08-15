@@ -130,7 +130,7 @@ void ElectricWall::VUpdate()
                 break;
             }
 
-            switch (pObj->Type())
+            switch (pObj->Type().Value())
             {
                 // Can't zap this
                 case ReliveTypes::eBone.Value():

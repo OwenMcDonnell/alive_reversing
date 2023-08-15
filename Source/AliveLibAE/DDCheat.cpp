@@ -248,7 +248,7 @@ void DDCheat::VUpdate()
 
         if ((gMap.mCurrentLevel != EReliveLevelIds::eMenu && gMap.mCurrentLevel != EReliveLevelIds::eNone) && sActiveHero && activePadPressed & InputCommands::eCheatMode)
         {
-            switch (sControlledCharacter->Type())
+            switch (sControlledCharacter->Type().Value())
             {
                 case ReliveTypes::eSlig.Value():
                     sControlledCharacter->mCurrentMotion = 7;

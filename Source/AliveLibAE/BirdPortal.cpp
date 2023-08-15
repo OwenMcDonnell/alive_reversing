@@ -532,7 +532,7 @@ s16 BirdPortal::IsScaredAway()
             return false;
         }
 
-        switch (pObj->Type())
+        switch (pObj->Type().Value())
         {
             case ReliveTypes::eAbe.Value():
             case ReliveTypes::eRingOrLiftMud.Value():

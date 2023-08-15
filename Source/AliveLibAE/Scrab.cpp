@@ -3726,7 +3726,7 @@ bool Scrab::VTakeDamage(BaseGameObject* pFrom)
         return false;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eFleech.Value():
             mHealth = mHealth - FP_FromDouble(0.13);
@@ -4161,7 +4161,7 @@ s16 Scrab::Handle_SlamDoor_or_EnemyStopper(FP velX, s16 bCheckLeftRightBounds)
         gridSize = (gridSize * FP_FromInteger(2));
     }
 
-    ReliveTypes objectType = {};
+    StringHash objectType = {};
     relive::Path_EnemyStopper::StopDirection stopDirection = relive::Path_EnemyStopper::StopDirection::Both;
     if (GetAnimation().GetFlipX())
     {

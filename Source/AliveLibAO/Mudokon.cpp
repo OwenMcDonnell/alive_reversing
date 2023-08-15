@@ -170,7 +170,7 @@ Mudokon::Mudokon(relive::Path_TLV* pTlv, const Guid& tlvId)
     SetTint(sMudTints_4CD320, mCurrentLevel);
 
     relive::reliveScale scale = relive::reliveScale::eFull;
-    switch (pTlv->mTlvType)
+    switch (pTlv->mTlvType.Value())
     {
         case ReliveTypes::eNone.Value():
             ALIVE_FATAL("Mudokon ctor pTlv->mTlvType32.mType was None_m1. This shouldn't happen.");
@@ -272,7 +272,7 @@ Mudokon::Mudokon(relive::Path_TLV* pTlv, const Guid& tlvId)
         }
         break;
         default:
-            LOG_WARNING("Mudokon ctor pTlv->mTlvType32.mType was %d. This is unhandled.", static_cast<s32>(pTlv->mTlvType));
+            LOG_WARNING("Mudokon ctor pTlv->mTlvType32.mType was %s. This is unhandled.", pTlv->mTlvType.String());
             break;
     }
 
@@ -528,9 +528,9 @@ void Mudokon::VScreenChanged()
 
 bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
 {
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
-        case ReliveTypes::eGasCountDown.Value():
+        case ReliveTypes::eGasCountdown.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 field_1B8_brain_state = 15;

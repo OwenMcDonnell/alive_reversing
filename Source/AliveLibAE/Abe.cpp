@@ -1594,9 +1594,9 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
     mRegenHealthTimer = MakeTimer(180);
     bool ret = mHealth > FP_FromInteger(0);
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
-        case ReliveTypes::eGasCountDown.Value():
+        case ReliveTypes::eGasCountdown.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 if (ForceDownIfHoisting_44BA30())
@@ -1919,7 +1919,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
         default:
             if (pFrom->Type() != ReliveTypes::eBullet)
             {
-                LOG_ERROR("Expected default case to be bullets only but got: %d", static_cast<s32>(pFrom->Type()));
+                LOG_ERROR("Expected default case to be bullets only but got: %s", pFrom->Type().String());
             }
             BulletDamage_44C980(static_cast<Bullet*>(pFrom));
             if (!mbGotShot)
@@ -2021,7 +2021,7 @@ IBaseAliveGameObject* Abe::FindObjectToPossess_44B7B0()
 
         if (pObj->GetCanBePossessed())
         {
-            switch (pObj->Type())
+            switch (pObj->Type().Value())
             {
                     // Third priority
                 case ReliveTypes::eCrawlingSlig.Value():
@@ -2381,7 +2381,7 @@ void Abe::Motion_0_Idle_44EEB0()
         // Handle objects that accept "up"
         while (pTlv)
         {
-            switch (pTlv->mTlvType)
+            switch (pTlv->mTlvType.Value())
             {
                 case ReliveTypes::eDoor.Value():
                     if (NearDoorIsOpen_44EE10() && !GetElectrocuted())
@@ -7542,7 +7542,7 @@ void Abe::PickUpThrowabe_Or_PressBomb_454090(FP fpX, s32 fpY, s32 bStandToCrouch
     if (pSlappableOrCollectable)
     {
         bool trySlapOrCollect = false;
-        switch (pSlappableOrCollectable->Type())
+        switch (pSlappableOrCollectable->Type().Value())
         {
             case ReliveTypes::eTimedMine_or_MovingBomb.Value():
             case ReliveTypes::eUXB.Value():
@@ -7772,7 +7772,7 @@ s16 Abe::HandleDoAction_455BD0()
 
     for (;;)
     {
-        switch (pTlv->mTlvType)
+        switch (pTlv->mTlvType.Value())
         {
             case ReliveTypes::eWellLocal.Value():
                 BaseAliveGameObjectPathTLV = pTlv;

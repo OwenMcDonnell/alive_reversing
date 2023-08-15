@@ -210,7 +210,7 @@ public:
     static inline constexpr StringHash eDoorBlocker{"door_blocker"};
     static inline constexpr StringHash eTorturedMudokon{"tortured_mudokon"};
     static inline constexpr StringHash eTrainDoor{"train_door"};
-
+    static inline constexpr StringHash eDemoPlaybackStone{"demo_playback_stone"};
     ReliveTypes()
     {
         Add(eNone);
@@ -344,6 +344,7 @@ public:
         Add(eMudokonPathTrans);
         Add(eSligGetWings);
         Add(eThrowableArray);
+        Add(eDemoPlaybackStone);
     }
 };
 

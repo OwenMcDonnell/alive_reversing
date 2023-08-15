@@ -129,7 +129,7 @@ Electrocute::Electrocute(IBaseAliveGameObject* pTargetObj, bool bExtraOverwriter
 
     //field_40_pPalData = nullptr;
 
-    switch (pTargetObj->Type())
+    switch (pTargetObj->Type().Value())
     {
         case ReliveTypes::eFlyingSlig.Value():
         case ReliveTypes::eGlukkon.Value():

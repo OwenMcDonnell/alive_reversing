@@ -3129,7 +3129,7 @@ IBaseAliveGameObject* Slog::FindTarget(s16 bKillSligs, s16 bLookingUp)
 
         if (pObj != pSligBeingListendTo && pObj != this && pObj->GetScale() == GetScale())
         {
-            switch (pObj->Type())
+            switch (pObj->Type().Value())
             {
                 case ReliveTypes::eCrawlingSlig.Value():
                 case ReliveTypes::eFlyingSlig.Value():
@@ -3222,7 +3222,7 @@ bool Slog::VTakeDamage(BaseGameObject* pFrom)
         return false;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eBullet.Value():
         {

@@ -693,7 +693,7 @@ void BaseAliveGameObject::UsePathTransScale()
     }
 }
 
-BaseGameObject* BaseAliveGameObject::FindObjectOfType(ReliveTypes typeToFind, FP xpos, FP ypos)
+BaseGameObject* BaseAliveGameObject::FindObjectOfType(const StringHash& reliveTypeToFind, FP xpos, FP ypos)
 {
     const s32 xpos_int = FP_GetExponent(xpos);
     const s32 ypos_int = FP_GetExponent(ypos);
@@ -706,7 +706,7 @@ BaseGameObject* BaseAliveGameObject::FindObjectOfType(ReliveTypes typeToFind, FP
             break;
         }
 
-        if (pObj->Type() == typeToFind)
+        if (pObj->Type() == reliveTypeToFind)
         {
             auto pObj2 = static_cast<BaseAnimatedWithPhysicsGameObject*>(pObj);
 

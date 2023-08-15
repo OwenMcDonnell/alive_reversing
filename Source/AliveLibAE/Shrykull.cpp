@@ -74,7 +74,7 @@ void Shrykull::VScreenChanged()
 
 bool Shrykull::CanElectrocute(BaseGameObject* pObj)
 {
-    switch (pObj->Type())
+    switch (pObj->Type().Value())
     {
         case ReliveTypes::eCrawlingSlig.Value():
         case ReliveTypes::eFlyingSlig.Value():

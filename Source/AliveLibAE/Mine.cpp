@@ -127,7 +127,7 @@ bool Mine::VTakeDamage(BaseGameObject* pFrom)
         return false;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eGreeter.Value():
         case ReliveTypes::eAbe.Value():

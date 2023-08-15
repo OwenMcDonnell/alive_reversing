@@ -90,7 +90,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
             return;
     }
 
-    switch (pTlv->mTlvType)
+    switch (pTlv->mTlvType.Value())
     {
         case ReliveTypes::eSlig.Value():
         {

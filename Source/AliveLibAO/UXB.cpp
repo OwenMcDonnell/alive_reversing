@@ -253,7 +253,7 @@ bool UXB::VTakeDamage(BaseGameObject* pFrom)
         return false;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eAbe.Value():
             if (mCurrentState == UXBState::eDeactivated)

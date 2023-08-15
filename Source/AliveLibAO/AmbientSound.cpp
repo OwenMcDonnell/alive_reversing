@@ -67,7 +67,7 @@ void Start_Sounds_for_TLV(CameraPos direction, relive::Path_TLV* pTlv)
 
     if (pAmbianceTbl)
     {
-        switch (pTlv->mTlvType)
+        switch (pTlv->mTlvType.Value())
         {
             case ReliveTypes::eSlig.Value():
                 if (static_cast<relive::Path_Slig*>(pTlv)->mData.mStartState == relive::Path_Slig_Data::StartState::Patrol)

@@ -98,7 +98,7 @@ bool Shrykull::CanKill(BaseAnimatedWithPhysicsGameObject* pObj)
 
 bool Shrykull::CanElectrocute(BaseGameObject* pObj) const
 {
-    switch (pObj->Type())
+    switch (pObj->Type().Value())
     {
         case ReliveTypes::eElum.Value():
         case ReliveTypes::eBackgroundGlukkon.Value():

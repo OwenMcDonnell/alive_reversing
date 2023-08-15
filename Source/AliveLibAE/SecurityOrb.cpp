@@ -102,7 +102,7 @@ bool SecurityOrb::VTakeDamage(BaseGameObject* pFrom)
 
     mHealth = FP_FromInteger(0);
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eAbilityRing.Value():
         case ReliveTypes::eShrykull.Value():

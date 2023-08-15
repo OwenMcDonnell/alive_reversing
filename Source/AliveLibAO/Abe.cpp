@@ -1593,7 +1593,7 @@ void Abe::PickUpThrowabe_Or_PressBomb(FP fpX, s32 fpY, s16 bStandToCrouch)
     {
         bool tryToSlapOrCollect = false;
 
-        switch (pSlapableOrCollectable->Type())
+        switch (pSlapableOrCollectable->Type().Value())
         {
             case ReliveTypes::eTimedMine.Value():
             case ReliveTypes::eUXB.Value():
@@ -2384,7 +2384,7 @@ s16 Abe::HandleDoAction()
 
     while (pTlv)
     {
-        switch (pTlv->mTlvType)
+        switch (pTlv->mTlvType.Value())
         {
             case ReliveTypes::eWellLocal.Value():
                 BaseAliveGameObjectPathTLV = pTlv;
@@ -2519,7 +2519,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
 
     auto oldHp = mHealth;
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eBat.Value():
             if (mHealth > FP_FromInteger(0))
@@ -2557,7 +2557,7 @@ bool Abe::VTakeDamage(BaseGameObject* pFrom)
             }
             break;
 
-        case ReliveTypes::eGasCountDown.Value():
+        case ReliveTypes::eGasCountdown.Value():
             if (mHealth > FP_FromInteger(0))
             {
                 if (mCurrentMotion == eAbeMotions::Motion_64_LedgeAscend
@@ -3143,7 +3143,7 @@ void Abe::Motion_0_Idle()
 
         while (pTlv)
         {
-            switch (pTlv->mTlvType)
+            switch (pTlv->mTlvType.Value())
             {
                 case ReliveTypes::eDoor.Value():
                 {
@@ -7193,7 +7193,7 @@ void Abe::Motion_88_HandstoneBegin()
                 if (BaseAliveGameObjectPathTLV)
                 {
                     mHandStoneType = BaseAliveGameObjectPathTLV->mTlvType;
-                    switch (mHandStoneType)
+                    switch (mHandStoneType.Value())
                     {
                         case ReliveTypes::eMovieHandStone.Value():
                         {
@@ -7232,7 +7232,7 @@ void Abe::Motion_88_HandstoneBegin()
             auto pCircularFade = static_cast<CircularFade*>(sObjectIds.Find_Impl(mCircularFadeId));
             if (pCircularFade->VDone())
             {
-                switch (mHandStoneType)
+                switch (mHandStoneType.Value())
                 {
                     case ReliveTypes::eMovieHandStone.Value():
                     {

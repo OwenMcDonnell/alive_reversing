@@ -6376,7 +6376,7 @@ bool Slig::VTakeDamage(BaseGameObject* pFrom)
         return false;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eBullet.Value():
         {

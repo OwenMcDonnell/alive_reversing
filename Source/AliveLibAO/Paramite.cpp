@@ -207,7 +207,7 @@ bool Paramite::VTakeDamage(BaseGameObject* pFrom)
         mMeat = nullptr;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eGroundExplosion.Value():
         case ReliveTypes::eAirExplosion.Value():

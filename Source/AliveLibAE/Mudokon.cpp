@@ -1215,7 +1215,7 @@ void Mudokon::VPossessed()
 
 bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
 {
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eBullet.Value():
         {
@@ -1275,7 +1275,7 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             [[fallthrough]];
         }
 
-        case ReliveTypes::eGasCountDown.Value():
+        case ReliveTypes::eGasCountdown.Value():
         case ReliveTypes::eRockSpawner.Value():
         case ReliveTypes::eMineCar.Value():
         case ReliveTypes::eParamite.Value():
@@ -1292,7 +1292,7 @@ bool Mudokon::VTakeDamage(BaseGameObject* pFrom)
             field_194_timer = MakeTimer(90);
             VUpdateResBlock();
             EventBroadcast(kEventMudokonDied, this);
-            if (pFrom->Type() == ReliveTypes::eGasCountDown)
+            if (pFrom->Type() == ReliveTypes::eGasCountdown)
             {
                 SFX_Play_Pitch(relive::SoundEffects::Choke, 127, 128);
             }

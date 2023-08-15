@@ -259,7 +259,7 @@ bool Scrab::VTakeDamage(BaseGameObject* pFrom)
 {
     if (mHealth > FP_FromInteger(0))
     {
-        switch (pFrom->Type())
+        switch (pFrom->Type().Value())
         {
             case ReliveTypes::eBat.Value():
                 if (BrainIs(&Scrab::Brain_BatDeath))

@@ -150,7 +150,7 @@ void DDCheat::VUpdate()
                         showDebugCreatureInfo_5076E0 = 0;
                         sControlledCharacter->BaseAliveGameObjectCollisionLine = nullptr;
                         sControlledCharacter->BaseAliveGameObjectLastLineYPos = sControlledCharacter->mYPos;
-                        switch (sControlledCharacter->Type())
+                        switch (sControlledCharacter->Type().Value())
                         {
                             case ReliveTypes::eElum.Value():
                             {

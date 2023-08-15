@@ -192,7 +192,7 @@ bool MovingBomb::VTakeDamage(BaseGameObject* pFrom)
         return true;
     }
 
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eAbilityRing.Value():
         case ReliveTypes::eAirExplosion.Value():

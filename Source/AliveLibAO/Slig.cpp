@@ -676,7 +676,7 @@ void Slig::VPossessed()
 
 bool Slig::VTakeDamage(BaseGameObject* pFrom)
 {
-    switch (pFrom->Type())
+    switch (pFrom->Type().Value())
     {
         case ReliveTypes::eBullet.Value():
         {
