@@ -1650,7 +1650,7 @@ void Map::Loader(s16 camX, s16 camY, LoadMode loadMode, const StringHash& relive
             if (loadMode != LoadMode::ConstructObject_0 || !(pPathTLV->mTlvFlags.Get(relive::TlvFlags::eBit1_Created) || pPathTLV->mTlvFlags.Get(relive::TlvFlags::eBit2_Destroyed)))
             {
                 // Call the factory to construct the item
-                ConstructTLVObject(pPathTLV, this, pPathTLV->mId, loadMode);
+                mFactory.ConstructTLVObject(pPathTLV, this, pPathTLV->mId, loadMode);
 
                 if (loadMode == LoadMode::ConstructObject_0)
                 {

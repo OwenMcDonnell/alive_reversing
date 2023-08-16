@@ -3,6 +3,7 @@
 #include "../relive_lib/MapWrapper.hpp"
 #include "../relive_lib/data_conversion/relive_tlvs.hpp"
 #include "../relive_lib/Function.hpp"
+#include "Factory.hpp"
 
 struct PathData;
 struct FixedPoint;
@@ -257,6 +258,7 @@ public:
     u16 mCamsOnY = 0;
     const PathData* mPathData = nullptr;
     BinaryPath* mBinaryPath = nullptr; // Non owning ptr
+    Factory mFactory;
 };
 
 enum class CameraPos : s16;

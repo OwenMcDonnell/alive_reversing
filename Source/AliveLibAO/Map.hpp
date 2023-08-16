@@ -2,6 +2,7 @@
 
 #include "../relive_lib/MapWrapper.hpp"
 #include "../relive_lib/FixedPoint.hpp"
+#include "Factory.hpp"
 
 class CamResource;
 struct PSX_Point;
@@ -145,6 +146,7 @@ public:
     u8* mSaveData = nullptr;
 
     std::vector<std::unique_ptr<class BinaryPath>> mLoadedPaths;
+    Factory mFactory;
 };
 
 

@@ -117,7 +117,7 @@ bool Player::ValidateObjectStates()
             s16 objType = 0;
             mFile.Read(objType);
             // Convert to relive type
-            ReliveTypes reliveObjType = BaseGameObject::FromAO(static_cast<AOTypes>(objType));
+            StringHash reliveObjType = BaseGameObject::FromAO(static_cast<AOTypes>(objType));
 
             if (pObj->Type() != reliveObjType)
             {
@@ -158,7 +158,7 @@ bool Player::ValidateObjectStates()
             mFile.Read(objType);
 
             // Convert to relive type
-            ReliveTypes reliveObjType = BaseGameObject::FromAO(static_cast<AOTypes>(objType));
+            StringHash reliveObjType = BaseGameObject::FromAO(static_cast<AOTypes>(objType));
 
             if (pObj->Type() != reliveObjType)
             {

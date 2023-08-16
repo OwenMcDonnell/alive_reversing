@@ -17,7 +17,7 @@ s16 gGasOn = 0;
 GasCountDown::GasCountDown(relive::Path_GasCountDown* pTlv, const Guid& tlvInfo)
     : BaseGameObject(true, 0)
 {
-    SetType(ReliveTypes::eGasCountDown);
+    SetType(ReliveTypes::eGasCountdown);
     mTlvId = tlvInfo;
 
     mPal = ResourceManagerWrapper::LoadPal(PalId::LedFont_Red);

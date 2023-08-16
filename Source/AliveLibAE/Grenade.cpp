@@ -162,8 +162,8 @@ void Grenade::Init(FP xpos, FP ypos)
 
 void Grenade::AddToPlatform()
 {
-    BaseAddToPlatform([](ReliveTypes type)
-                      { return type == ReliveTypes::eLiftPoint || type == ReliveTypes::eTrapDoor; });
+    BaseAddToPlatform([](StringHash reliveType)
+                      { return reliveType == ReliveTypes::eLiftPoint || reliveType == ReliveTypes::eTrapDoor; });
 }
 
 void Grenade::VTimeToExplodeRandom()

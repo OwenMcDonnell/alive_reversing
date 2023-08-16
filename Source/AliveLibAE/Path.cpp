@@ -65,7 +65,7 @@ void Path::Loader_4DB800(s16 xpos, s16 ypos, LoadMode loadMode, const StringHash
                 }
 
                 // Call the factory to construct the item
-                ConstructTLVObject(pPathTLV, this, pPathTLV->mId, loadMode);
+                mFactory.ConstructTLVObject(pPathTLV, this, pPathTLV->mId, loadMode);
             }
         }
 
