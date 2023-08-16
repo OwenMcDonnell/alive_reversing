@@ -80,7 +80,7 @@ public:
     s16 mBottomRightX = 0;
     s16 mBottomRightY = 0;
     s8 mTlvSpecificMeaning = 0; // TODO: remove me and add to the actual tlv's instead
-    StringHash mTlvType = {};
+    StringHash mTlvType = ReliveTypes::eNone;
     BitField8<TlvFlags> mTlvFlags = {};
     s32 mLength = 0;
     Guid mId;

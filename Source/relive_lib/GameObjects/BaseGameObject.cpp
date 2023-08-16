@@ -284,7 +284,7 @@ StringHash BaseGameObject::FromAO(AO::AOTypes aoType)
     }
 }
 
-AO::AOTypes BaseGameObject::ToAO(StringHash reliveType)
+AO::AOTypes BaseGameObject::ToAO(const StringHash& reliveType)
 {
     switch (reliveType.Value())
     {
@@ -694,7 +694,7 @@ StringHash BaseGameObject::FromAE(AETypes aeType)
     }
 }
 
-AETypes BaseGameObject::ToAE(StringHash reliveType)
+AETypes BaseGameObject::ToAE(const StringHash& reliveType)
 {
     switch (reliveType.Value())
     {
@@ -919,7 +919,7 @@ AETypes BaseGameObject::ToAE(StringHash reliveType)
     }
 }
 
-void BaseGameObject::SetType(StringHash type)
+void BaseGameObject::SetType(const StringHash& type)
 {
     mBaseGameObjectTypeId = type;
 }

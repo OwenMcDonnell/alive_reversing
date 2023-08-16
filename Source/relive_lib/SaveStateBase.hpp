@@ -4,7 +4,7 @@
 
 struct SaveStateBase
 {
-    SaveStateBase(StringHash type, u32 size)
+    SaveStateBase(const StringHash& type, u32 size)
         : mType(type)
         , mSize(size)
     { }

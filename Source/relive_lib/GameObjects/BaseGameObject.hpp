@@ -32,13 +32,13 @@ public:
     virtual void VGetSaveState(SerializedObjectData& /*pSaveBuffer*/);
 
     static StringHash FromAO(AO::AOTypes aoType);
-    static AO::AOTypes ToAO(StringHash reliveType);
+    static AO::AOTypes ToAO(const StringHash& reliveType);
 
     static StringHash FromAE(AETypes aeType);
 
-    static AETypes ToAE(StringHash reliveType);
+    static AETypes ToAE(const StringHash& reliveType);
 
-    void SetType(StringHash type);
+    void SetType(const StringHash& type);
 
     StringHash Type() const;
 

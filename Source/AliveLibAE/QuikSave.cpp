@@ -336,7 +336,7 @@ void ConvertObjectsStatesToJson(nlohmann::json& j, const SerializedObjectData& p
     while (pData.CanRead())
     {
         const SaveStateBase* pSaveStateBase = pData.PeekTmpPtr<SaveStateBase>();
-        LOG_INFO("Converting type %d with size %d", pSaveStateBase->mType, pSaveStateBase->mSize);
+        LOG_INFO("Converting type %s with size %d", pSaveStateBase->mType.String(), pSaveStateBase->mSize);
         ConvertObjectSaveStateDataToJson(j, pSaveStateBase->mType, pData);
     }
 }
@@ -347,7 +347,7 @@ void QuikSave::RestoreBlyData(Quicksave& pSaveData)
     while (pSaveData.mObjectsStateData.CanRead())
     {
         const SaveStateBase* pSaveStateBase = pSaveData.mObjectsStateData.PeekTmpPtr<SaveStateBase>();
-        LOG_INFO("Restore type %d with size %d", pSaveStateBase->mType, pSaveStateBase->mSize);
+        LOG_INFO("Restore type %s with size %d", pSaveStateBase->mType.String(), pSaveStateBase->mSize);
         RestoreObjectState(pSaveStateBase->mType, pSaveData.mObjectsStateData);
     }
 

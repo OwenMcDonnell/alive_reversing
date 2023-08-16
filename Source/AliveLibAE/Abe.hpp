@@ -701,7 +701,7 @@ private:
     s32 mInvisibilityTimer = 0;
     Guid mInvisibleEffectId;
     s8 mHandStoneCamIdx = 0;
-    StringHash mHandStoneType = {};
+    StringHash mHandStoneType = ReliveTypes::eNone;
     s16 mFmvId = 0;
     s16 mHandStoneCams[3] = {};
     s16 mHasEvilFart = 0;

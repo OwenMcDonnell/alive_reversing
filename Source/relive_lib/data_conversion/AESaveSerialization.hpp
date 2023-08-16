@@ -63,13 +63,14 @@ inline void to_json(nlohmann::json& j, const StringHash& p)
 
 inline void from_json(const nlohmann::json& j, StringHash& h)
 {
-    h = StringHash(j.at("string"));
+    LOG_INFO("%s", j.dump(4).c_str());
+    h = StringHash(j.at("string").get<std::string>().c_str());
 }
 
 inline void to_json(nlohmann::json& j, const SligSpawnerSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_id", p.mTlvId},
         {"state", p.mState},
         {"spawned_slig_id", p.mSpawnedSligId},
@@ -96,7 +97,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(LiftMoverStates, {
 inline void to_json(nlohmann::json& j, const LiftMoverSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_id", p.mTlvId},
         {"state", p.mState},
     };
@@ -121,7 +122,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(BoneStates, {
 inline void to_json(nlohmann::json& j, const BoneSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"base_tlv_id", p.mBaseTlvId},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
@@ -175,7 +176,7 @@ inline void from_json(const nlohmann::json& j, BoneSaveState& p)
 inline void to_json(nlohmann::json& j, const MinesAlarmSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"explosion_timer", p.mExplosionTimer},
     };
 }
@@ -256,7 +257,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GetKilledBrain::EState, {
 inline void to_json(nlohmann::json& j, const CrawlingSligSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"base_tlv_id", p.mBaseTlvId},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
@@ -354,7 +355,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(DrillStates, {
 inline void to_json(nlohmann::json & j, const DrillSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"drill_tlv_id", p.mDrillTlvId},
         {"off_timer", p.mOffTimer},
         {"state", p.mState},
@@ -380,7 +381,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(FartStates, {
 inline void to_json(nlohmann::json& j, const EvilFartSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"red", p.mRed},
         {"green", p.mGreen},
         {"blue", p.mBlue},
@@ -517,7 +518,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(ScaredBrain::EState, {
 inline void to_json(nlohmann::json& j, const FleechSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"field_4_obj_id", p.field_4_obj_id},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
@@ -687,7 +688,7 @@ inline void from_json(const nlohmann::json& j, FleechSaveState& p)
 inline void to_json(nlohmann::json& j, const FlyingSligSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"xpos", p.field_4_xpos},
         {"ypos", p.field_8_ypos},
         {"velx", p.field_C_velx},
@@ -813,7 +814,7 @@ inline void from_json(const nlohmann::json& j, FlyingSligSaveState& p)
 inline void to_json(nlohmann::json& j, const FlyingSligSpawnerSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_info", p.field_4_tlvInfo},
         {"spawned", p.field_8_bSpawned},
         {"spawned_slig_obj_id", p.field_C_spawned_slig_obj_id},
@@ -841,7 +842,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GameEnderControllerStates, {
 inline void to_json(nlohmann::json& j, const GameEnderControllerSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"obj_id", p.mObjId},
         {"timer", p.mTimer},
         {"state", p.mState},
@@ -858,7 +859,7 @@ inline void from_json(const nlohmann::json& j, GameEnderControllerSaveState& p)
 inline void to_json(nlohmann::json& j, const SlapLockWhirlWindSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"switch_id", p.mSwitchId},
     };
 }
@@ -883,7 +884,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(SlapLockStates, {
 inline void to_json(nlohmann::json& j, const SlapLockSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"anim_render", p.mAnimRender},
         {"tlv_info", p.mTlvInfo},
         {"tlv_state", p.mTlvState},
@@ -920,7 +921,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GreeterBrainStates, {
 inline void to_json(nlohmann::json& j, const GreeterSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"r", p.field_2_r},
         {"g", p.field_4_g},
         {"b", p.field_6_b},
@@ -995,7 +996,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GrenadeStates, {
 inline void to_json(nlohmann::json& j, const GrenadeSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_info", p.mTlvInfo},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
@@ -1095,7 +1096,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(eGlukkonMotions, {
 inline void to_json(nlohmann::json& j, const GlukkonSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"field_4_object_id", p.field_4_object_id},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
@@ -1239,7 +1240,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(MudSounds, {
 inline void to_json(nlohmann::json& j, const AbeSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
         {"velx", p.mVelX},
@@ -1402,7 +1403,7 @@ inline void from_json(const nlohmann::json& j, AbeSaveState& p)
 inline void to_json(nlohmann::json& j, const LiftPointSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
         {"platform_id", p.mPlatformId},
@@ -1578,7 +1579,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GameSpeakEvents, {
 inline void to_json(nlohmann::json& j, const MudokonSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"xpos", p.field_4_xpos},
         {"ypos", p.field_8_ypos},
         {"velx", p.field_C_velx},
@@ -1721,7 +1722,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(MeatStates, {
 inline void to_json(nlohmann::json& j, const MeatSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_id", p.mTlvId},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
@@ -1785,7 +1786,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(MineCarDirs, {
 inline void to_json(nlohmann::json& j, const MineCarSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"xpos", p.field_4_xpos},
         {"ypos", p.field_8_ypos},
         {"velx", p.field_C_velx},
@@ -1910,7 +1911,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(eParamiteMotions, {
 inline void to_json(nlohmann::json& j, const ParamiteSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
         {"velx", p.mVelX},
@@ -2036,7 +2037,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(PortalStates, {
 inline void to_json(nlohmann::json& j, const BirdPortalSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"state", p.mState},
         {"mud_count_for_shrykull", p.mMudCountForShrykull},
         {"tlv_info", p.mTlvInfo},
@@ -2054,7 +2055,7 @@ inline void from_json(const nlohmann::json& j, BirdPortalSaveState& p)
 inline void to_json(nlohmann::json& j, const ThrowableArraySaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"count", p.mCount},
     };
 }
@@ -2086,7 +2087,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(RingTypes, {
 inline void to_json(nlohmann::json & j, const AbilityRingSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"ring_xpos", p.mRingXPos},
         {"ring_ypos", p.mRingYPos},
         {"ring_type", p.mRingType},
@@ -2127,7 +2128,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(RockStates, {
 inline void to_json(nlohmann::json& j, const RockSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"obj_id", p.mTlvId},
         {"field_8_xpos", p.mXPos},
         {"field_c_ypos", p.mYPos},
@@ -2220,7 +2221,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(eScrabMotions, {
 inline void to_json(nlohmann::json& j, const ScrabSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"obj_id", p.field_4_obj_id},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
@@ -2337,7 +2338,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(ScrabSpawnerStates, {
 inline void to_json(nlohmann::json& j, const ScrabSpawnerSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_info", p.field_4_tlvInfo},
         {"state", p.field_8_state},
         {"spawned_scrab_id", p.field_C_spawned_scrab_id},
@@ -2355,7 +2356,7 @@ inline void from_json(const nlohmann::json& j, ScrabSpawnerSaveState& p)
 inline void to_json(nlohmann::json& j, const SlamDoorSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_info", p.mTlvInfo},
     };
 }
@@ -2424,7 +2425,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(eSligMotions, {
 inline void to_json(nlohmann::json& j, const SligSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"xpos", p.field_4_xpos},
         {"ypos", p.field_8_ypos},
         {"velx", p.field_C_velx},
@@ -2578,7 +2579,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(eSlogBrains, {
 inline void to_json(nlohmann::json& j, const SlogSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"base_tlv_id", p.mBaseTlvId},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
@@ -2696,7 +2697,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(SlurgStates, {
 inline void to_json(nlohmann::json& j, const SlurgSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"xpos", p.mXPos},
         {"ypos", p.mYPos},
         {"velx", p.mVelX},
@@ -2743,7 +2744,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(TimerTriggerStates, {
 inline void to_json(nlohmann::json& j, const TimerTriggerSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_id", p.mTlvId},
         {"activation_delay_timer", p.mActivationDelayTimer},
         {"state", p.mState},
@@ -2770,7 +2771,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(TrapDoorState, {
 inline void to_json(nlohmann::json& j, const TrapDoorSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"state", p.mState},
         {"open_time", p.mOpenTime},
         {"tlv_id", p.mTlvId},
@@ -2795,7 +2796,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(UXBState, {
 inline void to_json(nlohmann::json& j, const UXBSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_info", p.mTlvInfo},
         {"next_state_timer", p.mNextStateTimer},
         {"current_state", p.mCurrentState},
@@ -2826,7 +2827,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(WheelStates, {
 inline void to_json(nlohmann::json& j, const WorkWheelSaveState& p)
 {
     j = nlohmann::json{
-        {"type", p.mType.String()},
+        {"type", p.mType},
         {"tlv_id", p.mTlvId},
         {"turning_time", p.mTurningTime},
         {"state", p.mState},
@@ -2961,7 +2962,7 @@ static void write_object_state(const nlohmann::json& j, SerializedObjectData& ob
 
 static void WriteObjectStateFromJson(const nlohmann::json& j, SerializedObjectData& object_states)
 {
-    const auto& type = j["type"];
+    const auto& type = j["type"]["string"];
     if (type == "slig_spawner")
     {
         write_object_state<SligSpawnerSaveState>(j, object_states);
@@ -3108,7 +3109,7 @@ static void WriteObjectStateFromJson(const nlohmann::json& j, SerializedObjectDa
     }
     else
     {
-        ALIVE_FATAL("over");
+        ALIVE_FATAL("unknown save state type");
     }
 }
 
