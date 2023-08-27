@@ -75,12 +75,9 @@ public:
     static inline constexpr StringHash eMainMenuTransistion{"main_menu_transition"}; // TODO: fix typo later
     static inline constexpr StringHash eScreenShake{"screen_shake_ae"};
     static inline constexpr StringHash eSnoozeParticle{"snooze_particle"}; // TODO: fix typo later and merge eSnoozeParticle/eSnoozParticle
-    static inline constexpr StringHash eTorturedMud{"tortured_mud"};
     static inline constexpr StringHash eWebLine{"web_line"};
     static inline constexpr StringHash eDeathDrop{"death_drop"};
     static inline constexpr StringHash eInvisibleZone{"invisible_zone"};
-    static inline constexpr StringHash eWellExpress{"well_express"};
-    static inline constexpr StringHash eWellLocal{"well_local"};
     static inline constexpr StringHash eContinuePoint{"continue_point"};
     static inline constexpr StringHash eBirdPortalExit{"bird_portal_exit"};
     static inline constexpr StringHash eSoftLanding{"soft_landing"};
@@ -98,8 +95,8 @@ public:
     static inline constexpr StringHash eMovingBombStopper{"moving_bomb_stopper"};
     static inline constexpr StringHash eElumPathTrans{"elum_path_trans"};
     static inline constexpr StringHash eMudokonPathTrans{"mudokon_path_trans"};
-    static inline constexpr StringHash eSligGetWings{"slig_get_wings"};
     static inline constexpr StringHash eThrowableArray{"throwable_array"};
+    static inline constexpr StringHash eWell{"well"};
     
     // objects with factory funcs
     static inline constexpr StringHash eHoist{"hoist"};
@@ -107,7 +104,8 @@ public:
     static inline constexpr StringHash eDoor{"door"};
     static inline constexpr StringHash eShadowZone{"shadow_zone"};
     static inline constexpr StringHash eLiftPoint{"lift_point"};
-    static inline constexpr StringHash eWell{"well"};
+    static inline constexpr StringHash eWellExpress{"well_express"};
+    static inline constexpr StringHash eWellLocal{"well_local"};
     static inline constexpr StringHash eDove{"dove"};
     static inline constexpr StringHash eRockSack{"rock_sack"};
     static inline constexpr StringHash eZBall{"z_ball"};
@@ -204,13 +202,15 @@ public:
     static inline constexpr StringHash eScrabSpawner{"scrab_spawner"};
     static inline constexpr StringHash eCrawlingSlig{"crawling_slig"};
     static inline constexpr StringHash eSligGetPants{"slig_get_pants"};
+    static inline constexpr StringHash eSligGetWings{"slig_get_wings"};
     static inline constexpr StringHash eGreeter{"greeter"};
     static inline constexpr StringHash eCrawlingSligButton{"crawling_slig_button"};
     static inline constexpr StringHash eGlukkonSwitch{"glukkon_switch"};
     static inline constexpr StringHash eDoorBlocker{"door_blocker"};
-    static inline constexpr StringHash eTorturedMudokon{"tortured_mudokon"};
     static inline constexpr StringHash eTrainDoor{"train_door"};
     static inline constexpr StringHash eDemoPlaybackStone{"demo_playback_stone"};
+    static inline constexpr StringHash eTorturedMud{"tortured_mud"};
+
     ReliveTypes()
     {
         Add(eNone);
@@ -219,6 +219,8 @@ public:
         Add(eShadowZone);
         Add(eLiftPoint);
         Add(eWell);
+        Add(eWellExpress);
+        Add(eWellLocal);
         Add(eDove);
         Add(eRockSack);
         Add(eZBall);
@@ -319,12 +321,9 @@ public:
         Add(eCrawlingSligButton);
         Add(eGlukkonSwitch);
         Add(eDoorBlocker);
-        Add(eTorturedMudokon);
         Add(eTrainDoor);
         Add(eDeathDrop);
         Add(eInvisibleZone);
-        Add(eWellExpress);
-        Add(eWellLocal);
         Add(eContinuePoint);
         Add(eBirdPortalExit);
         Add(eSoftLanding);
@@ -345,6 +344,7 @@ public:
         Add(eSligGetWings);
         Add(eThrowableArray);
         Add(eDemoPlaybackStone);
+        Add(eTorturedMud);
     }
 };
 

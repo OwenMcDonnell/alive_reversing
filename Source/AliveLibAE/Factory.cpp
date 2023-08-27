@@ -1610,7 +1610,8 @@ Factory::Factory()
     mMap[ReliveTypes::eDoor] = &Factory::Factory_Door;
     mMap[ReliveTypes::eShadowZone] = &Factory::Factory_ShadowZone;
     mMap[ReliveTypes::eLiftPoint] = &Factory::Factory_LiftPoint;
-    mMap[ReliveTypes::eWell] = &Factory::Factory_Well;
+    mMap[ReliveTypes::eWellExpress] = &Factory::Factory_Well;
+    mMap[ReliveTypes::eWellLocal] = &Factory::Factory_Well;
     mMap[ReliveTypes::eDove] = &Factory::Factory_Dove;
     mMap[ReliveTypes::eRockSack] = &Factory::Factory_RockSack;
     mMap[ReliveTypes::eFallingItem] = &Factory::Factory_FallingItem;
@@ -1682,11 +1683,12 @@ Factory::Factory()
     mMap[ReliveTypes::eScrabSpawner] = &Factory::Factory_ScrabSpawner;
     mMap[ReliveTypes::eCrawlingSlig] = &Factory::Factory_CrawlingSlig;
     mMap[ReliveTypes::eSligGetPants] = &Factory::Factory_SligGetPants;
+    mMap[ReliveTypes::eSligGetWings] = &Factory::Factory_SligGetWings;
     mMap[ReliveTypes::eGreeter] = &Factory::Factory_Greeter;
     mMap[ReliveTypes::eCrawlingSligButton] = &Factory::Factory_CrawlingSligButton;
     mMap[ReliveTypes::eGlukkonSwitch] = &Factory::Factory_GlukkonSwitch;
     mMap[ReliveTypes::eDoorBlocker] = &Factory::Factory_DoorBlocker;
-    mMap[ReliveTypes::eTorturedMudokon] = &Factory::Factory_TorturedMudokon;
+    mMap[ReliveTypes::eTorturedMud] = &Factory::Factory_TorturedMudokon;
     mMap[ReliveTypes::eTrainDoor] = &Factory::Factory_TrainDoor;
 }
     
