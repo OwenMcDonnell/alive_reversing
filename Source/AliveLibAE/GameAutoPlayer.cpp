@@ -86,7 +86,7 @@ bool Player::ValidateObjectStates()
 
         if (pObj->Type() != reliveObjType)
         {
-            LOG_ERROR("Got %d type but expected %d", static_cast<s16>(BaseGameObject::ToAE(pObj->Type())), objType);
+            LOG_ERROR("Got %d (%s) type but expected %d", static_cast<s16>(BaseGameObject::ToAE(pObj->Type())), pObj->Type().String(), objType);
             return false;
         }
 
