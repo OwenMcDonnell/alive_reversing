@@ -1,17 +1,17 @@
 name: Bug report
 description: File a bug report
 body:
- - type: dropdown
-   attributes:
-     label: Bug presence
-     description: Does this bug also occur without R.E.L.I.V.E.?
-     options:
-      - Yes
-      - No
-      - Unsure
-     default: 2
-     validations:
-       required: true
+  - type: dropdown
+    attributes:
+      label: Bug presence
+      description: Does this bug also occur without R.E.L.I.V.E.?
+      options:
+       - Yes
+       - No
+       - Unsure
+      default: 2
+      validations:
+        required: true
   - type: dropdown
     attributes:
       label: Operating system
