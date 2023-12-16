@@ -3,8 +3,8 @@ description: File a bug report
 body:
   - type: dropdown
     attributes:
-      label: Bug presence
-      description: Does this bug also occur without R.E.L.I.V.E.?
+      label: Original bug
+      description: Does this bug also occur in the original version of the game without R.E.L.I.V.E.? 
       options:
        - "Yes"
        - "No"
@@ -27,7 +27,7 @@ body:
       
   - type: textarea
     attributes:
-      label: What happened?
+      label: Bug description
     validations:
       required: true
       
