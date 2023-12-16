@@ -12,7 +12,6 @@ body:
       default: 2
     validations:
       required: true
-      
   - type: dropdown
     attributes:
       label: Operating system
@@ -24,19 +23,16 @@ body:
       default: 0
     validations:
       required: true
-      
   - type: textarea
     attributes:
       label: What happened?
     validations:
       required: true
-
   - type: textarea
     attributes:
       label: How do we reproduce the bug?
     validations:
       required: false
-
   - type: textarea
   attributes:
     label: Game save file
@@ -44,12 +40,10 @@ body:
     placeholder: Drag and drop your save file into this box.
   validations:
     required: false
-
   - type: markdown
     attributes:
     value: |
       You can find the R.E.L.I.V.E. log in your game directory e.g `C:\Program Files (x86)\Steam\steamapps\common\Oddworld Abes Exoddus\logs\myeasylog.log` if you installed the game through steam.
-
   - type: textarea
     attributes:
       label: R.E.L.I.V.E. logs may help us identify the issue.
