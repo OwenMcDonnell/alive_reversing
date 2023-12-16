@@ -16,7 +16,7 @@ body:
   - type: dropdown
     attributes:
       label: Operating system
-      description: On which Operating system did you encounter the bug?
+      description: On which operating system did you encounter the bug?
       options:
         - Windows
         - Linux
