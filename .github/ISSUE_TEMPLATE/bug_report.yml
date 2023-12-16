@@ -2,7 +2,7 @@ name: Bug report
 description: File a bug report
 body:
   - type: dropdown
-      attributes:
+    attributes:
       label: Bug presence
       description: Does this bug also occur without R.E.L.I.V.E.?
       options:
