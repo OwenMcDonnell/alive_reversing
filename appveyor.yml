@@ -68,7 +68,7 @@ for:
       - x64
 
     build_script:
-      - sudo add-apt-repository --remove 'deb [arch=amd64] http://apt.postgresql.org/pub/repos/apt bionic-pgdg Release'
+      - sudo add-apt-repository --remove 'http://apt.postgresql.org/pub/repos/apt Release'
       - sudo add-apt-repository 'deb [arch=amd64] https://apt-archive.postgresql.org/pub/repos/apt bionic-pgdg main'
       - sudo apt-get update
       - sudo apt-get install libsdl2-dev -y
