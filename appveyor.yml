@@ -134,7 +134,7 @@ for:
       - path: build\RELIVE_Windows_Binaries_Lite_*.zip
         name: RELIVE_Windows_Binaries_$(configuration)_x86
     
-  -
+  #-
     # matrix:
     #   only:
     #     - job_name: Windows64
