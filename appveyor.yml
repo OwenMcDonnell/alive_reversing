@@ -68,6 +68,8 @@ for:
       - x64
 
     build_script:
+      - ls /etc/apt/sources.list.d
+      - cat /etc/apt/sources.list
       - sudo add-apt-repository --remove 'http://apt.postgresql.org/pub/repos/apt Release'
       - sudo add-apt-repository 'deb [arch=amd64] https://apt-archive.postgresql.org/pub/repos/apt bionic-pgdg main'
       - sudo apt-get update
