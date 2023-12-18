@@ -70,9 +70,9 @@ for:
     build_script:
       - ls /etc/apt/sources.list.d
       - cat /etc/apt/sources.list
-      - sudo add-apt-repository "deb https://apt-archive.postgresql.org/pub/repos/apt bionic-pgdg main"
+      #- sudo add-apt-repository "deb https://apt-archive.postgresql.org/pub/repos/apt bionic-pgdg main"
       - sudo add-apt-repository --remove 'deb https://apt-archive.postgresql.org/pub/repos/apt bionic-pgdg main'
-      - sudo add-apt-repository 'deb [arch=amd64] https://apt-archive.postgresql.org/pub/repos/apt bionic-pgdg main'
+      #- sudo add-apt-repository 'deb [arch=amd64] https://apt-archive.postgresql.org/pub/repos/apt bionic-pgdg main'
       - sudo apt-get update
       - sudo apt-get install libsdl2-dev -y
       - echo 'export PATH=$PATH:$HOME/Qt/5.15.2/gcc_64/bin' >> ~/.profile
